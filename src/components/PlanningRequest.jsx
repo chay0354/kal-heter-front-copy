@@ -135,11 +135,11 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
 
   const renderStep1 = () => (
     <div className="step-content">
-      <h2 className="step-title">שלב 1: פרטי בעל הנכס ומבקש הבקשה</h2>
+      <h2 className="step-title">שלב 1: בעלי עניין</h2>
       
       <div className="form-group">
         <label className="form-label">
-          תז ונספח של בעל הנכס ומבקש הבקשה <span className="required">*</span>
+          תז ונספח של מבקש הבקשה <span className="required">*</span>
         </label>
         <div className="file-upload-row">
           <input
@@ -246,7 +246,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
 
   const renderStep2 = () => (
     <div className="step-content">
-      <h2 className="step-title">שלב 2: גוש חלקה</h2>
+      <h2 className="step-title">שלב 2: פרטי מקרקעין</h2>
       
       <div className="form-row">
         <div className="form-group">
@@ -325,7 +325,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
 
   const renderStep3 = () => (
     <div className="step-content">
-      <h2 className="step-title">שלב 3: מהות בקשה</h2>
+      <h2 className="step-title">שלב 3: תיאור הבקשה</h2>
       
       <div className="form-group">
         <label className="form-label">
@@ -412,7 +412,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
 
   const renderStep4 = () => (
     <div className="step-content">
-      <h2 className="step-title">שלב 4: שימוש לנכס</h2>
+      <h2 className="step-title">שלב 4: צירוף מסמכים</h2>
       
       <div className="form-group">
         <label className="form-label">
@@ -499,7 +499,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
 
   const renderStep5 = () => (
     <div className="step-content">
-      <h2 className="step-title">שלב 5: סיכום</h2>
+      <h2 className="step-title">שלב 5: מידע נוסף ותשלום</h2>
       
       <div className="summary-section">
         <h3>תוכנית נבחרת</h3>
@@ -510,7 +510,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
       </div>
 
       <div className="summary-section">
-        <h3>פרטי בעל הנכס</h3>
+        <h3>פרטי מבקש הבקשה</h3>
         <div className="summary-grid">
           <div className="summary-item">
             <span className="summary-label">תז:</span>
@@ -589,13 +589,19 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
           </button>
           <h1 className="request-title">בקשה למידע תכנוני</h1>
           <div className="steps-indicator">
-            {[1, 2, 3, 4, 5].map(step => (
+            {[
+              { number: 1, label: 'בעלי עניין' },
+              { number: 2, label: 'פרטי מקרקעין' },
+              { number: 3, label: 'תיאור הבקשה' },
+              { number: 4, label: 'צירוף מסמכים' },
+              { number: 5, label: 'מידע נוסף ותשלום' }
+            ].map(step => (
               <div
-                key={step}
-                className={`step-indicator ${currentStep === step ? 'active' : ''} ${currentStep > step ? 'completed' : ''}`}
+                key={step.number}
+                className={`step-indicator ${currentStep === step.number ? 'active' : ''} ${currentStep > step.number ? 'completed' : ''}`}
               >
-                <span className="step-number">{step}</span>
-                <span className="step-label">שלב {step}</span>
+                <span className="step-number">{step.number}</span>
+                <span className="step-label">{step.label}</span>
               </div>
             ))}
           </div>

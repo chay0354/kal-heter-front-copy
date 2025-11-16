@@ -110,19 +110,19 @@ function HomePage({ onSignIn }) {
                 <h3>רישום והרשמה</h3>
                 <p>הרשמה מהירה למערכת ומילוי פרטים בסיסיים</p>
               </div>
-              <div className="process-arrow">→</div>
+              <div className="process-arrow">←</div>
               <div className="process-step">
                 <div className="step-number">2</div>
                 <h3>הגשת בקשה</h3>
                 <p>מילוי טופס הבקשה והעלאת המסמכים הנדרשים</p>
               </div>
-              <div className="process-arrow">→</div>
+              <div className="process-arrow">←</div>
               <div className="process-step">
                 <div className="step-number">3</div>
                 <h3>בדיקה ואימות</h3>
                 <p>בדיקת המסמכים ואימות תקינות הבקשה</p>
               </div>
-              <div className="process-arrow">→</div>
+              <div className="process-arrow">←</div>
               <div className="process-step">
                 <div className="step-number">4</div>
                 <h3>קבלת היתר</h3>
