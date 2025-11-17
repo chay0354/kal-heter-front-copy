@@ -263,6 +263,7 @@ const PlansGallery = ({ onBack, onSelectPlan }) => {
           </svg>
           חזרה לטופס
         </button>
+        <h2 className="step-indicator-title">שלב 1: בעלי עניין</h2>
         <h1 className="plans-title">בחר תוכנית אדריכלית</h1>
         <p className="plans-subtitle">20 תוכניות מוכנות לבחירה</p>
       </div>
@@ -328,10 +329,6 @@ const PlansGallery = ({ onBack, onSelectPlan }) => {
               </div>
 
               <div className="plan-footer">
-                <div className="plan-price">
-                  <span className="price-label">מחיר משוער:</span>
-                  <span className="price-value">{plan.price} ₪</span>
-                </div>
                 <button className="select-plan-button">
                   בחר תוכנית
                 </button>
@@ -339,6 +336,17 @@ const PlansGallery = ({ onBack, onSelectPlan }) => {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="plans-footer">
+        <a 
+          href="https://www.gov.il/he/departments/israel_land_authority/govil-landing-page" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="footer-link"
+        >
+          מקרקעי ישראל - אתר רשמי
+        </a>
       </div>
     </div>
   )

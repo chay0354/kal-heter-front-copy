@@ -9,7 +9,8 @@ const FormPage = () => {
     helka: '',
     surveyMap: null,
     region: '',
-    council: ''
+    council: '',
+    isIsraelLandAuthority: false
   })
 
   const [errors, setErrors] = useState({})
@@ -28,10 +29,10 @@ const FormPage = () => {
   ]
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value, type, checked } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }))
     // Clear error when user starts typing
     if (errors[name]) {
@@ -266,6 +267,20 @@ const FormPage = () => {
                 placeholder="הזן שם מועצה"
               />
               {errors.council && <span className="error-message">{errors.council}</span>}
+            </div>
+          </div>
+
+          <div className="form-section">
+            <div className="form-group">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  name="isIsraelLandAuthority"
+                  checked={formData.isIsraelLandAuthority}
+                  onChange={handleInputChange}
+                />
+                <span>האם השטח הוא בבעלות מקרקעי ישראל</span>
+              </label>
             </div>
           </div>
 

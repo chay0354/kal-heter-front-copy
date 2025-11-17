@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import './PlanningRequest.css'
+import ProfessionalsSelection from './ProfessionalsSelection'
 
 const PlanningRequest = ({ selectedPlan, onBack }) => {
   const [currentStep, setCurrentStep] = useState(1)
+  const [showProfessionals, setShowProfessionals] = useState(false)
   const [formData, setFormData] = useState({
     // שלב 1
     idNumber: '',
     idAttachment: null,
     fullName: '',
     requestorType: '',
-    contactMethods: '',
+    contactMethods: [],
     propertyRights: '',
     requestNumber: '',
     
@@ -37,7 +39,8 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
 
   const requestorTypes = ['פרטי', 'תאגיד', 'חברה בע"מ', 'רשות מקומית']
   const constructionTypes = ['בנייה חדשה', 'הריסה', 'תיקונים', 'אחר']
-  const propertyFeaturesOptions = ['חניון', 'פאנלים סולאריים', 'מעלית', 'מרפסת', 'גינה', 'בריכה', 'מחסן', 'חדר כושר']
+  const propertyFeaturesOptions = ['חניה מקורה', 'פאנלים סולאריים', 'מעלית', 'מרפסת', 'גינה', 'בריכה', 'מחסן', 'חדר כושר']
+  const contactMethodsOptions = ['אימייל', 'טלפון']
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -79,6 +82,21 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
     }))
   }
 
+  const handleContactMethodToggle = (method) => {
+    setFormData(prev => ({
+      ...prev,
+      contactMethods: prev.contactMethods.includes(method)
+        ? prev.contactMethods.filter(m => m !== method)
+        : [...prev.contactMethods, method]
+    }))
+    if (errors.contactMethods) {
+      setErrors(prev => ({
+        ...prev,
+        contactMethods: ''
+      }))
+    }
+  }
+
   const validateStep = (step) => {
     const newErrors = {}
     
@@ -86,7 +104,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
       if (!formData.idNumber.trim()) newErrors.idNumber = 'נא להזין תז'
       if (!formData.fullName.trim()) newErrors.fullName = 'נא להזין שם מלא'
       if (!formData.requestorType) newErrors.requestorType = 'נא לבחור סוג מבקש'
-      if (!formData.contactMethods.trim()) newErrors.contactMethods = 'נא להזין דרכי התקשרות'
+      if (formData.contactMethods.length === 0) newErrors.contactMethods = 'נא לבחור דרכי התקשרות'
       if (!formData.propertyRights.trim()) newErrors.propertyRights = 'נא להזין זכות לזכות המקרקעין'
     }
     
@@ -98,8 +116,6 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
     
     if (step === 3) {
       if (!formData.constructionType) newErrors.constructionType = 'נא לבחור סוג בנייה'
-      if (!formData.length.trim()) newErrors.length = 'נא להזין אורך'
-      if (!formData.width.trim()) newErrors.width = 'נא להזין רוחב'
     }
     
     if (step === 4) {
@@ -202,14 +218,18 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
         <label className="form-label">
           דרכי התקשרות <span className="required">*</span>
         </label>
-        <input
-          type="text"
-          name="contactMethods"
-          value={formData.contactMethods}
-          onChange={handleInputChange}
-          className={`form-input ${errors.contactMethods ? 'error' : ''}`}
-          placeholder="טלפון, אימייל וכו'"
-        />
+        <div className={`features-grid ${errors.contactMethods ? 'error' : ''}`}>
+          {contactMethodsOptions.map(method => (
+            <label key={method} className="feature-checkbox">
+              <input
+                type="checkbox"
+                checked={formData.contactMethods.includes(method)}
+                onChange={() => handleContactMethodToggle(method)}
+              />
+              <span>{method}</span>
+            </label>
+          ))}
+        </div>
         {errors.contactMethods && <span className="error-message">{errors.contactMethods}</span>}
       </div>
 
@@ -248,6 +268,18 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
     <div className="step-content">
       <h2 className="step-title">שלב 2: פרטי מקרקעין</h2>
       
+      <div className="professionals-link-section">
+        <button 
+          className="professionals-link-button"
+          onClick={() => setShowProfessionals(true)}
+        >
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88M13 7C13 9.20914 11.2091 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C11.2091 3 13 4.79086 13 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          בחירת מודדים
+        </button>
+      </div>
+      
       <div className="form-row">
         <div className="form-group">
           <label className="form-label">
@@ -282,20 +314,6 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
 
       <div className="form-group">
         <label className="form-label">
-          זיהוי לפי גורמים (גורמים שהם לא גוש חלקה)
-        </label>
-        <input
-          type="text"
-          name="alternativeIdentification"
-          value={formData.alternativeIdentification}
-          onChange={handleInputChange}
-          className="form-input"
-          placeholder="הזן זיהוי חלופי (אופציונלי)"
-        />
-      </div>
-
-      <div className="form-group">
-        <label className="form-label">
           שטח מגרש <span className="required">*</span>
         </label>
         <input
@@ -307,18 +325,6 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
           placeholder="הזן שטח במטרים רבועים"
         />
         {errors.plotArea && <span className="error-message">{errors.plotArea}</span>}
-      </div>
-
-      <div className="form-group">
-        <label className="checkbox-label">
-          <input
-            type="checkbox"
-            name="isIsraelLandAuthority"
-            checked={formData.isIsraelLandAuthority}
-            onChange={handleInputChange}
-          />
-          <span>האם השטח הוא בבעלות מקרקעי ישראל</span>
-        </label>
       </div>
     </div>
   )
@@ -334,7 +340,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
         <input
           type="text"
           name="requestType"
-          value={formData.requestType}
+          value={`בית חדש${formData.propertyFeatures.length > 0 ? ' + ' + formData.propertyFeatures.join(' + ') : ''}`}
           className="form-input"
           disabled
         />
@@ -373,38 +379,6 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
               <span>{feature}</span>
             </label>
           ))}
-        </div>
-      </div>
-
-      <div className="form-row">
-        <div className="form-group">
-          <label className="form-label">
-            אורך (מטרים) <span className="required">*</span>
-          </label>
-          <input
-            type="number"
-            name="length"
-            value={formData.length}
-            onChange={handleInputChange}
-            className={`form-input ${errors.length ? 'error' : ''}`}
-            placeholder="הזן אורך"
-          />
-          {errors.length && <span className="error-message">{errors.length}</span>}
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">
-            רוחב (מטרים) <span className="required">*</span>
-          </label>
-          <input
-            type="number"
-            name="width"
-            value={formData.width}
-            onChange={handleInputChange}
-            className={`form-input ${errors.width ? 'error' : ''}`}
-            placeholder="הזן רוחב"
-          />
-          {errors.width && <span className="error-message">{errors.width}</span>}
         </div>
       </div>
     </div>
@@ -464,7 +438,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
 
       <div className="form-group">
         <label className="form-label">
-          צילום של מגרש <span className="required">*</span>
+          צילום של מגרש/תמונה מתצ"א <span className="required">*</span>
         </label>
         <label className="file-upload-area">
           <input
@@ -487,7 +461,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M21 19V5C21 3.9 20.1 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19ZM8.5 13.5L11 16.51L14.5 12L19 18H5L8.5 13.5Z" fill="currentColor"/>
                 </svg>
-                <span>לחץ להעלאת צילום מגרש</span>
+                <span>לחץ להעלאת צילום מגרש/תמונה מתצ"א</span>
               </>
             )}
           </div>
@@ -526,7 +500,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
           </div>
           <div className="summary-item">
             <span className="summary-label">דרכי התקשרות:</span>
-            <span>{formData.contactMethods || '-'}</span>
+            <span>{formData.contactMethods.length > 0 ? formData.contactMethods.join(', ') : '-'}</span>
           </div>
         </div>
       </div>
@@ -546,10 +520,6 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
             <span className="summary-label">שטח מגרש:</span>
             <span>{formData.plotArea || '-'} מ"ר</span>
           </div>
-          <div className="summary-item">
-            <span className="summary-label">מקרקעי ישראל:</span>
-            <span>{formData.isIsraelLandAuthority ? 'כן' : 'לא'}</span>
-          </div>
         </div>
       </div>
 
@@ -561,14 +531,6 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
             <span>{formData.constructionType || '-'}</span>
           </div>
           <div className="summary-item">
-            <span className="summary-label">אורך:</span>
-            <span>{formData.length || '-'} מטרים</span>
-          </div>
-          <div className="summary-item">
-            <span className="summary-label">רוחב:</span>
-            <span>{formData.width || '-'} מטרים</span>
-          </div>
-          <div className="summary-item">
             <span className="summary-label">תכונות:</span>
             <span>{formData.propertyFeatures.length > 0 ? formData.propertyFeatures.join(', ') : '-'}</span>
           </div>
@@ -576,6 +538,12 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
       </div>
     </div>
   )
+
+  if (showProfessionals) {
+    return (
+      <ProfessionalsSelection onBack={() => setShowProfessionals(false)} />
+    )
+  }
 
   return (
     <div className="planning-request">
@@ -639,6 +607,17 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
               </svg>
             </button>
           )}
+        </div>
+
+        <div className="request-footer">
+          <a 
+            href="https://www.gov.il/he/departments/israel_land_authority/govil-landing-page" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="footer-link"
+          >
+            מקרקעי ישראל - אתר רשמי
+          </a>
         </div>
       </div>
     </div>

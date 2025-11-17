@@ -55,6 +55,17 @@
   height: 20px;
 }
 
+.step-indicator-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 15px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  display: inline-block;
+}
+
 .plans-title {
   font-size: 2.5rem;
   font-weight: 700;
@@ -283,7 +294,7 @@
 
 .plan-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding-top: 16px;
   border-top: 2px solid var(--background-light);
@@ -309,7 +320,7 @@
 }
 
 .select-plan-button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   background: var(--gradient-primary);
   color: white;
   border: none;
@@ -321,6 +332,7 @@
   font-family: 'Assistant', sans-serif;
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
   white-space: nowrap;
+  width: 100%;
 }
 
 .select-plan-button:hover {
@@ -337,6 +349,45 @@
   box-shadow: 0 6px 16px rgba(231, 76, 60, 0.5);
 }
 
+.plans-footer {
+  margin-top: 60px;
+  padding-top: 40px;
+  text-align: center;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  font-family: 'Assistant', sans-serif;
+}
+
+.footer-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
 @media (max-width: 480px) {
   .plan-footer {
     flex-direction: column;
@@ -345,6 +396,10 @@
   
   .select-plan-button {
     width: 100%;
+  }
+
+  .step-indicator-title {
+    font-size: 1.1rem;
   }
 }
 

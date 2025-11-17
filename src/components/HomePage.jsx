@@ -3,6 +3,8 @@ import './HomePage.css'
 
 function HomePage({ onSignIn }) {
   const [showSignIn, setShowSignIn] = useState(false)
+  const [showTerms, setShowTerms] = useState(false)
+  const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -29,8 +31,7 @@ function HomePage({ onSignIn }) {
           <div className="description-section">
             <h2 className="subtitle">מערכת ליווי מלא לקבלת היתר בנייה</h2>
             <p className="description">
-              מערכת <strong>קל-היתר</strong> נועדה ללוות אותך בכל שלב בתהליך קבלת היתר הבנייה,
-              מאלף עד תף. מהגשת הבקשה הראשונית ועד לקבלת האישור הסופי.
+              מערכת <strong>קל-היתר</strong> נועדה ללוות אותך בכל שלב בתהליך קבלת היתר הבנייה, כמו אדריכל. מהגשת הבקשה למידע תכנוני, בקשה להיתר בנייה, אישור לתחילת עבודה ותעודת גמר (תופס 4).
             </p>
             <p className="description">
               אנו מספקים לך כלים מקצועיים, הנחיות ברורות ותמיכה מלאה לאורך כל הדרך, 
@@ -108,25 +109,37 @@ function HomePage({ onSignIn }) {
               <div className="process-step">
                 <div className="step-number">1</div>
                 <h3>רישום והרשמה</h3>
-                <p>הרשמה מהירה למערכת ומילוי פרטים בסיסיים</p>
+                <p>הרשמה מהירה למערכת ומילוי פרטים בסיסיים ללא התחייבות</p>
               </div>
               <div className="process-arrow">←</div>
               <div className="process-step">
                 <div className="step-number">2</div>
-                <h3>הגשת בקשה</h3>
+                <h3>הגשת בקשה למידע</h3>
                 <p>מילוי טופס הבקשה והעלאת המסמכים הנדרשים</p>
               </div>
               <div className="process-arrow">←</div>
               <div className="process-step">
                 <div className="step-number">3</div>
-                <h3>בדיקה ואימות</h3>
-                <p>בדיקת המסמכים ואימות תקינות הבקשה</p>
+                <h3>הגשת בקשה להיתר</h3>
+                <p>הגשת הבקשה המלאה לקבלת היתר בנייה</p>
               </div>
               <div className="process-arrow">←</div>
               <div className="process-step">
                 <div className="step-number">4</div>
-                <h3>קבלת היתר</h3>
+                <h3>קבלת ההיתר</h3>
                 <p>קבלת האישור הסופי והיתר הבנייה</p>
+              </div>
+              <div className="process-arrow">←</div>
+              <div className="process-step">
+                <div className="step-number">5</div>
+                <h3>אישור להתחלת עבודה</h3>
+                <p>קבלת האישור להתחלת עבודות הבנייה</p>
+              </div>
+              <div className="process-arrow">←</div>
+              <div className="process-step">
+                <div className="step-number">6</div>
+                <h3>תעודת גמר+תופס</h3>
+                <p>קבלת תעודת גמר ותופס 4</p>
               </div>
             </div>
           </div>
@@ -182,6 +195,17 @@ function HomePage({ onSignIn }) {
                 <form className="sign-in-form" onSubmit={handleSignIn}>
                   <h3 className="form-title">התחברות למערכת</h3>
                   <div className="form-group">
+                    <label htmlFor="phone">מספר טלפון</label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="הכנס מספר טלפון"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
                     <label htmlFor="email">אימייל</label>
                     <input
                       type="email"
@@ -213,11 +237,103 @@ function HomePage({ onSignIn }) {
                   >
                     חזרה
                   </button>
+                  <div className="sign-in-terms-link">
+                    <button 
+                      type="button"
+                      className="terms-link-button"
+                      onClick={() => setShowTerms(true)}
+                    >
+                      תנאי שימוש
+                    </button>
+                  </div>
                 </form>
               </div>
             )}
           </div>
+
+          <div className="footer-section">
+            <button 
+              className="terms-button"
+              onClick={() => setShowTerms(true)}
+            >
+              תנאי שימוש
+            </button>
+          </div>
         </div>
+
+        {showTerms && (
+          <div className="terms-modal-overlay" onClick={() => setShowTerms(false)}>
+            <div className="terms-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="terms-modal-header">
+                <h2>תנאי שימוש</h2>
+                <button 
+                  className="terms-close-button"
+                  onClick={() => setShowTerms(false)}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div className="terms-modal-content">
+                <h3>1. כללי</h3>
+                <p>
+                  ברוכים הבאים למערכת קל-היתר. השימוש במערכת זו כפוף לתנאי השימוש המפורטים להלן. 
+                  על ידי השימוש במערכת, אתה מסכים לתנאים אלה.
+                </p>
+
+                <h3>2. שימוש במערכת</h3>
+                <p>
+                  המערכת נועדה לסייע בתהליך קבלת היתרי בנייה. השימוש במערכת הוא על אחריותך הבלעדית, 
+                  ואתה מתחייב לספק מידע מדויק ונכון.
+                </p>
+
+                <h3>3. אחריות</h3>
+                <p>
+                  המערכת מספקת כלים מקצועיים והנחיות, אך אינה מהווה תחליף לייעוץ מקצועי אישי. 
+                  אין לראות במידע המוצג במערכת כעצה מקצועית מחייבת.
+                </p>
+
+                <h3>4. אבטחת מידע</h3>
+                <p>
+                  אנו משתמשים באמצעי אבטחה מתקדמים להגנה על המידע שלך. עם זאת, אין אנו יכולים להבטיח 
+                  אבטחה מוחלטת מפני חדירות או תקלות טכניות.
+                </p>
+
+                <h3>5. שינויים בתנאים</h3>
+                <p>
+                  אנו שומרים לעצמנו את הזכות לשנות את תנאי השימוש מעת לעת. שינויים ייכנסו לתוקף 
+                  עם פרסומם במערכת.
+                </p>
+
+                <h3>6. מגבלות אחריות</h3>
+                <p>
+                  המערכת מסופקת "כפי שהיא" ללא כל אחריות מפורשת או משתמעת. לא נהיה אחראים לכל נזק 
+                  ישיר או עקיף שייגרם כתוצאה משימוש במערכת.
+                </p>
+
+                <h3>7. קניין רוחני</h3>
+                <p>
+                  כל הזכויות במערכת, כולל התוכן, העיצוב והקוד, שמורות לנו. אין להעתיק, לשכפל או 
+                  להשתמש בתוכן ללא רשות מפורשת.
+                </p>
+
+                <h3>8. קשר</h3>
+                <p>
+                  לשאלות או תלונות בנוגע לתנאי השימוש, ניתן ליצור קשר עם צוות התמיכה שלנו.
+                </p>
+              </div>
+              <div className="terms-modal-footer">
+                <button 
+                  className="terms-accept-button"
+                  onClick={() => setShowTerms(false)}
+                >
+                  הבנתי
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="decorative-elements">
           <div className="circle circle-1"></div>

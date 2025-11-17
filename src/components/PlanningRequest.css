@@ -337,6 +337,11 @@
   border-radius: 12px;
 }
 
+.features-grid.error {
+  border: 2px solid var(--accent-color);
+  background: rgba(231, 76, 60, 0.05);
+}
+
 .feature-checkbox {
   display: flex;
   align-items: center;
@@ -519,6 +524,87 @@
 
   .action-button.primary {
     margin-right: 0;
+  }
+}
+
+.professionals-link-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 12px;
+  border: 2px dashed rgba(102, 126, 234, 0.3);
+}
+
+.professionals-link-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 24px;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Assistant', sans-serif;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.professionals-link-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+}
+
+.professionals-link-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.request-footer {
+  margin-top: 40px;
+  padding-top: 30px;
+  text-align: center;
+  border-top: 2px solid var(--background-light);
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--secondary-color);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 10px 20px;
+  background: rgba(52, 152, 219, 0.05);
+  border-radius: 10px;
+  border: 2px solid rgba(52, 152, 219, 0.2);
+  transition: all 0.3s ease;
+  font-family: 'Assistant', sans-serif;
+}
+
+.footer-link:hover {
+  background: rgba(52, 152, 219, 0.1);
+  border-color: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+  color: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+  .request-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+  }
+
+  .footer-link {
+    font-size: 0.85rem;
+    padding: 8px 16px;
   }
 }
 
