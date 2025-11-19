@@ -39,6 +39,40 @@ function HomePage({ onSignIn }) {
             </p>
           </div>
 
+          <div className="benefits-section">
+            <h2 className="section-title">למה לבחור בקל-היתר?</h2>
+            <div className="benefits-grid">
+              <div className="benefit-item">
+                <div className="benefit-icon">
+                  <div className="icon-check"></div>
+                </div>
+                <h4>חיסכון בזמן</h4>
+                <p>תהליך מהיר ויעיל שמקצר את זמן ההמתנה משמעותית</p>
+              </div>
+              <div className="benefit-item">
+                <div className="benefit-icon">
+                  <div className="icon-check"></div>
+                </div>
+                <h4>חיסכון בכסף</h4>
+                <p>מניעת טעויות יקרות וטיפול מקצועי שיחסוך לך כסף</p>
+              </div>
+              <div className="benefit-item">
+                <div className="benefit-icon">
+                  <div className="icon-check"></div>
+                </div>
+                <h4>שקיפות מלאה</h4>
+                <p>מעקב אחר כל שלב בתהליך עם עדכונים שוטפים</p>
+              </div>
+              <div className="benefit-item">
+                <div className="benefit-icon">
+                  <div className="icon-check"></div>
+                </div>
+                <h4>נוחות מקסימלית</h4>
+                <p>ניהול מלא מהבית, שליטה מלאה על הכל</p>
+              </div>
+            </div>
+          </div>
+
           <div className="stats-section">
             <div className="stat-item">
               <div className="stat-number">100%</div>
@@ -140,40 +174,6 @@ function HomePage({ onSignIn }) {
                 <div className="step-number">6</div>
                 <h3>תעודת גמר+תופס</h3>
                 <p>קבלת תעודת גמר ותופס 4</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="benefits-section">
-            <h2 className="section-title">למה לבחור בקל-היתר?</h2>
-            <div className="benefits-grid">
-              <div className="benefit-item">
-                <div className="benefit-icon">
-                  <div className="icon-check"></div>
-                </div>
-                <h4>חיסכון בזמן</h4>
-                <p>תהליך מהיר ויעיל שמקצר את זמן ההמתנה משמעותית</p>
-              </div>
-              <div className="benefit-item">
-                <div className="benefit-icon">
-                  <div className="icon-check"></div>
-                </div>
-                <h4>חיסכון בכסף</h4>
-                <p>מניעת טעויות יקרות וטיפול מקצועי שיחסוך לך כסף</p>
-              </div>
-              <div className="benefit-item">
-                <div className="benefit-icon">
-                  <div className="icon-check"></div>
-                </div>
-                <h4>שקיפות מלאה</h4>
-                <p>מעקב אחר כל שלב בתהליך עם עדכונים שוטפים</p>
-              </div>
-              <div className="benefit-item">
-                <div className="benefit-icon">
-                  <div className="icon-check"></div>
-                </div>
-                <h4>נוחות מקסימלית</h4>
-                <p>ניהול הכל מהבית, ללא צורך להגיע פיזית למשרדים</p>
               </div>
             </div>
           </div>
