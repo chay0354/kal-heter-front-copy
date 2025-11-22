@@ -5,6 +5,7 @@ import LandingPage from './pages/LandingPage'
 import AuthPage from './pages/AuthPage'
 import TermsPage from './pages/TermsPage'
 import DashboardPage from './pages/DashboardPage'
+import AdminPage from './pages/AdminPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          <Route path="/admin03254" element={<AdminPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
