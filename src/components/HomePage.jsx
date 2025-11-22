@@ -1,17 +1,73 @@
 import React, { useState } from 'react'
 import './HomePage.css'
+import { signIn, signUp } from '../services/auth'
 
 function HomePage({ onSignIn }) {
-  const [showSignIn, setShowSignIn] = useState(false)
+  const [showAuth, setShowAuth] = useState(false)
+  const [isSignUp, setIsSignUp] = useState(false)
   const [showTerms, setShowTerms] = useState(false)
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault()
-    // Mock sign-in - just proceed to the app
-    onSignIn()
+    setError('')
+    setSuccessMessage('')
+    setLoading(true)
+
+    try {
+      const result = await signIn(email, password)
+      if (result.success) {
+        setSuccessMessage('התחברת בהצלחה!')
+        setTimeout(() => {
+          onSignIn()
+        }, 1000)
+      }
+    } catch (err) {
+      setError(err.message || 'שגיאה בהתחברות. נסה שוב.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSignUp = async (e) => {
+    e.preventDefault()
+    setError('')
+    setSuccessMessage('')
+    setLoading(true)
+
+    try {
+      const result = await signUp(email, password, phone || null, fullName || null)
+      if (result.success) {
+        setSuccessMessage('נרשמת בהצלחה! מעבר למערכת...')
+        setTimeout(() => {
+          onSignIn()
+        }, 1500)
+      } else if (result.requiresEmailConfirmation) {
+        setSuccessMessage('נרשמת בהצלחה! אנא בדוק את האימייל שלך לאישור החשבון.')
+      }
+    } catch (err) {
+      setError(err.message || 'שגיאה בהרשמה. נסה שוב.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const switchToSignUp = () => {
+    setIsSignUp(true)
+    setError('')
+    setSuccessMessage('')
+  }
+
+  const switchToSignIn = () => {
+    setIsSignUp(false)
+    setError('')
+    setSuccessMessage('')
   }
 
   return (
@@ -179,74 +235,179 @@ function HomePage({ onSignIn }) {
           </div>
 
           <div className="cta-section">
-            {!showSignIn ? (
+            {!showAuth ? (
               <div className="cta-content">
                 <h3 className="cta-title">מוכן להתחיל?</h3>
                 <p className="cta-description">הצטרף לאלפי לקוחות מרוצים וקבל את היתר הבנייה שלך בקלות</p>
-                <button 
-                  className="sign-in-button"
-                  onClick={() => setShowSignIn(true)}
-                >
-                  התחבר למערכת
-                </button>
+                <div className="auth-buttons-container">
+                  <button 
+                    className="sign-in-button"
+                    onClick={() => {
+                      setShowAuth(true)
+                      setIsSignUp(false)
+                    }}
+                  >
+                    התחברות
+                  </button>
+                  <button 
+                    className="sign-up-button"
+                    onClick={() => {
+                      setShowAuth(true)
+                      setIsSignUp(true)
+                    }}
+                  >
+                    הרשמה
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="sign-in-form-container">
-                <form className="sign-in-form" onSubmit={handleSignIn}>
-                  <h3 className="form-title">התחברות למערכת</h3>
-                  <div className="form-group">
-                    <label htmlFor="phone">מספר טלפון</label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="הכנס מספר טלפון"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="email">אימייל</label>
-                    <input
-                      type="email"
-                      id="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="הכנס אימייל"
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="password">סיסמה</label>
-                    <input
-                      type="password"
-                      id="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="הכנס סיסמה"
-                      required
-                    />
-                  </div>
-                  <button type="submit" className="submit-button">
-                    התחבר
-                  </button>
-                  <button 
-                    type="button" 
-                    className="back-button"
-                    onClick={() => setShowSignIn(false)}
+                <div className="auth-tabs">
+                  <button
+                    type="button"
+                    className={`auth-tab ${!isSignUp ? 'active' : ''}`}
+                    onClick={switchToSignIn}
                   >
-                    חזרה
+                    התחברות
                   </button>
-                  <div className="sign-in-terms-link">
-                    <button 
-                      type="button"
-                      className="terms-link-button"
-                      onClick={() => setShowTerms(true)}
-                    >
-                      תנאי שימוש
-                    </button>
+                  <button
+                    type="button"
+                    className={`auth-tab ${isSignUp ? 'active' : ''}`}
+                    onClick={switchToSignUp}
+                  >
+                    הרשמה
+                  </button>
+                </div>
+                {error && (
+                  <div className="error-message">
+                    {error}
                   </div>
-                </form>
+                )}
+                {successMessage && (
+                  <div className="success-message">
+                    {successMessage}
+                  </div>
+                )}
+                {isSignUp ? (
+                  <form className="sign-in-form" onSubmit={handleSignUp}>
+                    <h3 className="form-title">הרשמה למערכת</h3>
+                    <div className="form-group">
+                      <label htmlFor="fullName">שם מלא</label>
+                      <input
+                        type="text"
+                        id="fullName"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="הכנס שם מלא"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="email-signup">אימייל *</label>
+                      <input
+                        type="email"
+                        id="email-signup"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="הכנס אימייל"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="phone-signup">מספר טלפון</label>
+                      <input
+                        type="tel"
+                        id="phone-signup"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="הכנס מספר טלפון"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="password-signup">סיסמה *</label>
+                      <input
+                        type="password"
+                        id="password-signup"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="הכנס סיסמה"
+                        required
+                        minLength={6}
+                      />
+                    </div>
+                    <button type="submit" className="submit-button" disabled={loading}>
+                      {loading ? 'מתבצע...' : 'הרשמה'}
+                    </button>
+                    <button 
+                      type="button" 
+                      className="back-button"
+                      onClick={() => {
+                        setShowAuth(false)
+                        setError('')
+                        setSuccessMessage('')
+                      }}
+                    >
+                      חזרה
+                    </button>
+                    <div className="sign-in-terms-link">
+                      <button 
+                        type="button"
+                        className="terms-link-button"
+                        onClick={() => setShowTerms(true)}
+                      >
+                        תנאי שימוש
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <form className="sign-in-form" onSubmit={handleSignIn}>
+                    <h3 className="form-title">התחברות למערכת</h3>
+                    <div className="form-group">
+                      <label htmlFor="email-signin">אימייל *</label>
+                      <input
+                        type="email"
+                        id="email-signin"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="הכנס אימייל"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="password-signin">סיסמה *</label>
+                      <input
+                        type="password"
+                        id="password-signin"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="הכנס סיסמה"
+                        required
+                      />
+                    </div>
+                    <button type="submit" className="submit-button" disabled={loading}>
+                      {loading ? 'מתבצע...' : 'התחבר'}
+                    </button>
+                    <button 
+                      type="button" 
+                      className="back-button"
+                      onClick={() => {
+                        setShowAuth(false)
+                        setError('')
+                        setSuccessMessage('')
+                      }}
+                    >
+                      חזרה
+                    </button>
+                    <div className="sign-in-terms-link">
+                      <button 
+                        type="button"
+                        className="terms-link-button"
+                        onClick={() => setShowTerms(true)}
+                      >
+                        תנאי שימוש
+                      </button>
+                    </div>
+                  </form>
+                )}
               </div>
             )}
           </div>
