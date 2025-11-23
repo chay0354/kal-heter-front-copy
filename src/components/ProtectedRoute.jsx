@@ -1,20 +1,13 @@
+import React from 'react'
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
+import { isAuthenticated } from '../services/auth'
 
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth()
-
-  if (loading) {
-    return <div>טוען...</div>
-  }
-
+function ProtectedRoute({ children }) {
   if (!isAuthenticated()) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/auth?mode=signin" replace />
   }
-
   return children
 }
 
 export default ProtectedRoute
-
 

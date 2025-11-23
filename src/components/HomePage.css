@@ -893,8 +893,7 @@
   flex-wrap: wrap;
 }
 
-.sign-in-button,
-.sign-up-button {
+.sign-in-button {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   color: white;
   border: none;
@@ -915,11 +914,35 @@
 }
 
 .sign-up-button {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 50%, #f093fb 100%);
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  padding: 20px 60px;
+  font-size: 21px;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 
+    0 12px 35px rgba(102, 126, 234, 0.2),
+    0 0 0 0 rgba(102, 126, 234, 0.3);
+  font-family: 'Assistant', sans-serif;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.5px;
+  overflow: hidden;
 }
 
-.sign-in-button::before,
-.sign-up-button::before {
+.sign-up-button:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  color: white;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 
+    0 18px 45px rgba(102, 126, 234, 0.5),
+    0 0 0 8px rgba(102, 126, 234, 0.1);
+}
+
+.sign-in-button::before {
   content: '';
   position: absolute;
   top: 50%;
@@ -932,29 +955,20 @@
   transition: width 0.6s, height 0.6s;
 }
 
-.sign-in-button:hover,
-.sign-up-button:hover {
+.sign-in-button:hover {
   transform: translateY(-3px) scale(1.02);
   box-shadow: 
     0 18px 45px rgba(102, 126, 234, 0.5),
     0 0 0 8px rgba(102, 126, 234, 0.1);
 }
 
-.sign-in-button:hover::before,
-.sign-up-button:hover::before {
+.sign-in-button:hover::before {
   width: 300px;
   height: 300px;
 }
 
-.sign-in-button:active,
-.sign-up-button:active {
+.sign-in-button:active {
   transform: translateY(-1px) scale(0.98);
-}
-
-.sign-in-button:disabled,
-.sign-up-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .sign-in-form-container {
@@ -967,6 +981,69 @@
   position: relative;
   z-index: 1;
   animation: slideInUp 0.5s ease-out;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 15px;
+}
+
+.auth-tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Assistant', sans-serif;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -17px;
+  position: relative;
+}
+
+.auth-tab:hover {
+  color: #667eea;
+}
+
+.auth-tab.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+.error-message {
+  background: #fee;
+  color: #c33;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #fcc;
+  font-size: 15px;
+  text-align: center;
+  direction: rtl;
+}
+
+.success-message {
+  background: #efe;
+  color: #3c3;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #cfc;
+  font-size: 15px;
+  text-align: center;
+  direction: rtl;
+}
+
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
 }
 
 @keyframes slideInUp {
@@ -1039,54 +1116,9 @@
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
 
-.submit-button:hover:not(:disabled) {
+.submit-button:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
-}
-
-.submit-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.error-message {
-  background: rgba(220, 53, 69, 0.1);
-  color: #dc3545;
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-size: 15px;
-  text-align: center;
-  border: 1px solid rgba(220, 53, 69, 0.2);
-  margin-bottom: 10px;
-}
-
-.auth-toggle {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 16px;
-  color: var(--text-secondary);
-}
-
-.auth-toggle span {
-  margin-left: 8px;
-}
-
-.toggle-link {
-  background: transparent;
-  border: none;
-  color: #667eea;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  font-family: 'Assistant', sans-serif;
-  padding: 4px;
-  transition: all 0.3s ease;
-}
-
-.toggle-link:hover {
-  color: #764ba2;
-  text-decoration: none;
 }
 
 .back-button {
@@ -1268,17 +1300,6 @@
 
   .sign-in-form-container {
     padding: 35px 25px;
-  }
-
-  .auth-buttons-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .sign-in-button,
-  .sign-up-button {
-    width: 100%;
-    max-width: 300px;
   }
 }
 

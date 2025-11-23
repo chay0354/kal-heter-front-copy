@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './HomePage.css'
-import apiService from '../services/api'
+import { signIn, signUp } from '../services/auth'
 
 function HomePage({ onSignIn }) {
   const [showAuth, setShowAuth] = useState(false)
@@ -12,50 +12,62 @@ function HomePage({ onSignIn }) {
   const [fullName, setFullName] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState('')
+
+  const handleSignIn = async (e) => {
+    e.preventDefault()
+    setError('')
+    setSuccessMessage('')
+    setLoading(true)
+
+    try {
+      const result = await signIn(email, password)
+      if (result.success) {
+        setSuccessMessage('התחברת בהצלחה!')
+        setTimeout(() => {
+          onSignIn()
+        }, 1000)
+      }
+    } catch (err) {
+      setError(err.message || 'שגיאה בהתחברות. נסה שוב.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleSignUp = async (e) => {
     e.preventDefault()
     setError('')
+    setSuccessMessage('')
     setLoading(true)
 
     try {
-      const response = await apiService.signUp(email, password, phone || null, fullName || null)
-      
-      // Check if signup returned a session (user is auto-confirmed)
-      if (response.access_token) {
-        // User is already logged in, proceed to app
-        localStorage.setItem('access_token', response.access_token)
-        localStorage.setItem('refresh_token', response.refresh_token)
-        localStorage.setItem('user', JSON.stringify(response.user))
-        onSignIn()
-      } else {
-        // Try to sign in automatically
-        await handleSignInSubmit(e)
+      const result = await signUp(email, password, phone || null, fullName || null)
+      if (result.success) {
+        setSuccessMessage('נרשמת בהצלחה! מעבר למערכת...')
+        setTimeout(() => {
+          onSignIn()
+        }, 1500)
+      } else if (result.requiresEmailConfirmation) {
+        setSuccessMessage('נרשמת בהצלחה! אנא בדוק את האימייל שלך לאישור החשבון.')
       }
     } catch (err) {
       setError(err.message || 'שגיאה בהרשמה. נסה שוב.')
+    } finally {
       setLoading(false)
     }
   }
 
-  const handleSignInSubmit = async (e) => {
-    e.preventDefault()
+  const switchToSignUp = () => {
+    setIsSignUp(true)
     setError('')
-    setLoading(true)
-
-    try {
-      await apiService.signIn(email, password)
-      // Proceed to the app
-      onSignIn()
-    } catch (err) {
-      setError(err.message || 'שגיאה בהתחברות. נסה שוב.')
-      setLoading(false)
-    }
+    setSuccessMessage('')
   }
 
-  const handleAuthToggle = () => {
-    setIsSignUp(!isSignUp)
+  const switchToSignIn = () => {
+    setIsSignUp(false)
     setError('')
+    setSuccessMessage('')
   }
 
   return (
@@ -81,6 +93,40 @@ function HomePage({ onSignIn }) {
               אנו מספקים לך כלים מקצועיים, הנחיות ברורות ותמיכה מלאה לאורך כל הדרך, 
               כדי להפוך את התהליך המורכב לפשוט, מהיר ויעיל.
             </p>
+          </div>
+
+          <div className="benefits-section">
+            <h2 className="section-title">למה לבחור בקל-היתר?</h2>
+            <div className="benefits-grid">
+              <div className="benefit-item">
+                <div className="benefit-icon">
+                  <div className="icon-check"></div>
+                </div>
+                <h4>חיסכון בזמן</h4>
+                <p>תהליך מהיר ויעיל שמקצר את זמן ההמתנה משמעותית</p>
+              </div>
+              <div className="benefit-item">
+                <div className="benefit-icon">
+                  <div className="icon-check"></div>
+                </div>
+                <h4>חיסכון בכסף</h4>
+                <p>מניעת טעויות יקרות וטיפול מקצועי שיחסוך לך כסף</p>
+              </div>
+              <div className="benefit-item">
+                <div className="benefit-icon">
+                  <div className="icon-check"></div>
+                </div>
+                <h4>שקיפות מלאה</h4>
+                <p>מעקב אחר כל שלב בתהליך עם עדכונים שוטפים</p>
+              </div>
+              <div className="benefit-item">
+                <div className="benefit-icon">
+                  <div className="icon-check"></div>
+                </div>
+                <h4>נוחות מקסימלית</h4>
+                <p>ניהול מלא מהבית, שליטה מלאה על הכל</p>
+              </div>
+            </div>
           </div>
 
           <div className="stats-section">
@@ -188,40 +234,6 @@ function HomePage({ onSignIn }) {
             </div>
           </div>
 
-          <div className="benefits-section">
-            <h2 className="section-title">למה לבחור בקל-היתר?</h2>
-            <div className="benefits-grid">
-              <div className="benefit-item">
-                <div className="benefit-icon">
-                  <div className="icon-check"></div>
-                </div>
-                <h4>חיסכון בזמן</h4>
-                <p>תהליך מהיר ויעיל שמקצר את זמן ההמתנה משמעותית</p>
-              </div>
-              <div className="benefit-item">
-                <div className="benefit-icon">
-                  <div className="icon-check"></div>
-                </div>
-                <h4>חיסכון בכסף</h4>
-                <p>מניעת טעויות יקרות וטיפול מקצועי שיחסוך לך כסף</p>
-              </div>
-              <div className="benefit-item">
-                <div className="benefit-icon">
-                  <div className="icon-check"></div>
-                </div>
-                <h4>שקיפות מלאה</h4>
-                <p>מעקב אחר כל שלב בתהליך עם עדכונים שוטפים</p>
-              </div>
-              <div className="benefit-item">
-                <div className="benefit-icon">
-                  <div className="icon-check"></div>
-                </div>
-                <h4>נוחות מקסימלית</h4>
-                <p>ניהול הכל מהבית, ללא צורך להגיע פיזית למשרדים</p>
-              </div>
-            </div>
-          </div>
-
           <div className="cta-section">
             {!showAuth ? (
               <div className="cta-content">
@@ -250,10 +262,35 @@ function HomePage({ onSignIn }) {
               </div>
             ) : (
               <div className="sign-in-form-container">
-                <form className="sign-in-form" onSubmit={isSignUp ? handleSignUp : handleSignInSubmit}>
-                  <h3 className="form-title">{isSignUp ? 'הרשמה למערכת' : 'התחברות למערכת'}</h3>
-                  
-                  {isSignUp && (
+                <div className="auth-tabs">
+                  <button
+                    type="button"
+                    className={`auth-tab ${!isSignUp ? 'active' : ''}`}
+                    onClick={switchToSignIn}
+                  >
+                    התחברות
+                  </button>
+                  <button
+                    type="button"
+                    className={`auth-tab ${isSignUp ? 'active' : ''}`}
+                    onClick={switchToSignUp}
+                  >
+                    הרשמה
+                  </button>
+                </div>
+                {error && (
+                  <div className="error-message">
+                    {error}
+                  </div>
+                )}
+                {successMessage && (
+                  <div className="success-message">
+                    {successMessage}
+                  </div>
+                )}
+                {isSignUp ? (
+                  <form className="sign-in-form" onSubmit={handleSignUp}>
+                    <h3 className="form-title">הרשמה למערכת</h3>
                     <div className="form-group">
                       <label htmlFor="fullName">שם מלא</label>
                       <input
@@ -264,92 +301,113 @@ function HomePage({ onSignIn }) {
                         placeholder="הכנס שם מלא"
                       />
                     </div>
-                  )}
-                  
-                  {isSignUp && (
                     <div className="form-group">
-                      <label htmlFor="phone">מספר טלפון</label>
+                      <label htmlFor="email-signup">אימייל *</label>
+                      <input
+                        type="email"
+                        id="email-signup"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="הכנס אימייל"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="phone-signup">מספר טלפון</label>
                       <input
                         type="tel"
-                        id="phone"
+                        id="phone-signup"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="הכנס מספר טלפון"
                       />
                     </div>
-                  )}
-                  
-                  <div className="form-group">
-                    <label htmlFor="email">אימייל</label>
-                    <input
-                      type="email"
-                      id="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="הכנס אימייל"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="form-group">
-                    <label htmlFor="password">סיסמה</label>
-                    <input
-                      type="password"
-                      id="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="הכנס סיסמה"
-                      required
-                      minLength={6}
-                    />
-                  </div>
-                  
-                  {error && (
-                    <div className="error-message">
-                      {error}
+                    <div className="form-group">
+                      <label htmlFor="password-signup">סיסמה *</label>
+                      <input
+                        type="password"
+                        id="password-signup"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="הכנס סיסמה"
+                        required
+                        minLength={6}
+                      />
                     </div>
-                  )}
-                  
-                  <button type="submit" className="submit-button" disabled={loading}>
-                    {loading ? 'מעבד...' : (isSignUp ? 'הרשמה' : 'התחבר')}
-                  </button>
-                  
-                  <div className="auth-toggle">
-                    <span>{isSignUp ? 'כבר יש לך חשבון?' : 'אין לך חשבון?'}</span>
-                    <button 
-                      type="button"
-                      className="toggle-link"
-                      onClick={handleAuthToggle}
-                    >
-                      {isSignUp ? 'התחבר' : 'הרשם'}
+                    <button type="submit" className="submit-button" disabled={loading}>
+                      {loading ? 'מתבצע...' : 'הרשמה'}
                     </button>
-                  </div>
-                  
-                  <button 
-                    type="button" 
-                    className="back-button"
-                    onClick={() => {
-                      setShowAuth(false)
-                      setError('')
-                      setEmail('')
-                      setPassword('')
-                      setPhone('')
-                      setFullName('')
-                    }}
-                  >
-                    חזרה
-                  </button>
-                  
-                  <div className="sign-in-terms-link">
                     <button 
-                      type="button"
-                      className="terms-link-button"
-                      onClick={() => setShowTerms(true)}
+                      type="button" 
+                      className="back-button"
+                      onClick={() => {
+                        setShowAuth(false)
+                        setError('')
+                        setSuccessMessage('')
+                      }}
                     >
-                      תנאי שימוש
+                      חזרה
                     </button>
-                  </div>
-                </form>
+                    <div className="sign-in-terms-link">
+                      <button 
+                        type="button"
+                        className="terms-link-button"
+                        onClick={() => setShowTerms(true)}
+                      >
+                        תנאי שימוש
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <form className="sign-in-form" onSubmit={handleSignIn}>
+                    <h3 className="form-title">התחברות למערכת</h3>
+                    <div className="form-group">
+                      <label htmlFor="email-signin">אימייל *</label>
+                      <input
+                        type="email"
+                        id="email-signin"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="הכנס אימייל"
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="password-signin">סיסמה *</label>
+                      <input
+                        type="password"
+                        id="password-signin"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="הכנס סיסמה"
+                        required
+                      />
+                    </div>
+                    <button type="submit" className="submit-button" disabled={loading}>
+                      {loading ? 'מתבצע...' : 'התחבר'}
+                    </button>
+                    <button 
+                      type="button" 
+                      className="back-button"
+                      onClick={() => {
+                        setShowAuth(false)
+                        setError('')
+                        setSuccessMessage('')
+                      }}
+                    >
+                      חזרה
+                    </button>
+                    <div className="sign-in-terms-link">
+                      <button 
+                        type="button"
+                        className="terms-link-button"
+                        onClick={() => setShowTerms(true)}
+                      >
+                        תנאי שימוש
+                      </button>
+                    </div>
+                  </form>
+                )}
               </div>
             )}
           </div>

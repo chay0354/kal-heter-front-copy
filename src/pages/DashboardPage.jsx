@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
+import { signOut } from '../services/auth'
 import PlansGallery from '../components/PlansGallery'
 import PlanningRequest from '../components/PlanningRequest'
 import '../components/FormPage.css'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
-  const { user, signOut } = useAuth()
   const [formData, setFormData] = useState({
     gush: '',
     helka: '',
@@ -38,6 +37,7 @@ const DashboardPage = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }))
+    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -78,13 +78,13 @@ const DashboardPage = () => {
     }
     
     if (!formData.region) {
-      newErrors.region = 'נא לבחור איזור'
+      newErrors.region = 'נא לבחור אזור'
     }
     
     if (!formData.council.trim()) {
-      newErrors.council = 'נא להזין שם מועצה'
+      newErrors.council = 'נא להזין רשות מקומית'
     }
-
+    
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -96,22 +96,22 @@ const DashboardPage = () => {
     }
   }
 
+  const handleBackFromPlans = () => {
+    setShowPlans(false)
+  }
+
   const handleSelectPlan = (plan) => {
     setSelectedPlan(plan)
+    setShowPlans(false)
     setShowPlanningRequest(true)
   }
 
-  const handleBackFromPlanning = () => {
+  const handleBackFromPlanningRequest = () => {
     setShowPlanningRequest(false)
-    setShowPlans(true)
-  }
-
-  const handleBackFromPlans = () => {
-    setShowPlans(false)
     setSelectedPlan(null)
   }
 
-  const handleLogout = () => {
+  const handleSignOut = () => {
     signOut()
     navigate('/')
   }
@@ -125,7 +125,10 @@ const DashboardPage = () => {
           <div className="bg-shape bg-shape-3"></div>
           <div className="bg-shape bg-shape-4"></div>
         </div>
-        <PlanningRequest selectedPlan={selectedPlan} onBack={handleBackFromPlanning} />
+        <PlanningRequest 
+          selectedPlan={selectedPlan} 
+          onBack={handleBackFromPlanningRequest}
+        />
       </div>
     )
   }
@@ -163,10 +166,9 @@ const DashboardPage = () => {
             <h1 className="form-title">קל-היתר</h1>
             <p className="form-subtitle">מערכת להיתרי בנייה</p>
           </div>
-          <div className="user-info">
-            <span>שלום, {user?.full_name || user?.email}</span>
-            <button onClick={handleLogout} className="logout-button">התנתק</button>
-          </div>
+          <button className="sign-out-button" onClick={handleSignOut}>
+            התנתק
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="form-content">
@@ -206,38 +208,39 @@ const DashboardPage = () => {
                 {errors.helka && <span className="error-message">{errors.helka}</span>}
               </div>
             </div>
-          </div>
 
-          <div className="form-section">
-            <h2 className="section-title">מפת מדידה</h2>
-            
-            <div className="file-upload-container">
-              <input
-                type="file"
-                id="surveyMap"
-                name="surveyMap"
-                onChange={handleFileChange}
-                className="file-input"
-                accept=".pdf,.jpg,.jpeg,.png,.dwg,.dxf"
-              />
-              <label htmlFor="surveyMap" className={`file-label ${errors.surveyMap ? 'error' : ''} ${formData.surveyMap ? 'has-file' : ''}`}>
-                <div className="file-icon">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2ZM18 20H6V4H13V9H18V20Z" fill="currentColor"/>
-                  </svg>
-                </div>
-                {formData.surveyMap ? (
-                  <div className="file-info">
-                    <span className="file-name">{formData.surveyMap.name}</span>
-                    <span className="file-size">{(formData.surveyMap.size / 1024).toFixed(2)} KB</span>
-                  </div>
-                ) : (
-                  <div className="file-info">
-                    <span className="file-placeholder">לחץ לבחירת קובץ או גרור לכאן</span>
-                    <span className="file-hint">PDF, JPG, PNG, DWG, DXF</span>
-                  </div>
-                )}
+            <div className="form-group">
+              <label htmlFor="surveyMap" className="form-label">
+                מפת מדידה <span className="required">*</span>
               </label>
+              <div className="file-upload-container">
+                <input
+                  type="file"
+                  id="surveyMap"
+                  name="surveyMap"
+                  accept=".pdf,.jpg,.jpeg,.png,.dwg,.dxf"
+                  onChange={handleFileChange}
+                  className="file-input"
+                />
+                <label htmlFor="surveyMap" className={`file-label ${errors.surveyMap ? 'error' : ''} ${formData.surveyMap ? 'has-file' : ''}`}>
+                  <div className="file-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2ZM18 20H6V4H13V9H18V20Z" fill="currentColor"/>
+                    </svg>
+                  </div>
+                  {formData.surveyMap ? (
+                    <div className="file-info">
+                      <span className="file-name">{formData.surveyMap.name}</span>
+                      <span className="file-size">{(formData.surveyMap.size / 1024).toFixed(2)} KB</span>
+                    </div>
+                  ) : (
+                    <div className="file-info">
+                      <span className="file-placeholder">לחץ לבחירת קובץ או גרור לכאן</span>
+                      <span className="file-hint">PDF, JPG, PNG, DWG, DXF</span>
+                    </div>
+                  )}
+                </label>
+              </div>
               {errors.surveyMap && <span className="error-message">{errors.surveyMap}</span>}
             </div>
           </div>
@@ -247,7 +250,7 @@ const DashboardPage = () => {
             
             <div className="form-group">
               <label htmlFor="region" className="form-label">
-                איזור בארץ <span className="required">*</span>
+                אזור <span className="required">*</span>
               </label>
               <select
                 id="region"
@@ -256,7 +259,7 @@ const DashboardPage = () => {
                 onChange={handleInputChange}
                 className={`form-select ${errors.region ? 'error' : ''}`}
               >
-                <option value="">בחר איזור</option>
+                <option value="">בחר אזור</option>
                 {regions.map(region => (
                   <option key={region} value={region}>{region}</option>
                 ))}
@@ -266,7 +269,7 @@ const DashboardPage = () => {
 
             <div className="form-group">
               <label htmlFor="council" className="form-label">
-                שם מועצה <span className="required">*</span>
+                רשות מקומית <span className="required">*</span>
               </label>
               <input
                 type="text"
@@ -275,13 +278,11 @@ const DashboardPage = () => {
                 value={formData.council}
                 onChange={handleInputChange}
                 className={`form-input ${errors.council ? 'error' : ''}`}
-                placeholder="הזן שם מועצה"
+                placeholder="הזן שם רשות מקומית"
               />
               {errors.council && <span className="error-message">{errors.council}</span>}
             </div>
-          </div>
 
-          <div className="form-section">
             <div className="form-group">
               <label className="checkbox-label">
                 <input
@@ -290,14 +291,14 @@ const DashboardPage = () => {
                   checked={formData.isIsraelLandAuthority}
                   onChange={handleInputChange}
                 />
-                <span>האם השטח הוא בבעלות מקרקעי ישראל</span>
+                <span>רשות מקרקעי ישראל</span>
               </label>
             </div>
           </div>
 
           <div className="form-actions">
             <button type="submit" className="submit-button">
-              <span>בחר תוכנית</span>
+              <span>המשך לבחירת תוכנית</span>
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -310,5 +311,4 @@ const DashboardPage = () => {
 }
 
 export default DashboardPage
-
 
