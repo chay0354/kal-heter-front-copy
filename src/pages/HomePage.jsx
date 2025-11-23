@@ -72,6 +72,29 @@ function HomePage() {
             <div className="title-line"></div>
           </div>
 
+          {!showAuth && (
+            <div className="auth-buttons-container" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+              <button 
+                className="sign-in-button"
+                onClick={() => {
+                  setShowAuth(true)
+                  setIsSignUp(false)
+                }}
+              >
+                חיבור משתמש קיים
+              </button>
+              <button 
+                className="sign-up-button"
+                onClick={() => {
+                  setShowAuth(true)
+                  setIsSignUp(true)
+                }}
+              >
+                כניסת משתמש חדש
+              </button>
+            </div>
+          )}
+
           <div className="description-section">
             <h2 className="subtitle">מערכת ליווי מלא לקבלת היתר בנייה</h2>
             <p className="description">
@@ -227,26 +250,6 @@ function HomePage() {
               <div className="cta-content">
                 <h3 className="cta-title">מוכן להתחיל?</h3>
                 <p className="cta-description">הצטרף לאלפי לקוחות מרוצים וקבל את היתר הבנייה שלך בקלות</p>
-                <div className="auth-buttons-container">
-                  <button 
-                    className="sign-in-button"
-                    onClick={() => {
-                      setShowAuth(true)
-                      setIsSignUp(false)
-                    }}
-                  >
-                    התחברות
-                  </button>
-                  <button 
-                    className="sign-up-button"
-                    onClick={() => {
-                      setShowAuth(true)
-                      setIsSignUp(true)
-                    }}
-                  >
-                    הרשמה
-                  </button>
-                </div>
               </div>
             ) : (
               <div className="sign-in-form-container">
