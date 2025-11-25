@@ -11,15 +11,26 @@ const DashboardPage = () => {
   
   // Check if user has completed all data on mount
   useEffect(() => {
-    if (userDataService.isCompleted()) {
-      navigate('/personal-area')
-    } else {
-      // Load existing data if available
-      const savedData = userDataService.getUserData()
-      if (savedData && savedData.gush) {
-        setFormData(savedData)
+    const checkCompletion = async () => {
+      const isCompleted = await userDataService.isCompleted()
+      if (isCompleted) {
+        navigate('/personal-area')
+      } else {
+        // Load existing data if available
+        const savedData = await userDataService.getUserData()
+        if (savedData && savedData.gush) {
+          setFormData({
+            gush: savedData.gush || '',
+            helka: savedData.helka || '',
+            surveyMap: savedData.surveyMap || null,
+            region: savedData.region || '',
+            council: savedData.council || '',
+            isIsraelLandAuthority: savedData.isIsraelLandAuthority || false
+          })
+        }
       }
     }
+    checkCompletion()
   }, [navigate])
 
   const [formData, setFormData] = useState({
@@ -104,12 +115,17 @@ const DashboardPage = () => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (validateForm()) {
-      // Save form data before proceeding
-      userDataService.saveUserData(formData)
-      setShowPlans(true)
+      // Save form data to database before proceeding
+      try {
+        await userDataService.saveUserData(formData)
+        setShowPlans(true)
+      } catch (error) {
+        console.error('Error saving form data:', error)
+        alert('שגיאה בשמירת הנתונים. נסה שוב.')
+      }
     }
   }
 
@@ -117,16 +133,21 @@ const DashboardPage = () => {
     setShowPlans(false)
   }
 
-  const handleSelectPlan = (plan) => {
+  const handleSelectPlan = async (plan) => {
     // Save form data with selected plan before proceeding
     const dataToSave = {
       ...formData,
       selectedPlan: plan
     }
-    userDataService.saveUserData(dataToSave)
-    setSelectedPlan(plan)
-    setShowPlans(false)
-    setShowPlanningRequest(true)
+    try {
+      await userDataService.saveUserData(dataToSave)
+      setSelectedPlan(plan)
+      setShowPlans(false)
+      setShowPlanningRequest(true)
+    } catch (error) {
+      console.error('Error saving plan selection:', error)
+      alert('שגיאה בשמירת הנתונים. נסה שוב.')
+    }
   }
 
   const handleBackFromPlanningRequest = () => {

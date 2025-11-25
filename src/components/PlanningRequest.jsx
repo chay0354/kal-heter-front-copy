@@ -145,31 +145,45 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateStep(5)) {
-      // Get existing user data
-      const existingData = userDataService.getUserData() || {}
-      
-      // Combine all data
-      const completeData = {
-        ...existingData,
-        planningRequest: formData,
-        selectedPlan: selectedPlan
+      try {
+        // Get existing user data from database
+        const existingData = await userDataService.getUserData() || {}
+        
+        // Convert File objects to file names for storage
+        const planningRequestData = { ...formData }
+        if (planningRequestData.situationMap && planningRequestData.situationMap instanceof File) {
+          planningRequestData.situationMap = planningRequestData.situationMap.name
+        }
+        if (planningRequestData.plotPhoto && planningRequestData.plotPhoto instanceof File) {
+          planningRequestData.plotPhoto = planningRequestData.plotPhoto.name
+        }
+        if (planningRequestData.idAttachment && planningRequestData.idAttachment instanceof File) {
+          planningRequestData.idAttachment = planningRequestData.idAttachment.name
+        }
+        
+        // Combine all data
+        const completeData = {
+          ...existingData,
+          planningRequest: planningRequestData,
+          selectedPlan: selectedPlan
+        }
+        
+        // Save complete data to database
+        await userDataService.saveUserData(completeData)
+        
+        console.log('Form submitted:', completeData)
+        alert('הבקשה נשלחה בהצלחה! מעבר לאיזור האישי...')
+        
+        // Redirect to personal area
+        setTimeout(() => {
+          navigate('/personal-area')
+        }, 1500)
+      } catch (error) {
+        console.error('Error submitting form:', error)
+        alert('שגיאה בשליחת הבקשה. נסה שוב.')
       }
-      
-      // Save complete data
-      userDataService.saveUserData(completeData)
-      
-      // Mark as completed
-      userDataService.markAsCompleted()
-      
-      console.log('Form submitted:', completeData)
-      alert('הבקשה נשלחה בהצלחה! מעבר לאיזור האישי...')
-      
-      // Redirect to personal area
-      setTimeout(() => {
-        navigate('/personal-area')
-      }, 1500)
     }
   }
 

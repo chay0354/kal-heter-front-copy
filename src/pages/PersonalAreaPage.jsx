@@ -13,12 +13,15 @@ const PersonalAreaPage = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const data = userDataService.getUserData()
-    if (data) {
-      setUserData(data)
-      setEditedData(data)
+    const loadData = async () => {
+      const data = await userDataService.getUserData()
+      if (data) {
+        setUserData(data)
+        setEditedData(data)
+      }
+      setLoading(false)
     }
-    setLoading(false)
+    loadData()
   }, [])
 
   const handleEdit = () => {
@@ -33,13 +36,18 @@ const PersonalAreaPage = () => {
     setEditedData(JSON.parse(JSON.stringify(userData)))
   }
 
-  const handleSave = () => {
-    // Deep clone before saving to ensure we save a clean copy
-    const dataToSave = JSON.parse(JSON.stringify(editedData))
-    userDataService.saveUserData(dataToSave)
-    setUserData(dataToSave)
-    setIsEditing(false)
-    alert('הנתונים נשמרו בהצלחה!')
+  const handleSave = async () => {
+    try {
+      // Deep clone before saving to ensure we save a clean copy
+      const dataToSave = JSON.parse(JSON.stringify(editedData))
+      await userDataService.saveUserData(dataToSave)
+      setUserData(dataToSave)
+      setIsEditing(false)
+      alert('הנתונים נשמרו בהצלחה!')
+    } catch (error) {
+      console.error('Error saving data:', error)
+      alert('שגיאה בשמירת הנתונים. נסה שוב.')
+    }
   }
 
   const handleInputChange = (e) => {

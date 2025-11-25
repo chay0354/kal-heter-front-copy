@@ -32,9 +32,10 @@ function AuthPage() {
       const result = await signIn(email, password)
       if (result.success) {
         setSuccessMessage('התחברת בהצלחה!')
-        setTimeout(() => {
-          // Check if user has completed all data
-          if (userDataService.isCompleted()) {
+        setTimeout(async () => {
+          // Check if user has completed all data from database
+          const isCompleted = await userDataService.isCompleted()
+          if (isCompleted) {
             navigate('/personal-area')
           } else {
             navigate('/dashboard')
