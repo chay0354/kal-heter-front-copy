@@ -1,12 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { signOut } from '../services/auth'
+import userDataService from '../services/userDataService'
 import PlansGallery from '../components/PlansGallery'
 import PlanningRequest from '../components/PlanningRequest'
 import '../components/FormPage.css'
 
 const DashboardPage = () => {
   const navigate = useNavigate()
+  
+  // Check if user has completed all data on mount
+  useEffect(() => {
+    if (userDataService.isCompleted()) {
+      navigate('/personal-area')
+    } else {
+      // Load existing data if available
+      const savedData = userDataService.getUserData()
+      if (savedData && savedData.gush) {
+        setFormData(savedData)
+      }
+    }
+  }, [navigate])
+
   const [formData, setFormData] = useState({
     gush: '',
     helka: '',
@@ -92,6 +107,8 @@ const DashboardPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (validateForm()) {
+      // Save form data before proceeding
+      userDataService.saveUserData(formData)
       setShowPlans(true)
     }
   }
@@ -101,6 +118,12 @@ const DashboardPage = () => {
   }
 
   const handleSelectPlan = (plan) => {
+    // Save form data with selected plan before proceeding
+    const dataToSave = {
+      ...formData,
+      selectedPlan: plan
+    }
+    userDataService.saveUserData(dataToSave)
     setSelectedPlan(plan)
     setShowPlans(false)
     setShowPlanningRequest(true)
@@ -113,6 +136,7 @@ const DashboardPage = () => {
 
   const handleSignOut = () => {
     signOut()
+    userDataService.clearUserData()
     navigate('/')
   }
 

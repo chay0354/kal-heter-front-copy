@@ -5,6 +5,7 @@ import LandingPage from './pages/LandingPage'
 import AuthPage from './pages/AuthPage'
 import TermsPage from './pages/TermsPage'
 import DashboardPage from './pages/DashboardPage'
+import PersonalAreaPage from './pages/PersonalAreaPage'
 import AdminPage from './pages/AdminPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -21,6 +22,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/personal-area" 
+            element={
+              <ProtectedRoute>
+                <PersonalAreaPage />
               </ProtectedRoute>
             } 
           />

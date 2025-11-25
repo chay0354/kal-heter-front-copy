@@ -109,6 +109,7 @@ export const signIn = async (email, password) => {
 // Sign out
 export const signOut = () => {
   clearAuthTokens();
+  // Clear user application data - will be handled by components that call signOut
 };
 
 // Get current user (with token validation)

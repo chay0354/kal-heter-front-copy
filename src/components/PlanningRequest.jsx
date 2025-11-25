@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './PlanningRequest.css'
 import ProfessionalsSelection from './ProfessionalsSelection'
+import userDataService from '../services/userDataService'
 
 const PlanningRequest = ({ selectedPlan, onBack }) => {
+  const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(1)
   const [showProfessionals, setShowProfessionals] = useState(false)
   const [formData, setFormData] = useState({
@@ -144,8 +147,29 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
 
   const handleSubmit = () => {
     if (validateStep(5)) {
-      console.log('Form submitted:', { ...formData, selectedPlan })
-      alert('הבקשה נשלחה בהצלחה!')
+      // Get existing user data
+      const existingData = userDataService.getUserData() || {}
+      
+      // Combine all data
+      const completeData = {
+        ...existingData,
+        planningRequest: formData,
+        selectedPlan: selectedPlan
+      }
+      
+      // Save complete data
+      userDataService.saveUserData(completeData)
+      
+      // Mark as completed
+      userDataService.markAsCompleted()
+      
+      console.log('Form submitted:', completeData)
+      alert('הבקשה נשלחה בהצלחה! מעבר לאיזור האישי...')
+      
+      // Redirect to personal area
+      setTimeout(() => {
+        navigate('/personal-area')
+      }, 1500)
     }
   }
 

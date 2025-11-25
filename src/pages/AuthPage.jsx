@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { signIn, signUp } from '../services/auth'
+import userDataService from '../services/userDataService'
 import '../components/HomePage.css'
 
 function AuthPage() {
@@ -32,7 +33,12 @@ function AuthPage() {
       if (result.success) {
         setSuccessMessage('התחברת בהצלחה!')
         setTimeout(() => {
-          navigate('/dashboard')
+          // Check if user has completed all data
+          if (userDataService.isCompleted()) {
+            navigate('/personal-area')
+          } else {
+            navigate('/dashboard')
+          }
         }, 1000)
       }
     } catch (err) {
