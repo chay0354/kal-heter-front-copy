@@ -1087,21 +1087,21 @@
 
 .form-group input {
   padding: 16px 20px;
-  border: 2px solid #667eea;
+  border: 2px solid #d1d5db;
   border-radius: 15px;
   font-size: 17px;
   font-family: 'Assistant', sans-serif;
   transition: all 0.3s ease;
   background: white !important;
   color: #2C3E50 !important;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 4px rgba(209, 213, 219, 0.1);
   transform: translateY(-2px);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  border-color: #d1d5db;
+  box-shadow: 0 0 0 4px rgba(209, 213, 219, 0.1);
   transform: translateY(-2px);
   background: white !important;
   color: #2C3E50 !important;
