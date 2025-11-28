@@ -165,7 +165,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
             onChange={handleInputChange}
             className={`form-input ${errors.idNumber ? 'error' : ''}`}
             placeholder="הזן תז"
-            style={{ flex: 1 }}
+            style={{ flex: 1, color: '#2C3E50', backgroundColor: 'white' }}
           />
           <label className="file-upload-button">
             <input
@@ -192,6 +192,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
           onChange={handleInputChange}
           className={`form-input ${errors.fullName ? 'error' : ''}`}
           placeholder="הזן שם מלא"
+          style={{ color: '#2C3E50', backgroundColor: 'white' }}
         />
         {errors.fullName && <span className="error-message">{errors.fullName}</span>}
       </div>
@@ -205,6 +206,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
           value={formData.requestorType}
           onChange={handleInputChange}
           className={`form-select ${errors.requestorType ? 'error' : ''}`}
+          style={{ color: '#2C3E50', backgroundColor: 'white' }}
         >
           <option value="">בחר סוג מבקש</option>
           {requestorTypes.map(type => (
@@ -244,6 +246,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
           onChange={handleInputChange}
           className={`form-input ${errors.propertyRights ? 'error' : ''}`}
           placeholder="הזן פרטי זכות"
+          style={{ color: '#2C3E50', backgroundColor: 'white' }}
         />
         {errors.propertyRights && <span className="error-message">{errors.propertyRights}</span>}
       </div>
@@ -259,6 +262,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
           onChange={handleInputChange}
           className="form-input"
           placeholder="הזן מספר בקשה (אופציונלי)"
+          style={{ color: '#2C3E50', backgroundColor: 'white' }}
         />
       </div>
     </div>
@@ -292,6 +296,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
             onChange={handleInputChange}
             className={`form-input ${errors.gush ? 'error' : ''}`}
             placeholder="הזן גוש"
+            style={{ color: '#2C3E50', backgroundColor: 'white' }}
           />
           {errors.gush && <span className="error-message">{errors.gush}</span>}
         </div>
@@ -307,6 +312,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
             onChange={handleInputChange}
             className={`form-input ${errors.helka ? 'error' : ''}`}
             placeholder="הזן חלקה"
+            style={{ color: '#2C3E50', backgroundColor: 'white' }}
           />
           {errors.helka && <span className="error-message">{errors.helka}</span>}
         </div>
@@ -323,6 +329,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
           onChange={handleInputChange}
           className={`form-input ${errors.plotArea ? 'error' : ''}`}
           placeholder="הזן שטח במטרים רבועים"
+          style={{ color: '#2C3E50', backgroundColor: 'white' }}
         />
         {errors.plotArea && <span className="error-message">{errors.plotArea}</span>}
       </div>
@@ -343,6 +350,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
           value={`בית חדש${formData.propertyFeatures.length > 0 ? ' + ' + formData.propertyFeatures.join(' + ') : ''}`}
           className="form-input"
           disabled
+          style={{ color: '#2C3E50', backgroundColor: 'white' }}
         />
       </div>
 
@@ -355,6 +363,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
           value={formData.constructionType}
           onChange={handleInputChange}
           className={`form-select ${errors.constructionType ? 'error' : ''}`}
+          style={{ color: '#2C3E50', backgroundColor: 'white' }}
         >
           <option value="">בחר סוג בנייה</option>
           {constructionTypes.map(type => (
@@ -399,6 +408,7 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
           onChange={handleInputChange}
           className={`form-input ${errors.propertyUsage ? 'error' : ''}`}
           placeholder="הזן שימוש לנכס"
+          style={{ color: '#2C3E50', backgroundColor: 'white' }}
         />
         {errors.propertyUsage && <span className="error-message">{errors.propertyUsage}</span>}
       </div>

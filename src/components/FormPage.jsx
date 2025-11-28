@@ -175,6 +175,7 @@ const FormPage = () => {
                   onChange={handleInputChange}
                   className={`form-input ${errors.gush ? 'error' : ''}`}
                   placeholder="הזן מספר גוש"
+                  style={{ color: '#2C3E50', backgroundColor: 'white' }}
                 />
                 {errors.gush && <span className="error-message">{errors.gush}</span>}
               </div>
@@ -191,6 +192,7 @@ const FormPage = () => {
                   onChange={handleInputChange}
                   className={`form-input ${errors.helka ? 'error' : ''}`}
                   placeholder="הזן מספר חלקה"
+                  style={{ color: '#2C3E50', backgroundColor: 'white' }}
                 />
                 {errors.helka && <span className="error-message">{errors.helka}</span>}
               </div>
@@ -244,6 +246,7 @@ const FormPage = () => {
                 value={formData.region}
                 onChange={handleInputChange}
                 className={`form-select ${errors.region ? 'error' : ''}`}
+                style={{ color: '#2C3E50', backgroundColor: 'white' }}
               >
                 <option value="">בחר איזור</option>
                 {regions.map(region => (
@@ -265,6 +268,7 @@ const FormPage = () => {
                 onChange={handleInputChange}
                 className={`form-input ${errors.council ? 'error' : ''}`}
                 placeholder="הזן שם מועצה"
+                style={{ color: '#2C3E50', backgroundColor: 'white' }}
               />
               {errors.council && <span className="error-message">{errors.council}</span>}
             </div>

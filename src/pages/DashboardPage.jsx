@@ -188,6 +188,7 @@ const DashboardPage = () => {
                   onChange={handleInputChange}
                   className={`form-input ${errors.gush ? 'error' : ''}`}
                   placeholder="הזן מספר גוש"
+                  style={{ color: '#2C3E50', backgroundColor: 'white' }}
                 />
                 {errors.gush && <span className="error-message">{errors.gush}</span>}
               </div>
@@ -204,6 +205,7 @@ const DashboardPage = () => {
                   onChange={handleInputChange}
                   className={`form-input ${errors.helka ? 'error' : ''}`}
                   placeholder="הזן מספר חלקה"
+                  style={{ color: '#2C3E50', backgroundColor: 'white' }}
                 />
                 {errors.helka && <span className="error-message">{errors.helka}</span>}
               </div>
@@ -258,6 +260,7 @@ const DashboardPage = () => {
                 value={formData.region}
                 onChange={handleInputChange}
                 className={`form-select ${errors.region ? 'error' : ''}`}
+                style={{ color: '#2C3E50', backgroundColor: 'white' }}
               >
                 <option value="">בחר אזור</option>
                 {regions.map(region => (
