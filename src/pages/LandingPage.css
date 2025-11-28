@@ -1,0 +1,1246 @@
+/* Landing Page V1 - Exact Figma Implementation */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.landing-page-v1 {
+  position: relative;
+  width: 1440px;
+  max-width: 100%;
+  min-height: 4362px;
+  background: #FEFEFE;
+  direction: rtl;
+  overflow-x: hidden;
+  margin: 0 auto;
+  font-family: 'Assistant', 'Arial', sans-serif;
+}
+
+/* Navbar - Exact Figma Specs */
+.navbar {
+  position: absolute;
+  width: 1440px;
+  max-width: 100%;
+  height: 106.71px;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 120px;
+  gap: 48px;
+  background: transparent;
+  z-index: 100;
+}
+
+.navbar-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  width: 150px;
+  height: 66.71px;
+}
+
+.logo-text-nav {
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 36.19px;
+  line-height: 45px;
+  letter-spacing: -0.7238px;
+  color: #002169;
+  position: absolute;
+  left: 0;
+  top: 21.71px;
+}
+
+.logo-icon-nav {
+  position: absolute;
+  width: 58.62px;
+  height: 36.87px;
+  left: 91.38px;
+  top: 0;
+}
+
+.logo-icon-nav img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.nav-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 28px;
+  gap: 8px;
+  width: 132px;
+  height: 42px;
+  background: linear-gradient(96.41deg, #FA7D00 3.53%, #FFC039 122.86%);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+  color: #FFFFFF;
+  transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Hero Section - Exact Figma Specs */
+.hero-section {
+  position: absolute;
+  width: 1200px;
+  height: 628px;
+  left: 120px;
+  top: 128px;
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+.hero-background-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+.hero-background-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  border-radius: 32px;
+  overflow: hidden;
+  transform: rotate(180deg) scaleY(-1);
+}
+
+.hero-bg-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.hero-gradient-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: linear-gradient(
+    75.58deg,
+    rgba(0, 16, 51, 0.7) 4.06%,
+    rgba(0, 33, 105, 0.56) 41.52%,
+    rgba(136, 151, 185, 0.49) 65.34%,
+    rgba(255, 255, 255, 0) 85.5%
+  );
+  border-radius: 32px;
+  z-index: 1;
+}
+
+.hero-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0;
+  gap: 24px;
+  left: 300px;
+  top: 273px;
+  width: 851px;
+  z-index: 2;
+}
+
+.hero-title {
+  width: 851px;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 70px;
+  line-height: 100%;
+  text-align: right;
+  letter-spacing: -1.4px;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.hero-text {
+  width: 851px;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 150%;
+  text-align: right;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.hero-button-primary,
+.hero-button-secondary {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 28px;
+  gap: 8px;
+  height: 42px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+  color: #FFFFFF;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  z-index: 3;
+}
+
+.hero-button-primary {
+  width: 291px;
+  background: linear-gradient(96.41deg, #FA7D00 3.53%, #FFC039 122.86%);
+  left: 951px;
+  top: 564px;
+}
+
+.hero-button-secondary {
+  width: 159px;
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid #FFFFFF;
+  backdrop-filter: blur(3px);
+  left: 779px;
+  top: 564px;
+}
+
+.hero-button-primary:hover,
+.hero-button-secondary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* Stats Section - Exact Figma Specs */
+.stats-section {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 0;
+  gap: 60px 81px;
+  width: 557px;
+  left: 120px;
+  top: 871px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0;
+  width: 231px;
+  text-align: right;
+}
+
+.stat-number {
+  width: 100%;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 72px;
+  line-height: 100%;
+  text-align: right;
+  letter-spacing: -1.44px;
+  color: #002169;
+  margin-bottom: 0;
+}
+
+.stat-label {
+  width: 100%;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 150%;
+  text-align: right;
+  color: #00184C;
+}
+
+/* About Section - Exact Figma Specs */
+.about-section {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0;
+  gap: 0;
+  width: 562px;
+  left: 758px;
+  top: 839px;
+}
+
+.about-image {
+  position: absolute;
+  width: 515px;
+  height: 618px;
+  left: 805px;
+  top: 1309px;
+  border-radius: 32px;
+  overflow: hidden;
+  transform: scaleX(-1);
+}
+
+.about-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0;
+  gap: 2px;
+  width: 100%;
+}
+
+.about-title {
+  width: 499px;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 120%;
+  text-align: right;
+  letter-spacing: -0.64px;
+  color: #002169;
+  margin: 0 0 0 0;
+}
+
+.about-text {
+  width: 562px;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 150%;
+  text-align: right;
+  color: #00184C;
+  margin: 0;
+}
+
+/* Why Choose Section - Exact Figma Specs */
+.why-choose-section {
+  position: absolute;
+  width: 100%;
+  left: 758px;
+  top: 1309px;
+  padding: 0;
+}
+
+.why-choose-title {
+  width: 369px;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 120%;
+  text-align: right;
+  letter-spacing: -0.8px;
+  color: #002169;
+  margin: 0 0 0 0;
+  transform: translateX(-100%);
+}
+
+.why-choose-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 626px;
+  left: 132px;
+  top: 1381px;
+  position: absolute;
+}
+
+.why-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 4px 0 0;
+  gap: 24px;
+  width: 100%;
+  margin-bottom: 147px;
+}
+
+.why-item:last-child {
+  margin-bottom: 0;
+}
+
+.why-divider {
+  width: 105px;
+  height: 0;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.why-divider img {
+  width: 105px;
+  height: 6px;
+  transform: rotate(90deg);
+}
+
+.why-text-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0;
+  gap: 16px;
+  flex: 1;
+}
+
+.why-item-title {
+  width: 100%;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 120%;
+  text-align: right;
+  letter-spacing: -0.48px;
+  color: #002169;
+  margin: 0;
+}
+
+.why-item-text {
+  width: 100%;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 150%;
+  text-align: right;
+  color: #00184C;
+  margin: 0;
+}
+
+/* Process Section - Exact Figma Specs */
+.process-section {
+  position: absolute;
+  width: 1198px;
+  height: 967px;
+  left: 122px;
+  top: 2063px;
+  background: #08122F;
+  border-radius: 40px;
+  overflow: hidden;
+}
+
+.process-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.process-background-blur {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  filter: blur(3px);
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+.process-background-blur img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.process-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 60px 46px;
+  gap: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.process-title {
+  position: absolute;
+  width: 307px;
+  left: calc(50% + 551px);
+  top: 60px;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 100%;
+  text-align: right;
+  letter-spacing: -0.96px;
+  color: #FFFFFF;
+  margin: 0;
+  transform: translateX(-100%);
+}
+
+.process-subtitle {
+  position: absolute;
+  width: 411px;
+  left: 1150px;
+  top: 167px;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 150%;
+  text-align: right;
+  color: #FFFFFF;
+  margin: 0;
+  transform: translateX(-100%);
+}
+
+.process-steps {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0;
+  gap: 31px;
+  width: 623px;
+  left: 46px;
+  top: 60px;
+  isolation: isolate;
+}
+
+.process-step {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0;
+  gap: 39px;
+  width: 100%;
+}
+
+.step-icon {
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  background: linear-gradient(134.62deg, #F7941D 2.79%, #FFC039 97.8%);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-icon img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  position: absolute;
+}
+
+.step-icon-confetti img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0 16px;
+  gap: 8px;
+  flex: 1;
+}
+
+.step-number {
+  width: 404px;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 120%;
+  text-align: right;
+  color: #FFFFFF;
+}
+
+.step-title {
+  width: 404px;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 120%;
+  text-align: right;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.step-text {
+  width: 100%;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 120%;
+  text-align: right;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.step-line {
+  position: absolute;
+  width: 56px;
+  height: 0;
+  left: 584px;
+  transform: rotate(90deg);
+}
+
+.step-line img {
+  width: 100%;
+  height: 1px;
+}
+
+.step-line-1 {
+  top: 91px;
+}
+
+.step-line-2 {
+  top: 227px;
+}
+
+.step-line-3 {
+  width: 68px;
+  top: 383px;
+}
+
+.step-line-4 {
+  width: 81px;
+  top: 541px;
+}
+
+.step-line-5 {
+  top: 708px;
+}
+
+.step-opacity-80 {
+  opacity: 0.8;
+}
+
+.step-opacity-50 {
+  opacity: 0.5;
+}
+
+.step-opacity-30 {
+  opacity: 0.3;
+}
+
+.step-opacity-10 {
+  opacity: 0.1;
+}
+
+.step-line-opacity-50 {
+  opacity: 0.5;
+}
+
+.step-line-opacity-30 {
+  opacity: 0.3;
+}
+
+.step-line-opacity-10 {
+  opacity: 0.1;
+}
+
+/* CTA Section - Exact Figma Specs */
+.cta-section {
+  position: absolute;
+  width: 1440px;
+  height: 417px;
+  left: calc(50% - 1440px/2 + 2px);
+  top: 3040px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.cta-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  gap: 16px;
+  width: 830px;
+  left: 305px;
+  top: 97px;
+  position: absolute;
+}
+
+.cta-title {
+  width: 100%;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 120%;
+  text-align: center;
+  color: #002169;
+  margin: 0;
+}
+
+.cta-text {
+  width: 756px;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 120%;
+  text-align: center;
+  color: #002169;
+  margin: 0;
+}
+
+.cta-button {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 28px;
+  gap: 8px;
+  width: auto;
+  height: 42px;
+  background: linear-gradient(96.41deg, #FA7D00 3.53%, #FFC039 122.86%);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+  color: #FFFFFF;
+  transition: all 0.3s ease;
+  left: calc(50% - 0.5px);
+  top: 259px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.cta-button:hover {
+  opacity: 0.9;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+/* Contact Section - Exact Figma Specs */
+.contact-section {
+  position: absolute;
+  width: 1197px;
+  height: 546px;
+  left: calc(50% - 1197px/2 + 1.5px);
+  top: 3467px;
+  background: #00184C;
+  border-radius: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 31px 29px;
+  gap: 0;
+}
+
+.contact-image {
+  position: absolute;
+  width: 570px;
+  height: 552px;
+  left: 29px;
+  top: 31px;
+  border-radius: 24px;
+  overflow: hidden;
+  transform: scaleX(-1);
+}
+
+.contact-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.contact-content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0;
+  gap: 24px;
+  width: 473px;
+  left: calc(50% + 314px);
+  top: 60px;
+  transform: translateX(-50%);
+}
+
+.contact-title {
+  width: 100%;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 120%;
+  text-align: right;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.contact-title-bold {
+  font-weight: 700;
+}
+
+.contact-subtitle {
+  width: 100%;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 120%;
+  text-align: right;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 392px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0 16px;
+  height: 46px;
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: none;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 14px;
+  text-align: right;
+  color: #555555;
+  direction: rtl;
+}
+
+.form-input::placeholder {
+  color: #555555;
+}
+
+.contact-submit-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 32px 12px 22px;
+  gap: 8px;
+  width: 122px;
+  height: 42px;
+  background: linear-gradient(96.41deg, #FA7D00 3.53%, #FFC039 122.86%);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+  color: #FFFFFF;
+  margin-top: 0;
+  transition: all 0.3s ease;
+}
+
+.submit-arrow {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-arrow img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.contact-submit-button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* Footer - Exact Figma Specs */
+.footer {
+  position: absolute;
+  width: 1440px;
+  height: 265.37px;
+  left: calc(50% - 1440px/2);
+  bottom: 0;
+  background: #00184D;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 120px;
+  gap: 32px;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 0 52px;
+  width: 1200px;
+  height: 145.37px;
+  gap: 0;
+}
+
+.footer-logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.footer-logo-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  position: relative;
+  width: 251.24px;
+  height: 111.37px;
+  margin-bottom: 0;
+}
+
+.footer-logo-text {
+  position: absolute;
+  width: 225px;
+  height: 75px;
+  left: 500.38px;
+  top: 36.37px;
+  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 60.61px;
+  line-height: 75px;
+  letter-spacing: -1.2123px;
+  color: #FFFFFF;
+}
+
+.footer-logo-icon {
+  position: absolute;
+  width: 98.2px;
+  height: 61.76px;
+  left: 653.43px;
+  top: 0;
+}
+
+.footer-logo-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.footer-text {
+  width: 464px;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 120%;
+  text-align: right;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.footer-divider {
+  width: 1440px;
+  height: 0;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-divider img {
+  width: 100%;
+  height: 1px;
+  transform: rotate(180deg);
+}
+
+.footer-copyright {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.footer-terms-button {
+  background: none;
+  border: none;
+  color: #FFFFFF;
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  cursor: pointer;
+  text-decoration: underline;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.footer-terms-button:hover {
+  opacity: 1;
+}
+
+.copyright-text {
+  font-family: 'Assistant', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: center;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1440px) {
+  .landing-page-v1 {
+    width: 100%;
+  }
+  
+  .navbar,
+  .hero-section,
+  .stats-section,
+  .about-section,
+  .why-choose-section,
+  .process-section,
+  .cta-section,
+  .contact-section,
+  .footer {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .navbar {
+    transform: none;
+    left: 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .hero-section {
+    width: calc(100% - 240px);
+    left: 120px;
+  }
+  
+  .process-section,
+  .contact-section {
+    width: calc(100% - 244px);
+    left: 122px;
+  }
+}
+
+@media (max-width: 968px) {
+  .landing-page-v1 {
+    min-height: auto;
+  }
+  
+  .navbar {
+    padding: 15px 30px;
+    height: 70px;
+  }
+  
+  .hero-section {
+    position: relative;
+    width: 100%;
+    left: 0;
+    top: 70px;
+    height: auto;
+    min-height: 500px;
+    padding: 40px 20px;
+  }
+  
+  .hero-content {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 851px;
+  }
+  
+  .hero-title {
+    font-size: clamp(36px, 5vw, 70px);
+    width: 100%;
+  }
+  
+  .hero-text {
+    font-size: clamp(16px, 2vw, 20px);
+    width: 100%;
+  }
+  
+  .hero-button-primary,
+  .hero-button-secondary {
+    position: relative;
+    left: 0;
+    top: 0;
+  }
+  
+  .stats-section,
+  .about-section,
+  .why-choose-section,
+  .process-section,
+  .cta-section,
+  .contact-section {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 60px 40px;
+    margin: 0;
+  }
+  
+  .about-image {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 515px;
+    height: 400px;
+  }
+  
+  .process-section {
+    height: auto;
+    min-height: 900px;
+  }
+  
+  .contact-section {
+    height: auto;
+    min-height: 546px;
+    flex-direction: column;
+  }
+  
+  .contact-image {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 570px;
+    height: 400px;
+  }
+  
+  .contact-content {
+    position: relative;
+    left: 0;
+    top: 0;
+    transform: none;
+    width: 100%;
+    max-width: 473px;
+  }
+  
+  .footer {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 40px 30px;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .hero-button-primary,
+  .hero-button-secondary {
+    width: 100%;
+  }
+  
+  .stats-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .why-item {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .why-divider {
+    width: 80px;
+    height: 4px;
+  }
+  
+  .why-divider img {
+    transform: rotate(0deg);
+    width: 80px;
+    height: 4px;
+  }
+}

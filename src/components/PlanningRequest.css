@@ -205,8 +205,8 @@
   font-family: 'Assistant', sans-serif;
   border: 2px solid var(--border-color);
   border-radius: 12px;
-  background: var(--background-white);
-  color: var(--text-primary);
+  background: var(--background-white) !important;
+  color: #2C3E50 !important;
   transition: all 0.3s ease;
   outline: none;
 }
@@ -218,6 +218,8 @@
     0 0 0 4px rgba(52, 152, 219, 0.1),
     0 4px 12px rgba(52, 152, 219, 0.15);
   transform: translateY(-2px);
+  background: rgba(255, 255, 255, 1) !important;
+  color: #2C3E50 !important;
 }
 
 .form-input.error,
