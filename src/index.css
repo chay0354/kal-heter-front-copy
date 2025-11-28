@@ -157,7 +157,8 @@
   box-sizing: border-box;
 }
 
-/* Ensure all inputs have visible text */
+/* Ensure all inputs have visible text - COMPREHENSIVE RULES */
+input,
 input[type="text"],
 input[type="email"],
 input[type="tel"],
@@ -167,12 +168,40 @@ input[type="date"],
 input[type="time"],
 input[type="url"],
 input[type="search"],
+input[type="file"],
 textarea,
 select {
   color: #2C3E50 !important;
   background-color: white !important;
 }
 
+/* Ensure inputs maintain color on focus */
+input:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+select:focus {
+  color: #2C3E50 !important;
+  background-color: white !important;
+}
+
+/* Ensure inputs maintain color when disabled */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  color: #7F8C8D !important;
+  background-color: #f5f5f5 !important;
+}
+
+/* Placeholder text */
+input::placeholder,
 input[type="text"]::placeholder,
 input[type="email"]::placeholder,
 input[type="tel"]::placeholder,
@@ -182,13 +211,41 @@ input[type="date"]::placeholder,
 input[type="time"]::placeholder,
 textarea::placeholder {
   color: #7F8C8D !important;
-  opacity: 0.6;
+  opacity: 0.7 !important;
 }
 
 /* Ensure select options are visible */
 select option {
   color: #2C3E50 !important;
   background-color: white !important;
+}
+
+/* Override any Tailwind text color classes on inputs */
+input.text-white,
+input.text-gray-100,
+input.text-gray-200,
+input.text-gray-300,
+input.text-gray-400,
+input.text-gray-500,
+input.text-gray-600,
+input.text-gray-700,
+input.text-gray-800,
+input.text-gray-900 {
+  color: #2C3E50 !important;
+}
+
+/* Ensure textarea maintains color */
+textarea.text-white,
+textarea.text-gray-100,
+textarea.text-gray-200,
+textarea.text-gray-300,
+textarea.text-gray-400,
+textarea.text-gray-500,
+textarea.text-gray-600,
+textarea.text-gray-700,
+textarea.text-gray-800,
+textarea.text-gray-900 {
+  color: #2C3E50 !important;
 }
 
 body {

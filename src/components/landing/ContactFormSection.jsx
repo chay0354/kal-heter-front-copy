@@ -70,8 +70,8 @@ export const ContactFormSection = () => {
                     value={formData[field.name]}
                     onChange={handleInputChange}
                     placeholder={field.placeholder}
-                    className="relative w-full mt-[-1.00px] [font-family:'Assistant',Helvetica] text-[#545454] text-[13px] tracking-[0] leading-[14px] whitespace-nowrap font-normal [direction:rtl] text-right bg-white"
-                    style={{ color: '#545454' }}
+                    className="relative w-full mt-[-1.00px] [font-family:'Assistant',Helvetica] text-[13px] tracking-[0] leading-[14px] whitespace-nowrap font-normal [direction:rtl] text-right bg-white"
+                    style={{ color: '#2C3E50', backgroundColor: 'white' }}
                     required
                     aria-required="true"
                   />
