@@ -10,6 +10,8 @@
   select,
   textarea {
     @apply appearance-none outline-none;
+    color: #2C3E50 !important;
+    background-color: white !important;
   }
 }
 
@@ -158,6 +160,7 @@
 }
 
 /* Ensure all inputs have visible text - COMPREHENSIVE RULES */
+/* Base rules for all inputs - placed after Tailwind base to override */
 input,
 input[type="text"],
 input[type="email"],
@@ -171,6 +174,22 @@ input[type="search"],
 input[type="file"],
 textarea,
 select {
+  color: #2C3E50 !important;
+  background-color: white !important;
+}
+
+/* More specific rules for form inputs */
+.form-input,
+.form-select,
+.form-field input,
+.form-field select,
+.form-group input,
+.form-group select,
+input.form-input,
+select.form-select,
+.form-content input,
+.form-content select,
+.form-content textarea {
   color: #2C3E50 !important;
   background-color: white !important;
 }
@@ -335,4 +354,28 @@ body::after {
   padding: 20px;
   position: relative;
   z-index: 1;
+}
+
+/* MAXIMUM SPECIFICITY - Final override for all input text visibility */
+html body #root * input,
+html body #root * textarea,
+html body #root * select,
+html body .form-content * input,
+html body .form-content * textarea,
+html body .form-content * select,
+html body .form-page * input,
+html body .form-page * textarea,
+html body .form-page * select {
+  color: #2C3E50 !important;
+  background-color: white !important;
+}
+
+html body #root * input:focus,
+html body #root * textarea:focus,
+html body #root * select:focus,
+html body .form-content * input:focus,
+html body .form-content * textarea:focus,
+html body .form-content * select:focus {
+  color: #2C3E50 !important;
+  background-color: white !important;
 }
