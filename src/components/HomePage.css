@@ -1087,13 +1087,15 @@
 
 .form-group input {
   padding: 16px 20px;
-  border: 2px solid var(--border-color);
+  border: 2px solid #667eea;
   border-radius: 15px;
   font-size: 17px;
   font-family: 'Assistant', sans-serif;
   transition: all 0.3s ease;
   background: white !important;
   color: #2C3E50 !important;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
 }
 
 .form-group input:focus {

@@ -580,20 +580,24 @@
   padding: 16px 20px;
   font-size: 1rem;
   font-family: 'Assistant', sans-serif;
-  border: 2px solid var(--border-color);
+  border: 2px solid #667eea;
   border-radius: 12px;
-  background: var(--background-white) !important;
+  background: rgba(255, 255, 255, 1) !important;
   color: #2C3E50 !important;
   transition: all 0.3s ease;
   outline: none;
+  box-shadow: 
+    0 0 0 4px rgba(102, 126, 234, 0.1),
+    0 4px 12px rgba(102, 126, 234, 0.15);
+  transform: translateY(-2px);
 }
 
 .form-input:focus,
 .form-select:focus {
-  border-color: var(--secondary-color);
+  border-color: #667eea;
   box-shadow: 
-    0 0 0 4px rgba(52, 152, 219, 0.1),
-    0 4px 12px rgba(52, 152, 219, 0.15);
+    0 0 0 4px rgba(102, 126, 234, 0.1),
+    0 4px 12px rgba(102, 126, 234, 0.15);
   transform: translateY(-2px);
   background: rgba(255, 255, 255, 1) !important;
   color: #2C3E50 !important;

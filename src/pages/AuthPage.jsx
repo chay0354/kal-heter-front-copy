@@ -131,6 +131,7 @@ function AuthPage() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="הכנס שם מלא"
+                    style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <div className="form-group">
@@ -142,6 +143,7 @@ function AuthPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="הכנס אימייל"
                     required
+                    style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <div className="form-group">
@@ -152,6 +154,7 @@ function AuthPage() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="הכנס מספר טלפון"
+                    style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <div className="form-group">
@@ -164,6 +167,7 @@ function AuthPage() {
                     placeholder="הכנס סיסמה"
                     required
                     minLength={6}
+                    style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <button type="submit" className="submit-button" disabled={loading}>
@@ -198,6 +202,7 @@ function AuthPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="הכנס אימייל"
                     required
+                    style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <div className="form-group">
@@ -209,6 +214,7 @@ function AuthPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="הכנס סיסמה"
                     required
+                    style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <button type="submit" className="submit-button" disabled={loading}>
