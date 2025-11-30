@@ -31,6 +31,19 @@ function LandingPage() {
       
       <ImageGallerySection />
       
+      {/* Hero Text Section */}
+      <div className="hero-text-section">
+        <h2 className="hero-text-heading">
+          <span>הדרך הפשוטה והברורה</span>
+          <span>לקבלת היתר בנייה</span>
+        </h2>
+        <div className="hero-text-content">
+          <p>קל־היתר הופכת תהליך מורכב ומתיש למסלול מהודק, נגיש וברור.</p>
+          <p>אתם מעלים את המסמכים וממלאים את הפרטים – והמערכת דואגת לכל השאר.</p>
+          <p>הניסיון המקצועי של מעל 25 שנה בתחום ההיתרים עובד בשבילכם, בלי הבירוקרטיה וללא חוסר ודאות.</p>
+        </div>
+      </div>
+      
       {/* Hero Buttons */}
       <div className="hero-button-container hero-button-primary-container">
         <button
@@ -60,6 +73,13 @@ function LandingPage() {
       <div className="why-choose-title-responsive">
         למה לבחור בקל־היתר
       </div>
+      
+      {/* Why Choose Image */}
+      <img
+        className="why-choose-image"
+        alt="בית מודרני מבטון"
+        src="https://c.animaapp.com/VuAXsrkU/img/3d-rendering-big-modern-concrete-house-2-1.png"
+      />
       
       {/* Content Sections */}
       <CallToActionSection />

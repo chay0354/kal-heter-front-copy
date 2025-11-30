@@ -92,6 +92,110 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
   margin: 0;
 }
 
+/* Hero Text Section - Above Buttons */
+.hero-text-section {
+  position: absolute;
+  left: max(45%, 650px);
+  top: clamp(200px, 20vh, 280px);
+  width: min(600px, calc(100% - 120px));
+  max-width: 600px;
+  padding: 0;
+  background: transparent;
+  z-index: 10;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: clamp(16px, 1.5vw, 24px);
+}
+
+.hero-text-heading {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: clamp(6px, 0.5vw, 8px);
+  margin: 0;
+  width: 100%;
+  font-family: 'Tel_Aviv-ModernistBold', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(32px, 3.5vw, 48px);
+  line-height: 120%;
+  text-align: right;
+  color: #FFFFFF;
+}
+
+.hero-text-heading span {
+  display: block;
+  text-align: right;
+  width: 100%;
+}
+
+.hero-text-content {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+  width: 100%;
+}
+
+.hero-text-content p {
+  margin: 0 0 0 0;
+  width: 100%;
+  font-family: 'Assistant', Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 150%;
+  text-align: right;
+  color: #FFF;
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 1024px) {
+  .hero-text-section {
+    left: max(40%, 400px);
+    width: min(500px, calc(100% - 80px));
+  }
+  
+  .hero-text-content p {
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-text-section {
+    left: 5%;
+    width: calc(100% - 40px);
+    top: clamp(180px, 15vh, 240px);
+  }
+  
+  .hero-text-content p {
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-text-section {
+    left: 20px;
+    width: calc(100% - 40px);
+    top: clamp(150px, 12vh, 200px);
+    gap: 16px;
+  }
+  
+  .hero-text-heading {
+    gap: 4px;
+  }
+  
+  .hero-text-content p {
+    white-space: normal;
+    word-break: break-word;
+  }
+}
+
 /* Hero Buttons - Exact Figma Position */
 .hero-button-container {
   position: absolute;
@@ -219,7 +323,7 @@ section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] {
 }
 
 section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] h2 {
-  width: 499px;
+  width: 562px;
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
@@ -262,6 +366,39 @@ section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] p {
   color: #002169;
   margin: 0;
   z-index: 2;
+}
+
+.why-choose-image {
+  position: absolute;
+  left: min(800px, calc(100% - 640px));
+  top: 1309px;
+  width: min(570px, calc(100% - 870px));
+  height: auto;
+  max-height: 552px;
+  aspect-ratio: 570 / 552;
+  object-fit: cover;
+  border-radius: 24px;
+  z-index: 2;
+}
+
+/* Responsive adjustments for why choose image */
+@media (max-width: 1440px) {
+  .why-choose-image {
+    left: max(800px, calc(50% + 100px));
+    width: min(570px, calc(50% - 100px));
+  }
+}
+
+@media (max-width: 1024px) {
+  .why-choose-image {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    max-width: 570px;
+    margin: 20px auto;
+    display: block;
+  }
 }
 
 /* ============================================

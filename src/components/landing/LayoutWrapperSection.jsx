@@ -3,7 +3,7 @@ import React from "react";
 export const LayoutWrapperSection = () => {
   return (
     <section className="flex flex-col w-[562px] items-end gap-0.5 absolute top-[839px] left-[758px]">
-      <h2 className="relative w-[499px] mt-[-1.00px] [font-family:'Tel_Aviv-ModernistRegular',Helvetica] font-normal text-[#002169] text-[32px] tracking-[-0.64px] leading-[38.4px] [direction:rtl]">
+      <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Tel_Aviv-ModernistRegular',Helvetica] font-normal text-[#002169] text-[32px] tracking-[-0.64px] leading-[38.4px] [direction:rtl] text-right">
         מי אנחנו?
       </h2>
 
