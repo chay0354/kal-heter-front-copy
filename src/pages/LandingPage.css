@@ -1,12 +1,9 @@
-/* Landing Page V1 - Exact Figma Implementation */
+/* ============================================
+   LANDING PAGE STYLES - Exact Figma Match
+   ============================================ */
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-.landing-page-v1 {
+/* Main Container - Exact Figma Specs */
+.landing-page-container {
   position: relative;
   width: 1440px;
   max-width: 100%;
@@ -18,8 +15,11 @@
   font-family: 'Assistant', 'Arial', sans-serif;
 }
 
-/* Navbar - Exact Figma Specs */
-.navbar {
+/* ============================================
+   NAVIGATION BAR - Exact Figma Specs
+   ============================================ */
+
+nav[class*="w-\\[1440px\\]"] {
   position: absolute;
   width: 1440px;
   max-width: 100%;
@@ -34,80 +34,14 @@
   gap: 48px;
   background: transparent;
   z-index: 100;
+  box-sizing: border-box;
 }
 
-.navbar-content {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+/* ============================================
+   HERO SECTION - Exact Figma Specs
+   ============================================ */
 
-.logo-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  position: relative;
-  width: 150px;
-  height: 66.71px;
-}
-
-.logo-text-nav {
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 36.19px;
-  line-height: 45px;
-  letter-spacing: -0.7238px;
-  color: #002169;
-  position: absolute;
-  left: 0;
-  top: 21.71px;
-}
-
-.logo-icon-nav {
-  position: absolute;
-  width: 58.62px;
-  height: 36.87px;
-  left: 91.38px;
-  top: 0;
-}
-
-.logo-icon-nav img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.nav-button {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 12px 28px;
-  gap: 8px;
-  width: 132px;
-  height: 42px;
-  background: linear-gradient(96.41deg, #FA7D00 3.53%, #FFC039 122.86%);
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 100%;
-  color: #FFFFFF;
-  transition: all 0.3s ease;
-}
-
-.nav-button:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-/* Hero Section - Exact Figma Specs */
-.hero-section {
+.hero-background-img {
   position: absolute;
   width: 1200px;
   height: 628px;
@@ -115,57 +49,12 @@
   top: 128px;
   border-radius: 32px;
   overflow: hidden;
-}
-
-.hero-background-wrapper {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  border-radius: 32px;
-  overflow: hidden;
-}
-
-.hero-background-image {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  border-radius: 32px;
-  overflow: hidden;
-  transform: rotate(180deg) scaleY(-1);
-}
-
-.hero-bg-img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
   object-fit: cover;
-  transform: scaleX(-1);
-}
-
-.hero-gradient-overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  background: linear-gradient(
-    75.58deg,
-    rgba(0, 16, 51, 0.7) 4.06%,
-    rgba(0, 33, 105, 0.56) 41.52%,
-    rgba(136, 151, 185, 0.49) 65.34%,
-    rgba(255, 255, 255, 0) 85.5%
-  );
-  border-radius: 32px;
   z-index: 1;
 }
 
-.hero-content {
+/* Hero Text Overlay - Exact Figma Position */
+section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -178,9 +67,9 @@
   z-index: 2;
 }
 
-.hero-title {
+section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] h1 {
   width: 851px;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-family: 'Tel_Aviv-ModernistBold', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 70px;
@@ -191,9 +80,9 @@
   margin: 0;
 }
 
-.hero-text {
+section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
   width: 851px;
-  font-family: 'Assistant', sans-serif;
+  font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -203,10 +92,26 @@
   margin: 0;
 }
 
-.hero-button-primary,
-.hero-button-secondary {
+/* Hero Buttons - Exact Figma Position */
+.hero-button-container {
   position: absolute;
-  display: flex;
+  z-index: 10;
+}
+
+.hero-button-primary-container {
+  left: 951px;
+  top: 564px;
+}
+
+.hero-button-secondary-container {
+  left: 779px;
+  top: 564px;
+  width: 159px;
+}
+
+.hero-primary-button,
+.hero-secondary-button {
+  display: inline-flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -216,7 +121,7 @@
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -224,33 +129,31 @@
   color: #FFFFFF;
   transition: all 0.3s ease;
   white-space: nowrap;
-  z-index: 3;
 }
 
-.hero-button-primary {
+.hero-primary-button {
   width: 291px;
   background: linear-gradient(96.41deg, #FA7D00 3.53%, #FFC039 122.86%);
-  left: 951px;
-  top: 564px;
 }
 
-.hero-button-secondary {
+.hero-secondary-button {
   width: 159px;
   background: rgba(255, 255, 255, 0.01);
   border: 1px solid #FFFFFF;
   backdrop-filter: blur(3px);
-  left: 779px;
-  top: 564px;
 }
 
-.hero-button-primary:hover,
-.hero-button-secondary:hover {
+.hero-primary-button:hover,
+.hero-secondary-button:hover {
   opacity: 0.9;
   transform: translateY(-2px);
 }
 
-/* Stats Section - Exact Figma Specs */
-.stats-section {
+/* ============================================
+   STATS SECTION - Exact Figma Specs
+   ============================================ */
+
+section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] {
   position: absolute;
   display: flex;
   flex-direction: row;
@@ -262,9 +165,10 @@
   width: 557px;
   left: 120px;
   top: 871px;
+  z-index: 2;
 }
 
-.stat-item {
+section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] article {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -273,9 +177,9 @@
   text-align: right;
 }
 
-.stat-number {
+section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] article div[class*="text-7xl"] {
   width: 100%;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 72px;
@@ -286,9 +190,9 @@
   margin-bottom: 0;
 }
 
-.stat-label {
+section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] article div[class*="text-2xl"] {
   width: 100%;
-  font-family: 'Assistant', sans-serif;
+  font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -297,8 +201,11 @@
   color: #00184C;
 }
 
-/* About Section - Exact Figma Specs */
-.about-section {
+/* ============================================
+   ABOUT US SECTION - Exact Figma Specs
+   ============================================ */
+
+section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] {
   position: absolute;
   display: flex;
   flex-direction: row;
@@ -308,38 +215,12 @@
   width: 562px;
   left: 758px;
   top: 839px;
+  z-index: 2;
 }
 
-.about-image {
-  position: absolute;
-  width: 515px;
-  height: 618px;
-  left: 805px;
-  top: 1309px;
-  border-radius: 32px;
-  overflow: hidden;
-  transform: scaleX(-1);
-}
-
-.about-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scaleX(-1);
-}
-
-.about-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  padding: 0;
-  gap: 2px;
-  width: 100%;
-}
-
-.about-title {
+section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] h2 {
   width: 499px;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 32px;
@@ -350,9 +231,9 @@
   margin: 0 0 0 0;
 }
 
-.about-text {
+section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] p {
   width: 562px;
-  font-family: 'Assistant', sans-serif;
+  font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -362,18 +243,16 @@
   margin: 0;
 }
 
-/* Why Choose Section - Exact Figma Specs */
-.why-choose-section {
-  position: absolute;
-  width: 100%;
-  left: 758px;
-  top: 1309px;
-  padding: 0;
-}
+/* ============================================
+   WHY CHOOSE TITLE - Exact Figma Specs
+   ============================================ */
 
-.why-choose-title {
+.why-choose-title-responsive {
+  position: absolute;
   width: 369px;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  left: 389px;
+  top: 1309px;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 40px;
@@ -381,61 +260,28 @@
   text-align: right;
   letter-spacing: -0.8px;
   color: #002169;
-  margin: 0 0 0 0;
-  transform: translateX(-100%);
+  margin: 0;
+  z-index: 2;
 }
 
-.why-choose-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  width: 626px;
-  left: 132px;
-  top: 1381px;
+/* ============================================
+   CONTENT SECTIONS (626px) - Exact Figma Specs
+   ============================================ */
+
+section[class*="w-\\[626px\\]"] {
   position: absolute;
-}
-
-.why-item {
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 0 4px 0 0;
   gap: 24px;
+  width: 626px;
+  z-index: 2;
+}
+
+section[class*="w-\\[626px\\]"] h2 {
   width: 100%;
-  margin-bottom: 147px;
-}
-
-.why-item:last-child {
-  margin-bottom: 0;
-}
-
-.why-divider {
-  width: 105px;
-  height: 0;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.why-divider img {
-  width: 105px;
-  height: 6px;
-  transform: rotate(90deg);
-}
-
-.why-text-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  padding: 0;
-  gap: 16px;
-  flex: 1;
-}
-
-.why-item-title {
-  width: 100%;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -446,9 +292,9 @@
   margin: 0;
 }
 
-.why-item-text {
+section[class*="w-\\[626px\\]"] p {
   width: 100%;
-  font-family: 'Assistant', sans-serif;
+  font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -458,8 +304,31 @@
   margin: 0;
 }
 
-/* Process Section - Exact Figma Specs */
-.process-section {
+section[class*="w-\\[626px\\]"][class*="top-\\[1381px\\]"] {
+  left: 132px;
+  top: 1381px;
+}
+
+section[class*="w-\\[626px\\]"][class*="top-\\[1528px\\]"] {
+  left: 132px;
+  top: 1528px;
+}
+
+section[class*="w-\\[626px\\]"][class*="top-\\[1675px\\]"] {
+  left: 132px;
+  top: 1675px;
+}
+
+section[class*="w-\\[626px\\]"][class*="top-\\[1822px\\]"] {
+  left: 132px;
+  top: 1822px;
+}
+
+/* ============================================
+   FEATURES SECTION (PROCESS) - Exact Figma Specs
+   ============================================ */
+
+section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] {
   position: absolute;
   width: 1198px;
   height: 967px;
@@ -468,49 +337,37 @@
   background: #08122F;
   border-radius: 40px;
   overflow: hidden;
+  z-index: 2;
 }
 
-.process-background {
+section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] img[alt=""] {
   position: absolute;
   width: 100%;
   height: 100%;
   left: 0;
   top: 0;
-}
-
-.process-background-blur {
-  position: absolute;
-  width: 100%;
-  height: 100%;
   filter: blur(3px);
   border-radius: 32px;
   overflow: hidden;
-}
-
-.process-background-blur img {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
 }
 
-.process-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  padding: 60px 46px;
-  gap: 0;
-  width: 100%;
-  height: 100%;
+section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] img[alt="תהליך קבלת היתר"] {
+  position: absolute;
+  width: 636px;
+  height: 863px;
+  left: 33px;
+  top: 60px;
+  object-fit: contain;
+  filter: none;
 }
 
-.process-title {
+section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] h2 {
   position: absolute;
   width: 307px;
   left: calc(50% + 551px);
   top: 60px;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 48px;
@@ -522,12 +379,12 @@
   transform: translateX(-100%);
 }
 
-.process-subtitle {
+section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] p {
   position: absolute;
   width: 411px;
   left: 1150px;
   top: 167px;
-  font-family: 'Assistant', sans-serif;
+  font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -538,165 +395,11 @@
   transform: translateX(-100%);
 }
 
-.process-steps {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  padding: 0;
-  gap: 31px;
-  width: 623px;
-  left: 46px;
-  top: 60px;
-  isolation: isolate;
-}
+/* ============================================
+   TESTIMONIALS/CTA SECTION - Exact Figma Specs
+   ============================================ */
 
-.process-step {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0;
-  gap: 39px;
-  width: 100%;
-}
-
-.step-icon {
-  width: 80px;
-  height: 80px;
-  min-width: 80px;
-  background: linear-gradient(134.62deg, #F7941D 2.79%, #FFC039 97.8%);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.step-icon img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  position: absolute;
-}
-
-.step-icon-confetti img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-}
-
-.step-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  padding: 0 16px;
-  gap: 8px;
-  flex: 1;
-}
-
-.step-number {
-  width: 404px;
-  font-family: 'Assistant', sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 24px;
-  line-height: 120%;
-  text-align: right;
-  color: #FFFFFF;
-}
-
-.step-title {
-  width: 404px;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 32px;
-  line-height: 120%;
-  text-align: right;
-  color: #FFFFFF;
-  margin: 0;
-}
-
-.step-text {
-  width: 100%;
-  font-family: 'Assistant', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 120%;
-  text-align: right;
-  color: #FFFFFF;
-  margin: 0;
-}
-
-.step-line {
-  position: absolute;
-  width: 56px;
-  height: 0;
-  left: 584px;
-  transform: rotate(90deg);
-}
-
-.step-line img {
-  width: 100%;
-  height: 1px;
-}
-
-.step-line-1 {
-  top: 91px;
-}
-
-.step-line-2 {
-  top: 227px;
-}
-
-.step-line-3 {
-  width: 68px;
-  top: 383px;
-}
-
-.step-line-4 {
-  width: 81px;
-  top: 541px;
-}
-
-.step-line-5 {
-  top: 708px;
-}
-
-.step-opacity-80 {
-  opacity: 0.8;
-}
-
-.step-opacity-50 {
-  opacity: 0.5;
-}
-
-.step-opacity-30 {
-  opacity: 0.3;
-}
-
-.step-opacity-10 {
-  opacity: 0.1;
-}
-
-.step-line-opacity-50 {
-  opacity: 0.5;
-}
-
-.step-line-opacity-30 {
-  opacity: 0.3;
-}
-
-.step-line-opacity-10 {
-  opacity: 0.1;
-}
-
-/* CTA Section - Exact Figma Specs */
-.cta-section {
+section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] {
   position: absolute;
   width: 1440px;
   height: 417px;
@@ -707,9 +410,11 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  z-index: 2;
 }
 
-.cta-content {
+section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] > div[class*="w-\\[830px\\]"] {
+  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -718,12 +423,11 @@
   width: 830px;
   left: 305px;
   top: 97px;
-  position: absolute;
 }
 
-.cta-title {
+section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] h2 {
   width: 100%;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-family: 'Tel_Aviv-ModernistBold', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 700;
   font-size: 40px;
@@ -733,9 +437,9 @@
   margin: 0;
 }
 
-.cta-text {
+section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] p {
   width: 756px;
-  font-family: 'Assistant', sans-serif;
+  font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -745,9 +449,9 @@
   margin: 0;
 }
 
-.cta-button {
+section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] > div[class*="top-\\[259px\\]"] {
   position: absolute;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -759,7 +463,7 @@
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -772,13 +476,16 @@
   white-space: nowrap;
 }
 
-.cta-button:hover {
+section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] > div[class*="top-\\[259px\\]"]:hover {
   opacity: 0.9;
   transform: translateX(-50%) translateY(-2px);
 }
 
-/* Contact Section - Exact Figma Specs */
-.contact-section {
+/* ============================================
+   CONTACT FORM SECTION - Exact Figma Specs
+   ============================================ */
+
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] {
   position: absolute;
   width: 1197px;
   height: 546px;
@@ -791,9 +498,10 @@
   align-items: center;
   padding: 31px 29px;
   gap: 0;
+  z-index: 2;
 }
 
-.contact-image {
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] img[alt="בית מודרני מבטון"] {
   position: absolute;
   width: 570px;
   height: 552px;
@@ -802,16 +510,14 @@
   border-radius: 24px;
   overflow: hidden;
   transform: scaleX(-1);
+  object-fit: cover;
 }
 
-.contact-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] img[alt="בית מודרני מבטון"] img {
   transform: scaleX(-1);
 }
 
-.contact-content {
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] > div[class*="w-\\[473px\\]"] {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -824,9 +530,9 @@
   transform: translateX(-50%);
 }
 
-.contact-title {
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] h2 {
   width: 100%;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-family: 'Tel_Aviv-Regular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 40px;
@@ -836,13 +542,9 @@
   margin: 0;
 }
 
-.contact-title-bold {
-  font-weight: 700;
-}
-
-.contact-subtitle {
-  width: 100%;
-  font-family: 'Assistant', sans-serif;
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] p {
+  width: auto;
+  font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
@@ -850,29 +552,30 @@
   text-align: right;
   color: #FFFFFF;
   margin: 0;
+  white-space: nowrap;
 }
 
-.contact-form {
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] form {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 392px;
 }
 
-.form-row {
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] form > div {
   display: flex;
   flex-direction: row;
   width: 100%;
 }
 
-.form-input {
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] form input {
   width: 100%;
   padding: 0 16px;
   height: 46px;
   background: #FFFFFF;
   border-radius: 8px;
   border: none;
-  font-family: 'Assistant', sans-serif;
+  font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 13px;
@@ -882,11 +585,11 @@
   direction: rtl;
 }
 
-.form-input::placeholder {
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] form input::placeholder {
   color: #555555;
 }
 
-.contact-submit-button {
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] form button[type="submit"] {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -899,7 +602,7 @@
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -909,27 +612,16 @@
   transition: all 0.3s ease;
 }
 
-.submit-arrow {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.submit-arrow img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.contact-submit-button:hover {
+section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] form button[type="submit"]:hover {
   opacity: 0.9;
   transform: translateY(-2px);
 }
 
-/* Footer - Exact Figma Specs */
-.footer {
+/* ============================================
+   FOOTER SECTION - Exact Figma Specs
+   ============================================ */
+
+footer[class*="w-\\[1440px\\]"] {
   position: absolute;
   width: 1440px;
   height: 265.37px;
@@ -942,70 +634,23 @@
   align-items: center;
   padding: 24px 120px;
   gap: 32px;
+  z-index: 2;
 }
 
-.footer-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 0 0 52px;
-  width: 1200px;
-  height: 145.37px;
-  gap: 0;
-}
-
-.footer-logo-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  width: 100%;
-  margin-bottom: 0;
-}
-
-.footer-logo-group {
+footer[class*="w-\\[1440px\\]"] hr {
+  width: 1440px;
+  height: 0;
+  margin: 16px 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0;
-  position: relative;
-  width: 251.24px;
-  height: 111.37px;
-  margin-bottom: 0;
+  border: none;
+  background: white;
+  height: 1px;
 }
 
-.footer-logo-text {
-  position: absolute;
-  width: 225px;
-  height: 75px;
-  left: 500.38px;
-  top: 36.37px;
-  font-family: 'Tel Aviv', 'Assistant', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 60.61px;
-  line-height: 75px;
-  letter-spacing: -1.2123px;
-  color: #FFFFFF;
-}
-
-.footer-logo-icon {
-  position: absolute;
-  width: 98.2px;
-  height: 61.76px;
-  left: 653.43px;
-  top: 0;
-}
-
-.footer-logo-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.footer-text {
-  width: 464px;
-  font-family: 'Assistant', sans-serif;
+footer[class*="w-\\[1440px\\]"] p {
+  font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 28px;
@@ -1015,108 +660,58 @@
   margin: 0;
 }
 
-.footer-divider {
-  width: 1440px;
-  height: 0;
-  margin: 16px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/* ============================================
+   RESPONSIVE DESIGN - Maintain Layout on Smaller Screens
+   ============================================ */
 
-.footer-divider img {
-  width: 100%;
-  height: 1px;
-  transform: rotate(180deg);
-}
-
-.footer-copyright {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-}
-
-.footer-terms-button {
-  background: none;
-  border: none;
-  color: #FFFFFF;
-  font-family: 'Assistant', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 24px;
-  cursor: pointer;
-  text-decoration: underline;
-  opacity: 0.8;
-  transition: opacity 0.3s ease;
-}
-
-.footer-terms-button:hover {
-  opacity: 1;
-}
-
-.copyright-text {
-  font-family: 'Assistant', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 24px;
-  text-align: center;
-  color: #FFFFFF;
-  margin: 0;
-}
-
-/* Responsive Design */
 @media (max-width: 1440px) {
-  .landing-page-v1 {
+  .landing-page-container {
     width: 100%;
   }
   
-  .navbar,
-  .hero-section,
-  .stats-section,
-  .about-section,
-  .why-choose-section,
-  .process-section,
-  .cta-section,
-  .contact-section,
-  .footer {
+  nav[class*="w-\\[1440px\\]"],
+  .hero-background-img,
+  section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"],
+  section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"],
+  section[class*="w-\\[626px\\]"],
+  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"],
+  section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"],
+  section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"],
+  footer[class*="w-\\[1440px\\]"] {
     left: 50%;
     transform: translateX(-50%);
   }
   
-  .navbar {
+  nav[class*="w-\\[1440px\\]"] {
     transform: none;
     left: 0;
   }
 }
 
 @media (max-width: 1200px) {
-  .hero-section {
+  .hero-background-img {
     width: calc(100% - 240px);
     left: 120px;
   }
   
-  .process-section,
-  .contact-section {
+  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"],
+  section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] {
     width: calc(100% - 244px);
     left: 122px;
   }
 }
 
 @media (max-width: 968px) {
-  .landing-page-v1 {
+  .landing-page-container {
     min-height: auto;
   }
   
-  .navbar {
+  nav[class*="w-\\[1440px\\]"] {
     padding: 15px 30px;
     height: 70px;
   }
   
-  .hero-section {
+  .hero-background-img {
     position: relative;
     width: 100%;
     left: 0;
@@ -1126,37 +721,39 @@
     padding: 40px 20px;
   }
   
-  .hero-content {
+  section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] {
     position: relative;
     left: 0;
     top: 0;
     width: 100%;
     max-width: 851px;
+    padding: 20px;
   }
   
-  .hero-title {
+  section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] h1 {
     font-size: clamp(36px, 5vw, 70px);
     width: 100%;
   }
   
-  .hero-text {
+  section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
     font-size: clamp(16px, 2vw, 20px);
     width: 100%;
   }
   
-  .hero-button-primary,
-  .hero-button-secondary {
+  .hero-button-primary-container,
+  .hero-button-secondary-container {
     position: relative;
     left: 0;
     top: 0;
+    margin: 10px auto;
   }
   
-  .stats-section,
-  .about-section,
-  .why-choose-section,
-  .process-section,
-  .cta-section,
-  .contact-section {
+  section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"],
+  section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"],
+  section[class*="w-\\[626px\\]"],
+  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"],
+  section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"],
+  section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] {
     position: relative;
     left: 0;
     top: 0;
@@ -1165,45 +762,18 @@
     margin: 0;
   }
   
-  .about-image {
-    position: relative;
-    left: 0;
-    top: 0;
-    width: 100%;
-    max-width: 515px;
-    height: 400px;
-  }
-  
-  .process-section {
+  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] {
     height: auto;
     min-height: 900px;
   }
   
-  .contact-section {
+  section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] {
     height: auto;
     min-height: 546px;
     flex-direction: column;
   }
   
-  .contact-image {
-    position: relative;
-    left: 0;
-    top: 0;
-    width: 100%;
-    max-width: 570px;
-    height: 400px;
-  }
-  
-  .contact-content {
-    position: relative;
-    left: 0;
-    top: 0;
-    transform: none;
-    width: 100%;
-    max-width: 473px;
-  }
-  
-  .footer {
+  footer[class*="w-\\[1440px\\]"] {
     position: relative;
     left: 0;
     bottom: 0;
@@ -1213,34 +783,18 @@
 }
 
 @media (max-width: 640px) {
-  .hero-buttons {
-    flex-direction: column;
+  .hero-button-primary-container,
+  .hero-button-secondary-container {
     width: 100%;
   }
   
-  .hero-button-primary,
-  .hero-button-secondary {
+  .hero-primary-button,
+  .hero-secondary-button {
     width: 100%;
   }
   
-  .stats-section {
+  section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] {
     flex-direction: column;
     align-items: center;
-  }
-  
-  .why-item {
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .why-divider {
-    width: 80px;
-    height: 4px;
-  }
-  
-  .why-divider img {
-    transform: rotate(0deg);
-    width: 80px;
-    height: 4px;
   }
 }

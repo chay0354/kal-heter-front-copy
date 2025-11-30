@@ -6,12 +6,6 @@ export const TestimonialsSection = () => {
 
   return (
     <section className="absolute top-[3040px] left-[calc(50.00%_-_718px)] w-[1440px] h-[417px]">
-      <img
-        className="absolute top-[104px] left-[6417px] w-[513px] h-px object-cover"
-        alt=""
-        src="/img/line-47.svg"
-        aria-hidden="true"
-      />
 
       <div className="flex flex-col w-[830px] items-center gap-4 absolute top-[97px] left-[305px]">
         <h2 className="relative w-fit mt-[-1.00px] [font-family:'Tel_Aviv-ModernistBold',Helvetica] font-bold text-[#002169] text-[40px] text-center tracking-[0] leading-[48.0px] whitespace-nowrap [direction:rtl]">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { signIn, signUp } from '../services/auth'
-import '../components/HomePage.css'
+import './AuthPage.css'
 
 function AuthPage() {
   const navigate = useNavigate()

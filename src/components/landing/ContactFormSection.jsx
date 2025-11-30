@@ -28,12 +28,6 @@ export const ContactFormSection = () => {
 
   return (
     <section className="absolute top-[3467px] left-[calc(50.00%_-_597px)] w-[1197px] h-[546px] bg-[#00184c] rounded-[40px]">
-      <img
-        className="absolute top-[-322px] left-[6096px] w-[415px] h-px object-cover"
-        alt=""
-        src="/img/image.svg"
-        aria-hidden="true"
-      />
 
       <div className="flex flex-col w-[473px] items-end gap-6 absolute top-[60px] left-[calc(50.00%_+_78px)]">
         <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Tel_Aviv-Regular',Helvetica] font-normal text-white text-[40px] tracking-[0] leading-[48.0px] [direction:rtl]">

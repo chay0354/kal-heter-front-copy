@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import '../components/HomePage.css'
+import './TermsPage.css'
 
 function TermsPage() {
   const navigate = useNavigate()
@@ -110,6 +110,7 @@ function TermsPage() {
 }
 
 export default TermsPage
+
 
 
 
