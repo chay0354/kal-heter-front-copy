@@ -95,10 +95,11 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
 /* Hero Text Section - Above Buttons */
 .hero-text-section {
   position: absolute;
-  left: max(45%, 650px);
+  right: clamp(60px, 8vw, 120px);
+  left: clamp(40%, 400px, 50%);
   top: clamp(200px, 20vh, 280px);
-  width: min(600px, calc(100% - 120px));
-  max-width: 600px;
+  width: auto;
+  max-width: none;
   padding: 0;
   background: transparent;
   z-index: 10;
@@ -155,8 +156,8 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
 /* Responsive adjustments for smaller screens */
 @media (max-width: 1024px) {
   .hero-text-section {
-    left: max(40%, 400px);
-    width: min(500px, calc(100% - 80px));
+    right: clamp(40px, 5vw, 80px);
+    left: clamp(30%, 300px, 45%);
   }
   
   .hero-text-content p {
@@ -167,8 +168,8 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
 
 @media (max-width: 768px) {
   .hero-text-section {
-    left: 5%;
-    width: calc(100% - 40px);
+    right: 20px;
+    left: 20px;
     top: clamp(180px, 15vh, 240px);
   }
   
@@ -180,8 +181,8 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
 
 @media (max-width: 480px) {
   .hero-text-section {
+    right: 20px;
     left: 20px;
-    width: calc(100% - 40px);
     top: clamp(150px, 12vh, 200px);
     gap: 16px;
   }
