@@ -1,4 +1,5 @@
 import React from "react";
+import "../../pages/LandingPage.css";
 
 export const CallToActionSection = () => {
   const sectionData = {
@@ -10,24 +11,24 @@ export const CallToActionSection = () => {
 
   return (
     <section
-      className="flex w-[626px] items-center gap-6 pl-0 pr-1 py-0 absolute top-[1381px] left-[132px]"
+      className="content-section content-section-cta"
       aria-labelledby="cta-section-title"
     >
-      <div className="flex flex-col items-end gap-4 relative flex-1 grow">
+      <div className="content-section-inner">
         <h2
           id="cta-section-title"
-          className="relative self-stretch mt-[-1.00px] [font-family:'Tel_Aviv-ModernistRegular',Helvetica] font-normal text-[#002169] text-2xl tracking-[-0.48px] leading-[28.8px] [direction:rtl]"
+          className="content-section-title"
         >
           {sectionData.title}
         </h2>
 
-        <p className="relative self-stretch [font-family:'Assistant',Helvetica] font-normal text-[#00184c] text-xl tracking-[0] leading-[30px] [direction:rtl]">
+        <p className="content-section-description">
           {sectionData.description}
         </p>
       </div>
 
       <img
-        className="relative self-stretch w-1.5 mr-[-6.00px]"
+        className="content-section-line"
         alt=""
         role="presentation"
         src={sectionData.lineImage}

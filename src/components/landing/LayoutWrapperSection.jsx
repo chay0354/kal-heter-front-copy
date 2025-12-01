@@ -1,13 +1,12 @@
 import React from "react";
+import "../../pages/LandingPage.css";
 
 export const LayoutWrapperSection = () => {
   return (
-    <section className="flex flex-col w-[562px] items-end gap-0.5 absolute top-[839px] left-[758px]">
-      <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Tel_Aviv-ModernistRegular',Helvetica] font-normal text-[#002169] text-[32px] tracking-[-0.64px] leading-[38.4px] [direction:rtl] text-right">
-        מי אנחנו?
-      </h2>
+    <section className="about-section">
+      <h2 className="about-section-title">מי אנחנו?</h2>
 
-      <p className="relative self-stretch [font-family:'Assistant',Helvetica] font-normal text-[#00184c] text-xl tracking-[0] leading-[30px] [direction:rtl]">
+      <p className="about-section-description">
         אנחנו משרד אדריכלי מנוסה, שפועל כבר יותר מ־20 שנה בעולם ההיתרים והבנייה.
         לאורך השנים ראינו שוב ושוב עד כמה תהליך קבלת היתר בנייה עלול להיות ארוך,
         מסובך ומלא חוסר ודאות. אנשים מתמודדים עם טפסים לא ברורים, דרישות שמשתנות
