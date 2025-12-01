@@ -47,6 +47,7 @@
   background: #FEFEFE;
   direction: rtl;
   overflow-x: hidden;
+  overflow-y: visible;
   margin: 0 auto;
   font-family: 'Assistant', 'Arial', sans-serif;
 }
@@ -1432,9 +1433,10 @@ footer[class*="w-\\[1440px\\]"] p {
 .contact-form-section {
   position: absolute;
   width: 1197px;
-  height: 546px;
+  height: 650px;
+  min-height: 650px;
   left: calc(50% - 597px);
-  top: 3467px;
+  top: 3400px;
   background: #00184c;
   border-radius: 40px;
   z-index: 2;
@@ -1604,20 +1606,22 @@ footer[class*="w-\\[1440px\\]"] p {
   border-radius: 24px;
 }
 
-/* Footer Section */
+/* Footer Section - Completely Independent */
 .footer-section {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 32px;
-  width: 1440px;
-  left: calc(50% - 720px);
-  bottom: 0;
+  width: 100%;
+  left: 0;
+  right: 0;
   background: #00184c;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-  padding: 24px 120px;
+  padding: 24px clamp(20px, 8.33%, 120px);
   z-index: 2;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .footer-content {
@@ -1678,13 +1682,14 @@ footer[class*="w-\\[1440px\\]"] p {
   align-items: center;
   gap: 16px;
   position: relative;
-  margin-left: -120px;
-  margin-right: -120px;
+  width: 100%;
+  max-width: 1600px;
 }
 
 .footer-divider {
   position: relative;
-  width: 1440px;
+  width: 100%;
+  max-width: 1600px;
   height: 1px;
   border: 0;
   background: #FFFFFF;
