@@ -1,28 +1,27 @@
 /* ============================================
-   LANDING PAGE STYLES - Exact Figma Match
+   LANDING PAGE STYLES - Full Width Dynamic
    ============================================ */
 
-/* Main Container - Exact Figma Specs */
+/* Main Container - Full Width */
 .landing-page-container {
   position: relative;
-  width: 1440px;
-  max-width: 100%;
-  min-height: 4362px;
+  width: 100%;
+  min-height: 100vh;
   background: #FEFEFE;
   direction: rtl;
   overflow-x: hidden;
-  margin: 0 auto;
+  margin: 0;
+  padding: 0;
   font-family: 'Assistant', 'Arial', sans-serif;
 }
 
 /* ============================================
-   NAVIGATION BAR - Exact Figma Specs
+   NAVIGATION BAR - Full Width
    ============================================ */
 
 nav[class*="w-\\[1440px\\]"] {
-  position: absolute;
-  width: 1440px;
-  max-width: 100%;
+  position: fixed;
+  width: 100%;
   height: 106.71px;
   left: 0;
   top: 0;
@@ -30,7 +29,7 @@ nav[class*="w-\\[1440px\\]"] {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 120px;
+  padding: 20px clamp(20px, 8.33%, 120px);
   gap: 48px;
   background: transparent;
   z-index: 100;
@@ -38,41 +37,45 @@ nav[class*="w-\\[1440px\\]"] {
 }
 
 /* ============================================
-   HERO SECTION - Exact Figma Specs
+   HERO SECTION - Full Width
    ============================================ */
 
 .hero-background-img {
-  position: absolute;
-  width: 1200px;
-  height: 628px;
-  left: 120px;
-  top: 128px;
-  border-radius: 32px;
+  position: relative;
+  width: 100%;
+  height: clamp(400px, 50vh, 628px);
+  margin-top: 106.71px;
+  border-radius: 0;
   overflow: hidden;
   object-fit: cover;
   z-index: 1;
 }
 
-/* Hero Text Overlay - Exact Figma Position */
+/* Hero Text Overlay - Responsive */
 section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] {
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding: 0;
+  padding: clamp(20px, 5vw, 60px);
   gap: 24px;
-  left: 300px;
-  top: 273px;
-  width: 851px;
+  left: 0;
+  right: 0;
+  top: clamp(150px, 20vh, 273px);
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   z-index: 2;
+  box-sizing: border-box;
 }
 
 section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] h1 {
-  width: 851px;
+  width: 100%;
+  max-width: 851px;
   font-family: 'Tel_Aviv-ModernistBold', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 700;
-  font-size: 70px;
+  font-size: clamp(32px, 5vw, 70px);
   line-height: 100%;
   text-align: right;
   letter-spacing: -1.4px;
@@ -81,11 +84,12 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] h1 {
 }
 
 section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
-  width: 851px;
+  width: 100%;
+  max-width: 851px;
   font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 600;
-  font-size: 20px;
+  font-size: clamp(16px, 2vw, 20px);
   line-height: 150%;
   text-align: right;
   color: #FFFFFF;
@@ -95,17 +99,20 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
 /* Hero Text Section - Above Buttons */
 .hero-text-section {
   position: absolute;
-  left: max(45%, 650px);
-  top: clamp(200px, 20vh, 280px);
-  width: min(600px, calc(100% - 120px));
-  max-width: 600px;
-  padding: 0;
+  left: 0;
+  right: 0;
+  top: clamp(200px, 25vh, 350px);
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 8.33%, 120px);
   background: transparent;
   z-index: 10;
   display: inline-flex;
   flex-direction: column;
   align-items: flex-end;
   gap: clamp(16px, 1.5vw, 24px);
+  box-sizing: border-box;
 }
 
 .hero-text-heading {
@@ -115,6 +122,7 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
   gap: clamp(6px, 0.5vw, 8px);
   margin: 0;
   width: 100%;
+  max-width: 600px;
   font-family: 'Tel_Aviv-ModernistBold', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 700;
@@ -136,6 +144,7 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
   align-items: flex-end;
   gap: 0;
   width: 100%;
+  max-width: 600px;
 }
 
 .hero-text-content p {
@@ -148,68 +157,24 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
   line-height: 150%;
   text-align: right;
   color: #FFF;
-  white-space: nowrap;
-  word-break: keep-all;
 }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 1024px) {
-  .hero-text-section {
-    left: max(40%, 400px);
-    width: min(500px, calc(100% - 80px));
-  }
-  
-  .hero-text-content p {
-    white-space: normal;
-    word-break: break-word;
-  }
-}
-
-@media (max-width: 768px) {
-  .hero-text-section {
-    left: 5%;
-    width: calc(100% - 40px);
-    top: clamp(180px, 15vh, 240px);
-  }
-  
-  .hero-text-content p {
-    white-space: normal;
-    word-break: break-word;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-text-section {
-    left: 20px;
-    width: calc(100% - 40px);
-    top: clamp(150px, 12vh, 200px);
-    gap: 16px;
-  }
-  
-  .hero-text-heading {
-    gap: 4px;
-  }
-  
-  .hero-text-content p {
-    white-space: normal;
-    word-break: break-word;
-  }
-}
-
-/* Hero Buttons - Exact Figma Position */
+/* Hero Buttons - Responsive */
 .hero-button-container {
   position: absolute;
   z-index: 10;
 }
 
 .hero-button-primary-container {
-  left: 951px;
-  top: 564px;
+  left: auto;
+  right: clamp(20px, 8.33%, 120px);
+  top: clamp(450px, 55vh, 600px);
 }
 
 .hero-button-secondary-container {
-  left: 779px;
-  top: 564px;
+  left: auto;
+  right: clamp(320px, 25%, 400px);
+  top: clamp(450px, 55vh, 600px);
   width: 159px;
 }
 
@@ -228,7 +193,7 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 18px;
+  font-size: clamp(16px, 1.2vw, 18px);
   line-height: 100%;
   color: #FFFFFF;
   transition: all 0.3s ease;
@@ -236,7 +201,8 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
 }
 
 .hero-primary-button {
-  width: 291px;
+  width: auto;
+  min-width: 200px;
   background: linear-gradient(96.41deg, #FA7D00 3.53%, #FFC039 122.86%);
 }
 
@@ -254,22 +220,23 @@ section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
 }
 
 /* ============================================
-   STATS SECTION - Exact Figma Specs
+   STATS SECTION - Responsive
    ============================================ */
 
 section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: flex-start;
-  padding: 0;
-  gap: 60px 81px;
-  width: 557px;
-  left: 120px;
-  top: 871px;
+  padding: clamp(40px, 5vw, 80px) clamp(20px, 8.33%, 120px);
+  gap: clamp(30px, 4vw, 60px) clamp(40px, 5vw, 81px);
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   z-index: 2;
+  box-sizing: border-box;
 }
 
 section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] article {
@@ -277,7 +244,9 @@ section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] article {
   flex-direction: column;
   align-items: flex-end;
   padding: 0;
-  width: 231px;
+  width: calc(50% - 40px);
+  min-width: 200px;
+  max-width: 231px;
   text-align: right;
 }
 
@@ -286,7 +255,7 @@ section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] article div[class*="te
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 72px;
+  font-size: clamp(36px, 5vw, 72px);
   line-height: 100%;
   text-align: right;
   letter-spacing: -1.44px;
@@ -299,35 +268,37 @@ section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] article div[class*="te
   font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 24px;
+  font-size: clamp(18px, 2vw, 24px);
   line-height: 150%;
   text-align: right;
   color: #00184C;
 }
 
 /* ============================================
-   ABOUT US SECTION - Exact Figma Specs
+   ABOUT US SECTION - Responsive
    ============================================ */
 
 section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] {
-  position: absolute;
+  position: relative;
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 0;
-  gap: 0;
-  width: 562px;
-  left: 758px;
-  top: 839px;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: clamp(40px, 5vw, 80px) clamp(20px, 8.33%, 120px);
+  gap: 16px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   z-index: 2;
+  box-sizing: border-box;
 }
 
 section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] h2 {
-  width: 562px;
+  width: 100%;
+  max-width: 800px;
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 32px;
+  font-size: clamp(24px, 3vw, 32px);
   line-height: 120%;
   text-align: right;
   letter-spacing: -0.64px;
@@ -336,11 +307,12 @@ section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] h2 {
 }
 
 section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] p {
-  width: 562px;
+  width: 100%;
+  max-width: 800px;
   font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 20px;
+  font-size: clamp(16px, 2vw, 20px);
   line-height: 150%;
   text-align: right;
   color: #00184C;
@@ -348,72 +320,66 @@ section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] p {
 }
 
 /* ============================================
-   WHY CHOOSE TITLE - Exact Figma Specs
+   WHY CHOOSE TITLE - Responsive
    ============================================ */
 
 .why-choose-title-responsive {
-  position: absolute;
-  width: 369px;
-  left: 389px;
-  top: 1309px;
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: clamp(40px, 5vw, 80px) auto 0;
+  padding: 0 clamp(20px, 8.33%, 120px);
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 40px;
+  font-size: clamp(28px, 3.5vw, 40px);
   line-height: 120%;
   text-align: right;
   letter-spacing: -0.8px;
   color: #002169;
-  margin: 0;
   z-index: 2;
+  box-sizing: border-box;
 }
 
 .why-choose-image {
-  position: absolute;
-  left: min(800px, calc(100% - 640px));
-  top: 1309px;
-  width: min(570px, calc(100% - 870px));
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: clamp(20px, 3vw, 40px) auto;
+  padding: 0 clamp(20px, 8.33%, 120px);
   height: auto;
   max-height: 552px;
   aspect-ratio: 570 / 552;
   object-fit: cover;
   border-radius: 24px;
   z-index: 2;
+  display: block;
+  box-sizing: border-box;
 }
 
-/* Responsive adjustments for why choose image */
-@media (max-width: 1440px) {
-  .why-choose-image {
-    left: max(800px, calc(50% + 100px));
-    width: min(570px, calc(50% - 100px));
-  }
-}
-
-@media (max-width: 1024px) {
-  .why-choose-image {
-    position: relative;
-    left: auto;
-    top: auto;
-    width: 100%;
-    max-width: 570px;
-    margin: 20px auto;
-    display: block;
-  }
+.why-choose-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 24px;
+  object-fit: cover;
 }
 
 /* ============================================
-   CONTENT SECTIONS (626px) - Exact Figma Specs
+   CONTENT SECTIONS (626px) - Responsive
    ============================================ */
 
 section[class*="w-\\[626px\\]"] {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 0 4px 0 0;
+  padding: clamp(30px, 4vw, 60px) clamp(20px, 8.33%, 120px);
   gap: 24px;
-  width: 626px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   z-index: 2;
+  box-sizing: border-box;
 }
 
 section[class*="w-\\[626px\\]"] h2 {
@@ -421,7 +387,7 @@ section[class*="w-\\[626px\\]"] h2 {
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 24px;
+  font-size: clamp(20px, 2.5vw, 24px);
   line-height: 120%;
   text-align: right;
   letter-spacing: -0.48px;
@@ -434,47 +400,28 @@ section[class*="w-\\[626px\\]"] p {
   font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 20px;
+  font-size: clamp(16px, 2vw, 20px);
   line-height: 150%;
   text-align: right;
   color: #00184C;
   margin: 0;
 }
 
-section[class*="w-\\[626px\\]"][class*="top-\\[1381px\\]"] {
-  left: 132px;
-  top: 1381px;
-}
-
-section[class*="w-\\[626px\\]"][class*="top-\\[1528px\\]"] {
-  left: 132px;
-  top: 1528px;
-}
-
-section[class*="w-\\[626px\\]"][class*="top-\\[1675px\\]"] {
-  left: 132px;
-  top: 1675px;
-}
-
-section[class*="w-\\[626px\\]"][class*="top-\\[1822px\\]"] {
-  left: 132px;
-  top: 1822px;
-}
-
 /* ============================================
-   FEATURES SECTION (PROCESS) - Exact Figma Specs
+   FEATURES SECTION (PROCESS) - Full Width
    ============================================ */
 
 section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] {
-  position: absolute;
-  width: 1198px;
-  height: 967px;
-  left: 122px;
-  top: 2063px;
+  position: relative;
+  width: 100%;
+  min-height: 967px;
+  margin: clamp(40px, 5vw, 80px) 0;
+  padding: clamp(30px, 4vw, 60px) clamp(20px, 8.33%, 120px);
   background: #08122F;
-  border-radius: 40px;
+  border-radius: 0;
   overflow: hidden;
   z-index: 2;
+  box-sizing: border-box;
 }
 
 section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] img[alt=""] {
@@ -484,16 +431,17 @@ section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] img[alt=""] {
   left: 0;
   top: 0;
   filter: blur(3px);
-  border-radius: 32px;
+  border-radius: 0;
   overflow: hidden;
   object-fit: cover;
 }
 
 section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] img[alt="תהליך קבלת היתר"] {
   position: absolute;
-  width: 636px;
-  height: 863px;
-  left: 33px;
+  width: min(636px, 50%);
+  height: auto;
+  max-height: 863px;
+  left: clamp(20px, 8.33%, 33px);
   top: 60px;
   object-fit: contain;
   filter: none;
@@ -501,65 +449,66 @@ section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] img[alt="תהליך 
 
 section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] h2 {
   position: absolute;
-  width: 307px;
-  left: calc(50% + 551px);
+  width: auto;
+  max-width: 500px;
+  left: auto;
+  right: clamp(20px, 8.33%, 120px);
   top: 60px;
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 48px;
+  font-size: clamp(32px, 4vw, 48px);
   line-height: 100%;
   text-align: right;
   letter-spacing: -0.96px;
   color: #FFFFFF;
   margin: 0;
-  transform: translateX(-100%);
 }
 
 section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] p {
   position: absolute;
-  width: 411px;
-  left: 1150px;
+  width: auto;
+  max-width: 500px;
+  left: auto;
+  right: clamp(20px, 8.33%, 120px);
   top: 167px;
   font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 600;
-  font-size: 20px;
+  font-size: clamp(16px, 2vw, 20px);
   line-height: 150%;
   text-align: right;
   color: #FFFFFF;
   margin: 0;
-  transform: translateX(-100%);
 }
 
 /* ============================================
-   TESTIMONIALS/CTA SECTION - Exact Figma Specs
+   TESTIMONIALS/CTA SECTION - Full Width
    ============================================ */
 
 section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] {
-  position: absolute;
-  width: 1440px;
-  height: 417px;
-  left: calc(50% - 1440px/2 + 2px);
-  top: 3040px;
+  position: relative;
+  width: 100%;
+  min-height: 417px;
+  margin: clamp(40px, 5vw, 80px) 0;
+  padding: clamp(40px, 5vw, 97px) clamp(20px, 8.33%, 120px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0;
   z-index: 2;
+  box-sizing: border-box;
 }
 
 section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] > div[class*="w-\\[830px\\]"] {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0;
   gap: 16px;
-  width: 830px;
-  left: 305px;
-  top: 97px;
+  width: 100%;
+  max-width: 830px;
 }
 
 section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] h2 {
@@ -567,7 +516,7 @@ section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] h2 {
   font-family: 'Tel_Aviv-ModernistBold', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 700;
-  font-size: 40px;
+  font-size: clamp(28px, 3.5vw, 40px);
   line-height: 120%;
   text-align: center;
   color: #002169;
@@ -575,11 +524,12 @@ section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] h2 {
 }
 
 section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] p {
-  width: 756px;
+  width: 100%;
+  max-width: 756px;
   font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 24px;
+  font-size: clamp(18px, 2.5vw, 24px);
   line-height: 120%;
   text-align: center;
   color: #002169;
@@ -587,7 +537,7 @@ section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] p {
 }
 
 section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] > div[class*="top-\\[259px\\]"] {
-  position: absolute;
+  position: relative;
   display: inline-flex;
   flex-direction: row;
   justify-content: center;
@@ -603,68 +553,62 @@ section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] > div[class*="top-\\
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 18px;
+  font-size: clamp(16px, 1.2vw, 18px);
   line-height: 100%;
   color: #FFFFFF;
   transition: all 0.3s ease;
-  left: calc(50% - 0.5px);
-  top: 259px;
-  transform: translateX(-50%);
+  margin-top: 20px;
   white-space: nowrap;
 }
 
 section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] > div[class*="top-\\[259px\\]"]:hover {
   opacity: 0.9;
-  transform: translateX(-50%) translateY(-2px);
+  transform: translateY(-2px);
 }
 
 /* ============================================
-   CONTACT FORM SECTION - Exact Figma Specs
+   CONTACT FORM SECTION - Full Width
    ============================================ */
 
 section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] {
-  position: absolute;
-  width: 1197px;
-  height: 546px;
-  left: calc(50% - 1197px/2 + 1.5px);
-  top: 3467px;
+  position: relative;
+  width: 100%;
+  min-height: 546px;
+  margin: clamp(40px, 5vw, 80px) 0;
+  padding: clamp(30px, 4vw, 60px) clamp(20px, 8.33%, 120px);
   background: #00184C;
-  border-radius: 40px;
+  border-radius: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 31px 29px;
-  gap: 0;
+  gap: clamp(20px, 3vw, 40px);
   z-index: 2;
+  box-sizing: border-box;
 }
 
 section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] img[alt="בית מודרני מבטון"] {
-  position: absolute;
-  width: 570px;
-  height: 552px;
-  left: 29px;
-  top: 31px;
+  position: relative;
+  width: 100%;
+  max-width: 570px;
+  height: auto;
+  max-height: 552px;
   border-radius: 24px;
   overflow: hidden;
   transform: scaleX(-1);
   object-fit: cover;
-}
-
-section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] img[alt="בית מודרני מבטון"] img {
-  transform: scaleX(-1);
+  flex: 1;
 }
 
 section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] > div[class*="w-\\[473px\\]"] {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   padding: 0;
   gap: 24px;
-  width: 473px;
-  left: calc(50% + 314px);
-  top: 60px;
-  transform: translateX(-50%);
+  width: 100%;
+  max-width: 473px;
+  flex: 1;
 }
 
 section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] h2 {
@@ -672,7 +616,7 @@ section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] h2 {
   font-family: 'Tel_Aviv-Regular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 40px;
+  font-size: clamp(28px, 3.5vw, 40px);
   line-height: 120%;
   text-align: right;
   color: #FFFFFF;
@@ -680,23 +624,23 @@ section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] h2 {
 }
 
 section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] p {
-  width: auto;
+  width: 100%;
   font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 24px;
+  font-size: clamp(18px, 2.5vw, 24px);
   line-height: 120%;
   text-align: right;
   color: #FFFFFF;
   margin: 0;
-  white-space: nowrap;
 }
 
 section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] form {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 392px;
+  width: 100%;
+  max-width: 392px;
 }
 
 section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] form > div {
@@ -755,27 +699,28 @@ section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] form button[type="su
 }
 
 /* ============================================
-   FOOTER SECTION - Exact Figma Specs
+   FOOTER SECTION - Full Width
    ============================================ */
 
 footer[class*="w-\\[1440px\\]"] {
-  position: absolute;
-  width: 1440px;
-  height: 265.37px;
-  left: calc(50% - 1440px/2);
-  bottom: 0;
+  position: relative;
+  width: 100%;
+  min-height: 265.37px;
+  margin: 0;
+  padding: clamp(30px, 4vw, 60px) clamp(20px, 8.33%, 120px);
   background: #00184D;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 120px;
   gap: 32px;
   z-index: 2;
+  box-sizing: border-box;
 }
 
 footer[class*="w-\\[1440px\\]"] hr {
-  width: 1440px;
+  width: 100%;
+  max-width: 1200px;
   height: 0;
   margin: 16px 0;
   display: flex;
@@ -790,7 +735,7 @@ footer[class*="w-\\[1440px\\]"] p {
   font-family: 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 28px;
+  font-size: clamp(20px, 2.5vw, 28px);
   line-height: 120%;
   text-align: right;
   color: #FFFFFF;
@@ -798,131 +743,23 @@ footer[class*="w-\\[1440px\\]"] p {
 }
 
 /* ============================================
-   RESPONSIVE DESIGN - Maintain Layout on Smaller Screens
+   RESPONSIVE DESIGN - Mobile Optimizations
    ============================================ */
 
-@media (max-width: 1440px) {
-  .landing-page-container {
-    width: 100%;
-  }
-  
-  nav[class*="w-\\[1440px\\]"],
-  .hero-background-img,
-  section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"],
-  section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"],
-  section[class*="w-\\[626px\\]"],
-  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"],
-  section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"],
-  section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"],
-  footer[class*="w-\\[1440px\\]"] {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  nav[class*="w-\\[1440px\\]"] {
-    transform: none;
-    left: 0;
-  }
-}
-
-@media (max-width: 1200px) {
-  .hero-background-img {
-    width: calc(100% - 240px);
-    left: 120px;
-  }
-  
-  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"],
-  section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] {
-    width: calc(100% - 244px);
-    left: 122px;
-  }
-}
-
 @media (max-width: 968px) {
-  .landing-page-container {
-    min-height: auto;
-  }
-  
-  nav[class*="w-\\[1440px\\]"] {
-    padding: 15px 30px;
-    height: 70px;
-  }
-  
   .hero-background-img {
-    position: relative;
-    width: 100%;
-    left: 0;
-    top: 70px;
-    height: auto;
-    min-height: 500px;
-    padding: 40px 20px;
-  }
-  
-  section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] {
-    position: relative;
-    left: 0;
-    top: 0;
-    width: 100%;
-    max-width: 851px;
-    padding: 20px;
-  }
-  
-  section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] h1 {
-    font-size: clamp(36px, 5vw, 70px);
-    width: 100%;
-  }
-  
-  section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] p {
-    font-size: clamp(16px, 2vw, 20px);
-    width: 100%;
+    border-radius: 0;
   }
   
   .hero-button-primary-container,
   .hero-button-secondary-container {
     position: relative;
-    left: 0;
-    top: 0;
-    margin: 10px auto;
-  }
-  
-  section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"],
-  section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"],
-  section[class*="w-\\[626px\\]"],
-  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"],
-  section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"],
-  section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] {
-    position: relative;
-    left: 0;
-    top: 0;
+    left: auto;
+    right: auto;
+    top: auto;
+    margin: 20px auto;
     width: 100%;
-    padding: 60px 40px;
-    margin: 0;
-  }
-  
-  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] {
-    height: auto;
-    min-height: 900px;
-  }
-  
-  section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] {
-    height: auto;
-    min-height: 546px;
-    flex-direction: column;
-  }
-  
-  footer[class*="w-\\[1440px\\]"] {
-    position: relative;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    padding: 40px 30px;
-  }
-}
-
-@media (max-width: 640px) {
-  .hero-button-primary-container,
-  .hero-button-secondary-container {
-    width: 100%;
+    max-width: 300px;
   }
   
   .hero-primary-button,
@@ -930,8 +767,62 @@ footer[class*="w-\\[1440px\\]"] p {
     width: 100%;
   }
   
-  section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] {
+  section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] article {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] {
     flex-direction: column;
-    align-items: center;
+  }
+  
+  section[class*="w-\\[1197px\\]"][class*="top-\\[3467px\\]"] img[alt="בית מודרני מבטון"] {
+    max-width: 100%;
+  }
+  
+  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] {
+    flex-direction: column;
+    padding: 40px 20px;
+  }
+  
+  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] img[alt="תהליך קבלת היתר"] {
+    position: relative;
+    width: 100%;
+    max-width: 636px;
+    left: auto;
+    top: auto;
+    margin: 0 auto;
+  }
+  
+  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] h2,
+  section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] p {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    width: 100%;
+    max-width: 100%;
+    margin: 20px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  nav[class*="w-\\[1440px\\]"] {
+    padding: 15px 20px;
+    height: auto;
+    min-height: 70px;
+  }
+  
+  .hero-text-section {
+    padding: 0 20px;
+  }
+  
+  section[class*="w-\\[557px\\]"][class*="top-\\[871px\\]"] {
+    padding: 40px 20px;
+  }
+  
+  section[class*="w-\\[626px\\]"] {
+    flex-direction: column;
+    padding: 30px 20px;
   }
 }
