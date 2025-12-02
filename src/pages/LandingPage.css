@@ -41,7 +41,7 @@
 /* Main Container - Exact Figma Specs */
 .landing-page-container {
   position: relative;
-  width: 1440px;
+  width: 100%;
   max-width: 100%;
   min-height: 4362px;
   background: #FEFEFE;
@@ -155,9 +155,13 @@
 
 .hero-background-img {
   position: absolute;
-  width: 1200px;
-  height: 628px;
-  left: 120px;
+  width: calc(100% - 2 * clamp(20px, 8.33%, 120px));
+  max-width: calc(100% - 2 * clamp(20px, 8.33%, 120px));
+  height: auto;
+  min-height: 700px;
+  aspect-ratio: 1200 / 628;
+  left: 50%;
+  transform: translateX(-50%);
   top: 128px;
   border-radius: 32px;
   overflow: hidden;
@@ -478,7 +482,7 @@ section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] p {
   position: absolute;
   width: 369px;
   left: 389px;
-  top: 1309px;
+  top: 1369px;
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', 'Assistant', Helvetica, sans-serif;
   font-style: normal;
   font-weight: 400;
@@ -494,10 +498,10 @@ section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] p {
 .why-choose-image {
   position: absolute;
   left: min(800px, calc(100% - 640px));
-  top: 1309px;
-  width: min(570px, calc(100% - 870px));
+  top: 1369px;
+  width: min(600px, calc(100% - 840px));
   height: auto;
-  max-height: 552px;
+  max-height: 580px;
   aspect-ratio: 570 / 552;
   object-fit: cover;
   border-radius: 24px;
@@ -566,22 +570,22 @@ section[class*="w-\\[626px\\]"] p {
 
 section[class*="w-\\[626px\\]"][class*="top-\\[1381px\\]"] {
   left: 132px;
-  top: 1381px;
+  top: 1441px;
 }
 
 section[class*="w-\\[626px\\]"][class*="top-\\[1528px\\]"] {
   left: 132px;
-  top: 1528px;
+  top: 1588px;
 }
 
 section[class*="w-\\[626px\\]"][class*="top-\\[1675px\\]"] {
   left: 132px;
-  top: 1675px;
+  top: 1735px;
 }
 
 section[class*="w-\\[626px\\]"][class*="top-\\[1822px\\]"] {
   left: 132px;
-  top: 1822px;
+  top: 1882px;
 }
 
 /* ============================================
@@ -593,7 +597,7 @@ section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"] {
   width: 1198px;
   height: 967px;
   left: 122px;
-  top: 2063px;
+  top: 2123px;
   background: #08122F;
   border-radius: 40px;
   overflow: hidden;
@@ -664,7 +668,7 @@ section[class*="w-\\[1440px\\]"][class*="top-\\[3040px\\]"] {
   width: 1440px;
   height: 417px;
   left: calc(50% - 1440px/2 + 2px);
-  top: 3040px;
+  top: 3100px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -924,7 +928,7 @@ footer[class*="w-\\[1440px\\]"] p {
    RESPONSIVE DESIGN - Maintain Layout on Smaller Screens
    ============================================ */
 
-@media (max-width: 1440px) {
+@media (max-width: 1920px) {
   .landing-page-container {
     width: 100%;
   }
@@ -950,8 +954,14 @@ footer[class*="w-\\[1440px\\]"] p {
 
 @media (max-width: 1200px) {
   .hero-background-img {
-    width: calc(100% - 240px);
-    left: 120px;
+    width: calc(100% - 2 * clamp(20px, 8.33%, 120px));
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .stats-about-section {
+    width: calc(100% - 2 * clamp(20px, 8.33%, 120px));
+    max-width: calc(100% - 2 * clamp(20px, 8.33%, 120px));
   }
   
   section[class*="w-\\[1198px\\]"][class*="top-\\[2063px\\]"],
@@ -974,12 +984,42 @@ footer[class*="w-\\[1440px\\]"] p {
   
   .hero-background-img {
     position: relative;
-    width: 100%;
-    left: 0;
+    width: calc(100% - 2 * clamp(20px, 5%, 30px));
+    max-width: calc(100% - 2 * clamp(20px, 5%, 30px));
+    left: 50%;
+    transform: translateX(-50%);
     top: 70px;
     height: auto;
     min-height: 500px;
-    padding: 40px 20px;
+    padding: 40px 0;
+  }
+  
+  .stats-about-section {
+    position: relative;
+    width: calc(100% - 2 * clamp(20px, 5%, 30px));
+    max-width: calc(100% - 2 * clamp(20px, 5%, 30px));
+    left: 50%;
+    transform: translateX(-50%);
+    top: auto;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 60px;
+    padding: 40px 40px 0 0;
+  }
+  
+  .stats-section {
+    width: 100%;
+    flex: 0 0 100%;
+    justify-content: flex-end;
+    direction: rtl;
+    text-align: right;
+  }
+  
+  .about-section {
+    width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 40px 40px 40px 40px;
   }
   
   section[class*="top-\\[273px\\]"][class*="left-\\[391px\\]"] {
@@ -1078,22 +1118,22 @@ footer[class*="w-\\[1440px\\]"] p {
 
 .content-section-cta {
   left: 132px;
-  top: 1381px;
+  top: 1441px;
 }
 
 .content-section-hero {
   left: 132px;
-  top: 1528px;
+  top: 1588px;
 }
 
 .content-section-info {
   left: 132px;
-  top: 1675px;
+  top: 1735px;
 }
 
 .content-section-property {
   left: 132px;
-  top: 1822px;
+  top: 1882px;
 }
 
 .content-section-inner {
@@ -1180,20 +1220,44 @@ footer[class*="w-\\[1440px\\]"] p {
   margin: 0;
 }
 
+/* Stats and About Combined Section */
+.stats-about-section {
+  position: absolute;
+  width: calc(100% - 2 * clamp(20px, 8.33%, 120px));
+  max-width: calc(100% - 2 * clamp(20px, 8.33%, 120px));
+  left: 50%;
+  transform: translateX(calc(-50% + 120px));
+  top: calc(128px + 700px + 40px);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 60px;
+  padding: 40px 40px 0 0;
+  z-index: 2;
+  box-sizing: border-box;
+  direction: rtl;
+}
+
 /* Stats Section */
 .stats-section {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: flex-start;
+  align-content: flex-start;
   gap: 60px 81px;
-  width: 557px;
-  left: 120px;
-  top: 871px;
+  width: 50%;
+  flex: 0 0 50%;
   padding: 0;
-  z-index: 2;
+  box-sizing: border-box;
+  margin-right: auto;
+  margin-left: 40px;
+  margin-top: 40px;
+  direction: rtl;
+  text-align: right;
 }
 
 .stats-item {
@@ -1202,12 +1266,16 @@ footer[class*="w-\\[1440px\\]"] p {
   align-items: flex-end;
   width: 231px;
   position: relative;
+  text-align: right;
+  direction: rtl;
 }
 
 .stats-value {
   position: relative;
   width: fit-content;
   margin-top: -1px;
+  margin-right: 0;
+  margin-left: auto;
   font-family: 'Tel_Aviv-ModernistRegular', Helvetica, sans-serif;
   font-weight: 400;
   color: #002169;
@@ -1216,11 +1284,14 @@ footer[class*="w-\\[1440px\\]"] p {
   letter-spacing: -1.44px;
   line-height: 72px;
   white-space: nowrap;
+  direction: rtl;
 }
 
 .stats-label {
   position: relative;
   width: fit-content;
+  margin-right: 0;
+  margin-left: auto;
   font-family: 'Assistant', Helvetica, sans-serif;
   font-weight: 400;
   color: #00184c;
@@ -1228,20 +1299,26 @@ footer[class*="w-\\[1440px\\]"] p {
   letter-spacing: 0;
   line-height: 36px;
   white-space: nowrap;
+  text-align: right;
   direction: rtl;
 }
 
 /* About Section */
 .about-section {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 2px;
-  width: 562px;
-  left: 758px;
-  top: 839px;
+  width: 50%;
+  flex: 0 0 50%;
+  max-width: none;
   z-index: 2;
+  box-sizing: border-box;
+  padding: 40px 40px 40px 40px;
+  margin-top: -32px;
+  margin-right: 40px;
+  margin-left: auto;
 }
 
 .about-section-title {
@@ -1275,10 +1352,11 @@ footer[class*="w-\\[1440px\\]"] p {
 /* Features Section */
 .features-section {
   position: absolute;
-  width: 1198px;
-  height: 967px;
-  left: 122px;
-  top: 2063px;
+  width: 1300px;
+  height: 1050px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 2123px;
   background: #08122f;
   border-radius: 40px;
   overflow: hidden;
@@ -1287,24 +1365,26 @@ footer[class*="w-\\[1440px\\]"] p {
 
 .features-section-bg {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 1198px;
-  height: 967px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1600px;
+  height: 1290px;
   object-fit: cover;
 }
 
 .features-section-title {
   position: absolute;
-  width: 307px;
+  width: auto;
+  max-width: 400px;
   top: 60px;
   right: 60px;
   font-family: 'Tel_Aviv-ModernistRegular', Helvetica, sans-serif;
   font-weight: 400;
   color: #FFFFFF;
-  font-size: 48px;
-  letter-spacing: -0.96px;
-  line-height: 48px;
+  font-size: 56px;
+  letter-spacing: -1.12px;
+  line-height: 1.2;
   direction: rtl;
   text-align: right;
   margin: 0;
@@ -1313,14 +1393,16 @@ footer[class*="w-\\[1440px\\]"] p {
 .features-section-description {
   position: absolute;
   width: 411px;
-  top: 167px;
-  left: 739px;
+  top: 220px;
+  right: 60px;
+  left: auto;
   font-family: 'Assistant', Helvetica, sans-serif;
   font-weight: 600;
   color: #FFFFFF;
-  font-size: 20px;
+  font-size: 26px;
   letter-spacing: 0;
-  line-height: 30px;
+  line-height: 39px;
+  text-align: right;
   direction: rtl;
   margin: 0;
 }
@@ -1340,7 +1422,7 @@ footer[class*="w-\\[1440px\\]"] p {
   width: 1440px;
   height: 417px;
   left: calc(50% - 718px);
-  top: 3040px;
+  top: 3100px;
   z-index: 2;
 }
 
@@ -1436,7 +1518,7 @@ footer[class*="w-\\[1440px\\]"] p {
   height: 650px;
   min-height: 650px;
   left: calc(50% - 597px);
-  top: 3400px;
+  top: 3460px;
   background: #00184c;
   border-radius: 40px;
   z-index: 2;
@@ -1450,7 +1532,8 @@ footer[class*="w-\\[1440px\\]"] p {
   gap: 24px;
   width: 473px;
   top: 60px;
-  left: calc(50% + 78px);
+  right: 60px;
+  left: auto;
 }
 
 .contact-form-title {
@@ -1464,6 +1547,7 @@ footer[class*="w-\\[1440px\\]"] p {
   letter-spacing: 0;
   line-height: 48px;
   direction: rtl;
+  text-align: right;
   margin: 0;
 }
 
@@ -1479,36 +1563,42 @@ footer[class*="w-\\[1440px\\]"] p {
 
 .contact-form-description {
   position: relative;
-  width: fit-content;
-  margin-left: -1px;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
   font-family: 'Assistant', Helvetica, sans-serif;
   font-weight: 400;
   color: #FFFFFF;
   font-size: 24px;
   letter-spacing: 0;
   line-height: 28.8px;
-  white-space: nowrap;
+  white-space: normal;
   direction: rtl;
+  text-align: right;
   margin: 0;
 }
 
 .contact-form {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   width: 392px;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: flex-end;
   gap: 8px;
   position: relative;
+  margin-right: 0;
+  margin-left: auto;
 }
 
 .contact-form-field-wrapper {
   display: flex;
   width: 392px;
   align-items: flex-start;
-  justify-content: center;
-  gap: 12px;
+  justify-content: flex-end;
+  gap: 0;
   position: relative;
+  margin-right: 0;
+  margin-left: 0;
 }
 
 .contact-form-input-wrapper {
@@ -1520,7 +1610,7 @@ footer[class*="w-\\[1440px\\]"] p {
   gap: 32px;
   padding: 0 16px;
   position: relative;
-  flex: 1 1 auto;
+  width: 100%;
   background: #FFFFFF;
   border-radius: 8px;
 }
@@ -1548,10 +1638,14 @@ footer[class*="w-\\[1440px\\]"] p {
 }
 
 .contact-form-submit-wrapper {
-  display: inline-flex;
+  display: flex;
   height: 42px;
   align-items: flex-start;
+  justify-content: flex-end;
   position: relative;
+  width: 100%;
+  margin-right: 0;
+  margin-left: 0;
 }
 
 .contact-form-submit-button {
@@ -1566,6 +1660,8 @@ footer[class*="w-\\[1440px\\]"] p {
   cursor: pointer;
   transition: opacity 0.3s ease;
   height: 100%;
+  margin-right: 0;
+  margin-left: auto;
 }
 
 .contact-form-submit-button:hover {
@@ -1588,7 +1684,7 @@ footer[class*="w-\\[1440px\\]"] p {
   font-weight: 400;
   color: #FFFFFF;
   font-size: 18px;
-  text-align: left;
+  text-align: right;
   letter-spacing: 0;
   line-height: 18px;
   white-space: nowrap;

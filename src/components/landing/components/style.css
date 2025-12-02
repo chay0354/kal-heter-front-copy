@@ -25,7 +25,7 @@
   position: relative;
   min-height: 80px;
   transition: transform 0.3s ease, opacity 0.3s ease;
-  cursor: pointer;
+  cursor: default;
 }
 
 .view:hover,

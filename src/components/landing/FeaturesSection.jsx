@@ -22,7 +22,9 @@ export const FeaturesSection = () => {
       </p>
 
       <h2 className="features-section-title">
-        איך זה מתבצע התהליך?
+        איך זה מתבצע
+        <br />
+        התהליך?
       </h2>
 
       <div className="screen">

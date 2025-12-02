@@ -6,7 +6,6 @@ import { FeaturesSection } from "../components/landing/FeaturesSection";
 import { HeroSection } from "../components/landing/HeroSection";
 import { ImageGallerySection } from "../components/landing/ImageGallerySection";
 import { InfoSection } from "../components/landing/InfoSection";
-import { LayoutWrapperSection } from "../components/landing/LayoutWrapperSection";
 import { MainContentSection } from "../components/landing/MainContentSection";
 import { NavigationBarSection } from "../components/landing/NavigationBarSection";
 import { PropertyDetailsSection } from "../components/landing/PropertyDetailsSection";
@@ -55,7 +54,6 @@ function LandingPage() {
         
         {/* Main Content Sections */}
         <MainContentSection />
-        <LayoutWrapperSection />
         
         {/* Why Choose Title */}
         <div className="why-choose-title-responsive">
