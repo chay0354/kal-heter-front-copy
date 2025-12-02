@@ -1514,10 +1514,11 @@ footer[class*="w-\\[1440px\\]"] p {
 /* Contact Form Section */
 .contact-form-section {
   position: absolute;
-  width: 1197px;
+  width: 1300px;
   height: 650px;
   min-height: 650px;
-  left: calc(50% - 597px);
+  left: 50%;
+  transform: translateX(-50%);
   top: 3460px;
   background: #00184c;
   border-radius: 40px;
