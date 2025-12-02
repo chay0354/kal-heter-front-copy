@@ -1,0 +1,199 @@
+/* Process Flow Styles */
+.screen {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  width: 500px;
+  top: 80px;
+  left: 60px;
+  z-index: 3;
+}
+
+.view,
+.view-3,
+.view-4,
+.view-5,
+.view-6 {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+  gap: 0;
+  width: 100%;
+  margin-bottom: 0;
+  position: relative;
+  min-height: 80px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.view:hover,
+.view-3:hover,
+.view-4:hover,
+.view-5:hover,
+.view-6:hover {
+  transform: translateX(-5px);
+}
+
+.screen > img {
+  position: relative;
+}
+
+.view-2 {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  width: 72px;
+  height: 72px;
+  margin-top: 0;
+}
+
+.div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex: 1;
+  text-align: right;
+  padding-right: 0;
+  margin-right: 24px;
+  max-width: calc(100% - 72px);
+  margin-top: -10px;
+}
+
+.text-wrapper {
+  font-family: 'Tel_Aviv-ModernistRegular', Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  color: #FFFFFF;
+  direction: rtl;
+  margin: 0;
+  text-align: right;
+  width: 100%;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.view:hover .text-wrapper,
+.view-3:hover .text-wrapper,
+.view-4:hover .text-wrapper,
+.view-5:hover .text-wrapper,
+.view-6:hover .text-wrapper {
+  color: #FFFFC8;
+  transform: translateX(-3px);
+}
+
+.frame,
+.frame-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  text-align: right;
+  width: 100%;
+}
+
+.text-wrapper-2 {
+  font-family: 'Tel_Aviv-ModernistRegular', Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: #FFFFFF;
+  direction: rtl;
+  margin: 0;
+  text-align: right;
+  width: 100%;
+  transition: color 0.3s ease;
+}
+
+.view:hover .text-wrapper-2,
+.view-3:hover .text-wrapper-2,
+.view-4:hover .text-wrapper-2,
+.view-5:hover .text-wrapper-2,
+.view-6:hover .text-wrapper-2 {
+  color: #FFFFC8;
+}
+
+.text,
+.text-2,
+.p {
+  font-family: 'Assistant', Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #FFFFFF;
+  line-height: 1.5;
+  direction: rtl;
+  margin: 0;
+  opacity: 0.9;
+  text-align: right;
+  width: 100%;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.view:hover .text,
+.view:hover .text-2,
+.view:hover .p,
+.view-3:hover .text,
+.view-3:hover .text-2,
+.view-3:hover .p,
+.view-4:hover .text,
+.view-4:hover .text-2,
+.view-4:hover .p,
+.view-5:hover .text,
+.view-5:hover .text-2,
+.view-5:hover .p,
+.view-6:hover .text,
+.view-6:hover .text-2,
+.view-6:hover .p {
+  opacity: 1;
+  color: #FFFFE0;
+}
+
+.icon-instance-node {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  object-fit: contain;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.view:hover .icon-instance-node,
+.view-3:hover .icon-instance-node,
+.view-4:hover .icon-instance-node,
+.view-5:hover .icon-instance-node,
+.view-6:hover .icon-instance-node {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 200, 0.8));
+}
+
+.line,
+.img,
+.line-2,
+.line-3,
+.line-4 {
+  width: 2px;
+  height: 150px;
+  margin: 0 auto;
+  opacity: 0.6;
+  align-self: flex-end;
+  margin-right: 36px;
+  margin-left: auto;
+  margin-top: -45px;
+  margin-bottom: -45px;
+}
+
+.connecting-line {
+  width: 2px;
+  height: 100px;
+  background-color: rgba(255, 255, 200, 0.6);
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: -20px;
+  margin-bottom: -20px;
+  flex-shrink: 0;
+  align-self: flex-start;
+  position: relative;
+  left: -35px;
+}
+
