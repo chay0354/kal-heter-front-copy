@@ -575,17 +575,17 @@ section[class*="w-\\[626px\\]"][class*="top-\\[1381px\\]"] {
 
 section[class*="w-\\[626px\\]"][class*="top-\\[1528px\\]"] {
   left: 132px;
-  top: 1588px;
+  top: 1570px;
 }
 
 section[class*="w-\\[626px\\]"][class*="top-\\[1675px\\]"] {
   left: 132px;
-  top: 1735px;
+  top: 1699px;
 }
 
 section[class*="w-\\[626px\\]"][class*="top-\\[1822px\\]"] {
   left: 132px;
-  top: 1882px;
+  top: 1828px;
 }
 
 /* ============================================
@@ -1123,24 +1123,24 @@ footer[class*="w-\\[1440px\\]"] p {
 
 .content-section-hero {
   left: 132px;
-  top: 1588px;
+  top: 1570px;
 }
 
 .content-section-info {
   left: 132px;
-  top: 1735px;
+  top: 1699px;
 }
 
 .content-section-property {
   left: 132px;
-  top: 1882px;
+  top: 1828px;
 }
 
 .content-section-inner {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 16px;
+  gap: 8px;
   position: relative;
   flex: 1 1 auto;
 }
