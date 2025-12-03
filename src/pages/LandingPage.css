@@ -79,7 +79,8 @@
   justify-content: center;
   gap: 8px;
   padding: 12px 28px;
-  position: relative;
+  position: absolute;
+  right: max(1%, calc(50% - 800px));
   border-radius: 8px;
   background: linear-gradient(139deg, rgba(250,125,0,1) 0%, rgba(255,192,57,1) 100%);
   border: none;
@@ -112,7 +113,7 @@
 }
 
 .nav-logo-link {
-  position: relative;
+  position: absolute;
   width: 152px;
   height: 66.71px;
   margin-right: -2px;
@@ -120,6 +121,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  left: max(1%, calc(50% - 800px));
 }
 
 .nav-logo-link:focus {
@@ -550,7 +552,7 @@ section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] p {
 
 .why-choose-image {
   position: relative;
-  width: 950px;
+  width: 700px;
   max-width: 100%;
   height: auto;
   max-height: 600px;
@@ -578,7 +580,7 @@ section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] p {
   
   .why-choose-image {
     width: 100%;
-    max-width: 570px;
+    max-width: 500px;
   }
 }
 
@@ -1026,6 +1028,14 @@ footer[class*="w-\\[1440px\\]"] p {
     transform: translateX(-50%);
   }
   
+  .nav-login-button {
+    right: 5%;
+  }
+  
+  .nav-logo-link {
+    left: 5%;
+  }
+  
   .about-stats-section {
     width: 90%;
     flex-direction: column;
@@ -1070,6 +1080,14 @@ footer[class*="w-\\[1440px\\]"] p {
     height: auto;
     min-height: 500px;
     padding: 40px 20px;
+  }
+  
+  .nav-login-button {
+    right: 5%;
+  }
+  
+  .nav-logo-link {
+    left: 5%;
   }
   
   .hero-text-overlay {
