@@ -6,6 +6,7 @@ import { FeaturesSection } from "../components/landing/FeaturesSection";
 import { HeroSection } from "../components/landing/HeroSection";
 import { ImageGallerySection } from "../components/landing/ImageGallerySection";
 import { InfoSection } from "../components/landing/InfoSection";
+import { LayoutWrapperSection } from "../components/landing/LayoutWrapperSection";
 import { MainContentSection } from "../components/landing/MainContentSection";
 import { NavigationBarSection } from "../components/landing/NavigationBarSection";
 import { PropertyDetailsSection } from "../components/landing/PropertyDetailsSection";
@@ -26,7 +27,7 @@ function LandingPage() {
         <img
           className="hero-background-img"
           alt="Hero background"
-          src="https://c.animaapp.com/VuAXsrkU/img/3d-rendering-big-modern-concrete-house-1.png"
+          src="/hero-background.png"
         />
         
         <ImageGallerySection />
@@ -55,23 +56,24 @@ function LandingPage() {
         {/* Main Content Sections */}
         <MainContentSection />
         
-        {/* Why Choose Title */}
-        <div className="why-choose-title-responsive">
-          למה לבחור בקל־היתר
-        </div>
-        
-        {/* Why Choose Image */}
-        <img
-          className="why-choose-image"
-          alt="בית מודרני מבטון"
-          src="https://c.animaapp.com/VuAXsrkU/img/3d-rendering-big-modern-concrete-house-2-1.png"
-        />
-        
-        {/* Content Sections */}
-        <CallToActionSection />
-        <HeroSection />
-        <InfoSection />
-        <PropertyOverviewSection />
+        {/* Why Choose Section - Unified */}
+        <section className="why-choose-section">
+          <div className="why-choose-content">
+            <img
+              className="why-choose-image"
+              alt="בית מודרני מבטון"
+              src="/why-choose-image.png"
+            />
+            
+            <div className="why-choose-text">
+              <h2 className="why-choose-title">למה לבחור בקל־היתר</h2>
+              <CallToActionSection />
+              <HeroSection />
+              <InfoSection />
+              <PropertyOverviewSection />
+            </div>
+          </div>
+        </section>
         
         {/* Features Section */}
         <FeaturesSection />

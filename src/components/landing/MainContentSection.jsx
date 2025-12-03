@@ -22,7 +22,22 @@ export const MainContentSection = () => {
   ];
 
   return (
-    <section className="stats-about-section">
+    <section className="about-stats-section">
+      <section
+        className="stats-section"
+        aria-label="Statistics"
+      >
+        {statsData.map((stat, index) => (
+          <article
+            key={index}
+            className="stats-item"
+          >
+            <div className="stats-value">{stat.value}</div>
+            <div className="stats-label">{stat.label}</div>
+          </article>
+        ))}
+      </section>
+      
       <section className="about-section">
         <h2 className="about-section-title">מי אנחנו?</h2>
         <p className="about-section-description">
@@ -38,21 +53,6 @@ export const MainContentSection = () => {
           שליטה, מפחית טעויות, חוסך זמן ומעניק תחושת ביטחון. תהליך שהיה פעם מורכב
           – הופך עכשיו ברור, יעיל והרבה יותר אנושי.
         </p>
-      </section>
-      
-      <section
-        className="stats-section"
-        aria-label="Statistics"
-      >
-        {statsData.map((stat, index) => (
-          <article
-            key={index}
-            className="stats-item"
-          >
-            <div className="stats-value">{stat.value}</div>
-            <div className="stats-label">{stat.label}</div>
-          </article>
-        ))}
       </section>
     </section>
   );

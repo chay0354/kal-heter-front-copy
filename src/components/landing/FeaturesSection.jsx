@@ -12,6 +12,10 @@ export const FeaturesSection = () => {
         role="presentation"
       />
 
+      <h2 className="features-section-title">
+        איך זה מתבצע<br />התהליך?
+      </h2>
+
       <p className="features-section-description">
         תהליך קבלת ההיתר הופך אצלנו למסלול פשוט וברור.
         <br /> המערכת מדריכה אתכם צעד-אחר-צעד, מציגה מה נדרש בכל שלב, ומעדכנת
@@ -20,12 +24,6 @@ export const FeaturesSection = () => {
         ככה זה כשיש שילוב של טכנולוגיה חכמה וליווי מקצועי שמתרחש בשקט מאחורי
         הקלעים.
       </p>
-
-      <h2 className="features-section-title">
-        איך זה מתבצע
-        <br />
-        התהליך?
-      </h2>
 
       <div className="screen">
         <div className="view">
