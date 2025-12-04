@@ -23,11 +23,11 @@ export const TestimonialsSection = () => {
         <button
           className="testimonials-button"
           type="button"
-          aria-label="התחל הגשת מסמכים"
+          aria-label="התחל תהליך קבלת היתר בניה"
           onClick={() => navigate('/auth?mode=signup')}
         >
           <span className="testimonials-button-text">
-            התחל הגשת מסמכים
+            התחל תהליך קבלת היתר בניה
           </span>
         </button>
       </div>

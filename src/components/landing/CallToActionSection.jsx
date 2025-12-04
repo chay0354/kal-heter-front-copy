@@ -5,7 +5,7 @@ export const CallToActionSection = () => {
   const sectionData = {
     title: "בקרות מקצועיות",
     description:
-      "כל מסמך וכל פרט עוברים בדיקה מקצועית המוודאת תאימות מלאה לדרישות הרשות המקומית.",
+      "כל מסמך או פעולה המתבצעים באפליקציה - עוברים בדיקת התאמה מלאה.",
     lineImage: "https://c.animaapp.com/VuAXsrkU/img/line-119-3.svg",
   };
 

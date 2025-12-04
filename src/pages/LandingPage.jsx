@@ -32,6 +32,22 @@ function LandingPage() {
         
         <ImageGallerySection />
         
+        {/* Hero Frame Container - Statistics */}
+        <div className="hero-frame-container">
+          <article className="hero-stats-item">
+            <div className="hero-stats-value">24/7</div>
+            <div className="hero-stats-label">זמינות מלאה</div>
+          </article>
+          <article className="hero-stats-item">
+            <div className="hero-stats-value">100%</div>
+            <div className="hero-stats-label">ליווי מקצועי</div>
+          </article>
+          <article className="hero-stats-item">
+            <div className="hero-stats-value">1,000+</div>
+            <div className="hero-stats-label">לקוחות מרוצים</div>
+          </article>
+        </div>
+        
         {/* Hero Buttons */}
         <div className="hero-button-container hero-button-primary-container">
           <button
@@ -67,10 +83,10 @@ function LandingPage() {
             
             <div className="why-choose-text">
               <h2 className="why-choose-title">למה לבחור בקל־היתר</h2>
-              <CallToActionSection />
-              <HeroSection />
               <InfoSection />
               <PropertyOverviewSection />
+              <CallToActionSection />
+              <HeroSection />
             </div>
           </div>
         </section>
