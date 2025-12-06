@@ -12,7 +12,11 @@ function AuthPage() {
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [fullName, setFullName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showPasswordSignIn, setShowPasswordSignIn] = useState(false)
+  const [termsAccepted, setTermsAccepted] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
@@ -48,7 +52,14 @@ function AuthPage() {
     setSuccessMessage('')
     setLoading(true)
 
+    if (!termsAccepted) {
+      setError('יש לאשר את תנאי השימוש')
+      setLoading(false)
+      return
+    }
+
     try {
+      const fullName = `${firstName} ${lastName}`.trim()
       const result = await signUp(email, password, phone || null, fullName || null)
       if (result.success) {
         setSuccessMessage('נרשמת בהצלחה! מעבר למערכת...')
@@ -82,32 +93,59 @@ function AuthPage() {
   return (
     <div className="home-page">
       <div className="home-container">
-        <div className="home-content">
+        <div 
+          className="home-content"
+          style={{
+            backgroundImage: "url('/eef4e7b9c078d09a23b8f5bf3ffc49e51fb0dee3.png')",
+            backgroundPosition: 'center center',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          <button 
+            className="back-to-home-button"
+            onClick={() => navigate('/')}
+            type="button"
+          >
+            <svg 
+              className="back-arrow-icon" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M15 18L9 12L15 6" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span className="back-to-home-text">חזרה למסך הבית</span>
+          </button>
           <div className="logo-section">
-            <div className="logo-circle">
-              <div className="logo-inner">
-                <span className="logo-text">קל</span>
-              </div>
+            <div className="nav-logo-link">
+              <span className="nav-logo-text">קל-היתר</span>
+              <img className="nav-logo-icon" alt="קל-היתר לוגו" src="https://c.animaapp.com/VuAXsrkU/img/group-10-1@2x.png" />
             </div>
-            <h1 className="main-title">קל-היתר</h1>
-            <div className="title-line"></div>
+            <p className="auth-subtitle">המערכת שתלווה אתכם צעד־אחר־צעד עד לקבלת היתר הבנייה  בצורה פשוטה, ברורה ונגישה.</p>
           </div>
 
           <div className="sign-in-form-container">
             <div className="auth-tabs">
               <button
                 type="button"
-                className={`auth-tab ${!isSignUp ? 'active' : ''}`}
-                onClick={switchToSignIn}
-              >
-                התחברות
-              </button>
-              <button
-                type="button"
                 className={`auth-tab ${isSignUp ? 'active' : ''}`}
                 onClick={switchToSignUp}
               >
                 הרשמה
+              </button>
+              <button
+                type="button"
+                className={`auth-tab ${!isSignUp ? 'active' : ''}`}
+                onClick={switchToSignIn}
+              >
+                התחברות
               </button>
             </div>
             {error && (
@@ -122,131 +160,171 @@ function AuthPage() {
             )}
             {isSignUp ? (
               <form className="sign-in-form" onSubmit={handleSignUp}>
-                <h3 className="form-title">הרשמה למערכת</h3>
                 <div className="form-group">
-                  <label htmlFor="fullName">שם מלא</label>
+                  <label htmlFor="firstName">שם פרטי</label>
                   <input
                     type="text"
-                    id="fullName"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="הכנס שם מלא"
+                    id="firstName"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="הקלד"
                     style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="email-signup">אימייל *</label>
+                  <label htmlFor="lastName">שם משפחה</label>
                   <input
-                    type="email"
-                    id="email-signup"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="הכנס אימייל"
-                    required
+                    type="text"
+                    id="lastName"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    placeholder="הקלד"
                     style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="phone-signup">מספר טלפון</label>
+                  <label htmlFor="phone-signup">מספר נייד</label>
                   <input
                     type="tel"
                     id="phone-signup"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="הכנס מספר טלפון"
+                    placeholder="הקלד"
+                    style={{ color: '#2C3E50', backgroundColor: 'white', textAlign: 'right', direction: 'rtl' }}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="email-signup">אימייל</label>
+                  <input
+                    type="email"
+                    id="email-signup"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="הזן כתובת אימייל"
+                    required
                     style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="password-signup">סיסמה *</label>
+                  <label htmlFor="password-signup">בחר סיסמה</label>
+                  <div className="password-input-wrapper">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      id="password-signup"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="הקלד"
+                      required
+                      minLength={8}
+                      style={{ color: '#2C3E50', backgroundColor: 'white' }}
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? 'הסתר סיסמה' : 'הצג סיסמה'}
+                    >
+                      {showPassword ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                          <path d="M1 1L23 23" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      ) : (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                  <p className="password-requirements">הסיסמה חייבת להכיל לפחות 8 תווים, לפחות תו אחד מיוחד- !@#$%&*</p>
+                </div>
+                <div className="terms-checkbox-group">
+                  <label htmlFor="terms-checkbox" className="terms-label">
+                    קראתי ואני מאשר/ת את{' '}
+                    <button
+                      type="button"
+                      className="terms-link-inline"
+                      onClick={() => navigate('/terms')}
+                    >
+                      תנאי השימוש
+                    </button>
+                  </label>
                   <input
-                    type="password"
-                    id="password-signup"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="הכנס סיסמה"
-                    required
-                    minLength={6}
-                    style={{ color: '#2C3E50', backgroundColor: 'white' }}
+                    type="checkbox"
+                    id="terms-checkbox"
+                    checked={termsAccepted}
+                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                    className="terms-checkbox"
                   />
                 </div>
                 <button type="submit" className="submit-button" disabled={loading}>
                   {loading ? 'מתבצע...' : 'הרשמה'}
                 </button>
-                <button 
-                  type="button" 
-                  className="back-button"
-                  onClick={() => navigate('/')}
-                >
-                  חזרה
-                </button>
-                <div className="sign-in-terms-link">
-                  <button 
-                    type="button"
-                    className="terms-link-button"
-                    onClick={() => navigate('/terms')}
-                  >
-                    תנאי שימוש
-                  </button>
-                </div>
               </form>
             ) : (
               <form className="sign-in-form" onSubmit={handleSignIn}>
-                <h3 className="form-title">התחברות למערכת</h3>
                 <div className="form-group">
-                  <label htmlFor="email-signin">אימייל *</label>
+                  <label htmlFor="email-signin">אימייל</label>
                   <input
                     type="email"
                     id="email-signin"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="הכנס אימייל"
+                    placeholder="הזן כתובת אימייל"
                     required
                     style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="password-signin">סיסמה *</label>
-                  <input
-                    type="password"
-                    id="password-signin"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="הכנס סיסמה"
-                    required
-                    style={{ color: '#2C3E50', backgroundColor: 'white' }}
-                  />
+                  <label htmlFor="password-signin">סיסמה</label>
+                  <div className="password-input-wrapper">
+                    <input
+                      type={showPasswordSignIn ? 'text' : 'password'}
+                      id="password-signin"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="הזן סיסמה"
+                      required
+                      style={{ color: '#2C3E50', backgroundColor: 'white' }}
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowPasswordSignIn(!showPasswordSignIn)}
+                      aria-label={showPasswordSignIn ? 'הסתר סיסמה' : 'הצג סיסמה'}
+                    >
+                      {showPasswordSignIn ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                          <path d="M1 1L23 23" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      ) : (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                 </div>
-                <button type="submit" className="submit-button" disabled={loading}>
-                  {loading ? 'מתבצע...' : 'התחבר'}
-                </button>
-                <button 
-                  type="button" 
-                  className="back-button"
-                  onClick={() => navigate('/')}
-                >
-                  חזרה
-                </button>
-                <div className="sign-in-terms-link">
-                  <button 
+                <div className="forgot-password-link">
+                  <button
                     type="button"
-                    className="terms-link-button"
-                    onClick={() => navigate('/terms')}
+                    className="forgot-password-button"
+                    onClick={() => {/* Handle forgot password */}}
                   >
-                    תנאי שימוש
+                    שכחתי סיסמה
                   </button>
                 </div>
+                <button type="submit" className="submit-button" disabled={loading}>
+                  {loading ? 'מתבצע...' : 'התחברות'}
+                </button>
               </form>
             )}
           </div>
-        </div>
-
-        <div className="decorative-elements">
-          <div className="circle circle-1"></div>
-          <div className="circle circle-2"></div>
-          <div className="circle circle-3"></div>
-          <div className="triangle triangle-1"></div>
-          <div className="triangle triangle-2"></div>
         </div>
       </div>
     </div>
