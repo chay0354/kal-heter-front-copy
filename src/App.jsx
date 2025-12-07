@@ -6,6 +6,8 @@ import AuthPage from './pages/AuthPage'
 import TermsPage from './pages/TermsPage'
 import DashboardPage from './pages/DashboardPage'
 import AdminPage from './pages/AdminPage'
+import MeasurementMapPage from './pages/MeasurementMapPage'
+import SurveyorsListPage from './pages/SurveyorsListPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -16,6 +18,8 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/measurement-map" element={<MeasurementMapPage />} />
+          <Route path="/surveyors-list" element={<SurveyorsListPage />} />
           <Route 
             path="/dashboard" 
             element={

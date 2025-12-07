@@ -1,0 +1,333 @@
+/* ============================================
+   FONT FACE DECLARATIONS
+   ============================================ */
+
+@font-face {
+  font-family: 'Tel_Aviv-ModernistRegular';
+  src: url('../../fonts/TelAviv-ModernistRegular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tel_Aviv-ModernistBold';
+  src: url('../../fonts/TelAviv-ModernistBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================
+   MEASUREMENT MAP PAGE STYLES
+   ============================================ */
+
+.measurement-map-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.measurement-map-container {
+  max-width: 1400px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.measurement-map-content {
+  background-image: url('/eef4e7b9c078d09a23b8f5bf3ffc49e51fb0dee3.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 40px;
+  padding: 80px 60px;
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.back-to-home-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  direction: rtl;
+}
+
+.back-to-home-button:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+.back-arrow-icon {
+  width: 18px;
+  height: 18px;
+  color: #002169;
+  flex-shrink: 0;
+}
+
+.back-to-home-text {
+  font-size: 15px;
+  font-weight: 400;
+  color: #002169;
+  direction: rtl;
+  white-space: nowrap;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+}
+
+.logo-section {
+  text-align: center;
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 1s ease-out 0.2s both;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.nav-logo-link {
+  position: relative;
+  width: 152px;
+  height: 66.71px;
+  aspect-ratio: 2.25;
+  display: inline-block;
+}
+
+.nav-logo-text {
+  position: absolute;
+  top: 22px;
+  left: 0;
+  font-family: 'Tel_Aviv-ModernistRegular', Helvetica, sans-serif;
+  font-weight: 400;
+  color: #002169;
+  font-size: 36.2px;
+  text-align: left;
+  letter-spacing: -0.72px;
+  line-height: normal;
+  direction: rtl;
+}
+
+.nav-logo-icon {
+  position: absolute;
+  width: 59px;
+  height: 37px;
+  top: 0;
+  left: 91px;
+}
+
+.auth-subtitle {
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  color: #002169;
+  margin: 0;
+  direction: rtl;
+  max-width: 600px;
+}
+
+.measurement-map-card {
+  background: white;
+  padding: 60px 50px;
+  border-radius: 25px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  animation: slideInUp 0.5s ease-out;
+  direction: rtl;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.measurement-map-question {
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #002169;
+  text-align: center;
+  margin: 0 0 20px 0;
+  line-height: 1.4;
+  direction: rtl;
+}
+
+.measurement-map-explanation {
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #6b7280;
+  text-align: center;
+  margin: 0 0 40px 0;
+  line-height: 1.6;
+  direction: rtl;
+}
+
+.measurement-map-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: nowrap;
+  direction: rtl;
+  flex-direction: row;
+}
+
+.measurement-map-button {
+  width: 308px;
+  height: 143px;
+  padding: 32px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 400;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  direction: rtl;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.measurement-map-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.measurement-map-button-yes {
+  background: #F5F8FF;
+  color: #002169;
+}
+
+.measurement-map-button-yes:hover {
+  background: #E8EFFF;
+}
+
+.measurement-map-button-no {
+  background: #F5F8FF;
+  color: #002169;
+}
+
+.measurement-map-button-no:hover {
+  background: #E8EFFF;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .measurement-map-content {
+    padding: 50px 35px;
+    border-radius: 30px;
+  }
+
+  .measurement-map-card {
+    padding: 40px 30px;
+  }
+
+  .measurement-map-question {
+    font-size: 24px;
+  }
+
+  .measurement-map-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .measurement-map-button {
+    width: 308px;
+    max-width: calc(50% - 4px);
+  }
+}
+
+@media (max-width: 480px) {
+  .measurement-map-content {
+    padding: 30px 20px;
+  }
+
+  .measurement-map-card {
+    padding: 30px 20px;
+  }
+
+  .measurement-map-question {
+    font-size: 20px;
+  }
+
+  .measurement-map-explanation {
+    font-size: 14px;
+  }
+
+  .measurement-map-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .measurement-map-button {
+    width: calc(50% - 4px);
+    max-width: 308px;
+    height: 143px;
+    padding: 32px;
+    font-size: 16px;
+  }
+}
+

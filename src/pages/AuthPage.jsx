@@ -64,7 +64,7 @@ function AuthPage() {
       if (result.success) {
         setSuccessMessage('נרשמת בהצלחה! מעבר למערכת...')
         setTimeout(() => {
-          navigate('/dashboard')
+          navigate('/measurement-map')
         }, 1500)
       } else if (result.requiresEmailConfirmation) {
         setSuccessMessage('נרשמת בהצלחה! אנא בדוק את האימייל שלך לאישור החשבון.')
