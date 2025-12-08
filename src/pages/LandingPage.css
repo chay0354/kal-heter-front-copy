@@ -41,14 +41,14 @@
 /* Main Container - Exact Figma Specs */
 .landing-page-container {
   position: relative;
-  width: 97%;
-  max-width: 97%;
+  width: calc(100% - 240px);
+  max-width: calc(100% - 240px);
   min-height: 4362px;
   background: #FEFEFE;
   direction: rtl;
   overflow-x: hidden;
   overflow-y: visible;
-  margin: 0 auto;
+  margin: 0 120px;
   font-family: 'Assistant', 'Arial', sans-serif;
 }
 
@@ -548,12 +548,13 @@ section[class*="w-\\[562px\\]"][class*="top-\\[839px\\]"] p {
   text-align: right;
   margin-right: 0;
   padding-right: 0;
+  width: 50%;
 }
 
 .why-choose-image {
   position: relative;
-  width: 950px;
-  max-width: 100%;
+  width: 50%;
+  max-width: 50%;
   height: auto;
   max-height: 600px;
   aspect-ratio: 700 / 680;
@@ -997,8 +998,9 @@ footer[class*="w-\\[1440px\\]"] p {
 
 @media (max-width: 1440px) {
   .landing-page-container {
-    width: 97%;
-    max-width: 97%;
+    width: calc(100% - 240px);
+    max-width: calc(100% - 240px);
+    margin: 0 120px;
   }
   
   nav[class*="w-\\[1440px\\]"] {
@@ -1056,6 +1058,9 @@ footer[class*="w-\\[1440px\\]"] p {
 
 @media (max-width: 968px) {
   .landing-page-container {
+    width: calc(100% - 40px);
+    max-width: calc(100% - 40px);
+    margin: 0 20px;
     min-height: auto;
   }
   
@@ -1699,6 +1704,7 @@ footer[class*="w-\\[1440px\\]"] p {
   border-radius: 40px;
   z-index: 2;
   box-sizing: border-box;
+  overflow: visible;
 }
 
 .contact-form-content {
@@ -1870,8 +1876,8 @@ footer[class*="w-\\[1440px\\]"] p {
   position: absolute;
   top: 31px;
   left: 29px;
-  width: 570px;
-  height: 552px;
+  width: 650px;
+  height: 680px;
   aspect-ratio: 1.03;
   object-fit: cover;
   border-radius: 24px;
@@ -1892,7 +1898,7 @@ footer[class*="w-\\[1440px\\]"] p {
   padding: 24px clamp(20px, 8.33%, 120px);
   z-index: 2;
   box-sizing: border-box;
-  margin: 0;
+  margin: -100px 0 0 0;
 }
 
 .footer-content {
