@@ -11,8 +11,6 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
     email: '',
     idNumber: '',
     idPhoto: null,
-    tabuExcerpt: null,
-    contractNumber: '',
     additionalRightsHolders: []
   })
 
@@ -58,6 +56,13 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
         idNumber: '',
         idPhoto: null
       }]
+    }))
+  }
+
+  const handleRemoveRightsHolder = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      additionalRightsHolders: prev.additionalRightsHolders.filter((_, i) => i !== index)
     }))
   }
 
@@ -243,6 +248,14 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
 
             {formData.additionalRightsHolders.map((holder, index) => (
               <div key={index} className="rights-holder-form">
+                <button
+                  type="button"
+                  className="remove-rights-holder"
+                  onClick={() => handleRemoveRightsHolder(index)}
+                  aria-label="סגירת בעל זכות נוסף"
+                >
+                  ✕
+                </button>
                 <h3>בעל זכות נוסף {index + 1}</h3>
                 <div className="form-row">
                   <div className="form-column">
@@ -280,77 +293,24 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
                     </div>
                     <div className="form-group">
                       <label className="form-label">צילום תעודת זהות</label>
-                      <label className="file-upload-label">
-                        <input
-                          type="file"
-                          onChange={(e) => handleRightsHolderFileChange(index, e.target.files[0])}
-                          accept=".pdf,.jpg,.jpeg,.png"
-                          style={{ display: 'none' }}
-                        />
-                        <div className="file-upload-button">
-                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                          <span>צירוף קובץ</span>
-                        </div>
+                      <input
+                        id={`rightsHolder-idPhoto-${index}`}
+                        type="file"
+                        onChange={(e) => handleRightsHolderFileChange(index, e.target.files[0])}
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        style={{ display: 'none' }}
+                      />
+                      <label
+                        htmlFor={`rightsHolder-idPhoto-${index}`}
+                        className="file-upload-button id-photo-upload-button"
+                      >
+                        <span className="file-upload-text">צירוף קובץ</span>
                       </label>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* Tabu Excerpt */}
-          <div className="form-group">
-            <label className="form-label">נסח טאבו ממשרד המשפטים</label>
-            <label className="file-upload-label">
-              <input
-                type="file"
-                name="tabuExcerpt"
-                onChange={handleFileChange}
-                accept=".pdf,.jpg,.jpeg,.png"
-                style={{ display: 'none' }}
-              />
-              <div className="file-upload-button">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                <span>צירוף קובץ</span>
-              </div>
-              {formData.tabuExcerpt && (
-                <span className="file-name">{formData.tabuExcerpt.name}</span>
-              )}
-            </label>
-            <a 
-              href="https://www.gov.il/he/departments/justice/govil-landing-page" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="info-link"
-            >
-              ניתן ללחוץ כאן כדי לעבור לאתר ולקבל את הנסח
-            </a>
-          </div>
-
-          {/* Contract Number */}
-          <div className="form-group">
-            <label className="form-label">מספר חוזה ברשות מקרקעי ישראל</label>
-            <input
-              type="text"
-              name="contractNumber"
-              value={formData.contractNumber}
-              onChange={handleInputChange}
-              className="form-input"
-              placeholder="הקלד"
-            />
-            <a 
-              href="https://www.gov.il/he/departments/israel_land_authority/govil-landing-page" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="info-link"
-            >
-              ניתן ללחוץ כאן כדי לעבור לאתר ולקבל את מספר החוזה
-            </a>
           </div>
 
           {/* Navigation Buttons */}
@@ -368,6 +328,13 @@ const PlanningRequest = ({ selectedPlan, onBack }) => {
               onClick={handleContinue}
             >
               המשך
+            </button>
+            <button 
+              type="button"
+              className="link-button"
+              onClick={handleBack}
+            >
+              חזרה למסך קודם
             </button>
           </div>
             </div>
