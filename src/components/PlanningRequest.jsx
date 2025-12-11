@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './PlanningRequest.css'
+import { saveFormData, getFormData, saveFileData } from '../services/formData'
 
 const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hideSections = false, hideMeasurement = false }) => {
   const navigate = useNavigate()
@@ -14,14 +15,52 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     additionalRightsHolders: []
   })
 
+  const [propertyData, setPropertyData] = useState({
+    council: '',
+    city: '',
+    street: '',
+    propertySize: '',
+    lot: '',
+    helka: '',
+    gush: '',
+    photoDate: '',
+    propertyPhotos: [],
+    tabuExtract: null,
+    israelLandAuthorityContract: ''
+  })
+
+  const [measurementData, setMeasurementData] = useState({
+    surveyorName: '',
+    measurementDate: '',
+    pdfFile: null,
+    dwfFile: null,
+    dwgFile: null
+  })
+
   const [errors, setErrors] = useState({})
+
+  // Load form data from localStorage on mount
+  useEffect(() => {
+    const savedData = getFormData()
+    if (savedData.personalDetails) {
+      setFormData(savedData.personalDetails)
+    }
+    if (savedData.propertyDetails) {
+      setPropertyData(savedData.propertyDetails)
+    }
+    if (savedData.measurementDetails) {
+      setMeasurementData(savedData.measurementDetails)
+    }
+  }, [])
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
+    const updatedData = {
+      ...formData,
       [name]: value
-    }))
+    }
+    setFormData(updatedData)
+    saveFormData({ personalDetails: updatedData })
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -34,10 +73,13 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     const { name } = e.target
     const file = e.target.files[0]
     if (file) {
-      setFormData(prev => ({
-        ...prev,
+      const updatedData = {
+        ...formData,
         [name]: file
-      }))
+      }
+      setFormData(updatedData)
+      saveFileData(`personalDetails.${name}`, file)
+      saveFormData({ personalDetails: updatedData })
       if (errors[name]) {
         setErrors(prev => ({
           ...prev,
@@ -76,12 +118,52 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
   }
 
   const handleRightsHolderFileChange = (index, file) => {
-    setFormData(prev => ({
-      ...prev,
-      additionalRightsHolders: prev.additionalRightsHolders.map((holder, i) => 
+    const updatedData = {
+      ...formData,
+      additionalRightsHolders: formData.additionalRightsHolders.map((holder, i) => 
         i === index ? { ...holder, idPhoto: file } : holder
       )
-    }))
+    }
+    setFormData(updatedData)
+    saveFormData({ personalDetails: updatedData })
+  }
+
+  const handlePropertyChange = (field, value) => {
+    const updatedData = {
+      ...propertyData,
+      [field]: value
+    }
+    setPropertyData(updatedData)
+    saveFormData({ propertyDetails: updatedData })
+  }
+
+  const handleMeasurementChange = (field, value) => {
+    const updatedData = {
+      ...measurementData,
+      [field]: value
+    }
+    setMeasurementData(updatedData)
+    saveFormData({ measurementDetails: updatedData })
+  }
+
+  const handlePropertyFileChange = (field, file) => {
+    const updatedData = {
+      ...propertyData,
+      [field]: file
+    }
+    setPropertyData(updatedData)
+    saveFileData(`propertyDetails.${field}`, file)
+    saveFormData({ propertyDetails: updatedData })
+  }
+
+  const handleMeasurementFileChange = (field, file) => {
+    const updatedData = {
+      ...measurementData,
+      [field]: file
+    }
+    setMeasurementData(updatedData)
+    saveFileData(`measurementDetails.${field}`, file)
+    saveFormData({ measurementDetails: updatedData })
   }
 
   const handleContinue = () => {
@@ -114,11 +196,16 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
   const dreamCards = Array.from({ length: 6 }).map((_, idx) => ({
     id: idx + 1,
     tag: 'קל״צ',
-    title: 'שם הדגם',
+    title: idx === 0 ? 'האחוזה של חיים' : 'שם הדגם',
     desc: 'Lorem ipsum mi diam morbi ut morbi arcu augue sed et cursus elit tristique vestibulum eget sap.',
     spec: ['250 מ״ר', 'חניה 3', 'חדרי שינה 3', '2 מפלסים'],
     image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80'
   }))
+
+  const handleHouseSelect = (house) => {
+    saveFormData({ selectedHouse: house })
+    navigate('/summary')
+  }
   const steps = [
     { number: 1, label: 'פרטים אישיים' },
     { number: 2, label: 'פרטי הנכס' },
@@ -174,15 +261,33 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
               <div className="location-row">
                 <div className="location-field">
                   <label className="location-label">מועצה / עירייה</label>
-                  <input className="location-input" placeholder="הקלד" type="text" />
+                  <input 
+                    className="location-input" 
+                    placeholder="הקלד" 
+                    type="text"
+                    value={propertyData.council}
+                    onChange={(e) => handlePropertyChange('council', e.target.value)}
+                  />
                 </div>
                 <div className="location-field">
                   <label className="location-label">עיר / מושב / קיבוץ</label>
-                  <input className="location-input" placeholder="הקלד" type="text" />
+                  <input 
+                    className="location-input" 
+                    placeholder="הקלד" 
+                    type="text"
+                    value={propertyData.city}
+                    onChange={(e) => handlePropertyChange('city', e.target.value)}
+                  />
                 </div>
                 <div className="location-field">
                   <label className="location-label">רחוב</label>
-                  <input className="location-input" placeholder="הקלד" type="text" />
+                  <input 
+                    className="location-input" 
+                    placeholder="הקלד" 
+                    type="text"
+                    value={propertyData.street}
+                    onChange={(e) => handlePropertyChange('street', e.target.value)}
+                  />
                   <p className="location-hint inline-hint">
                     ניתן לנעוץ כתובת מדויקת <a href="#" className="location-link">כאן</a>
                   </p>
@@ -195,19 +300,43 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                 <div className="property-row">
                   <div className="property-field">
                     <label className="property-label">גודל הנכס במ"ר</label>
-                    <input className="property-input" placeholder="הקלד" type="text" />
+                    <input 
+                      className="property-input" 
+                      placeholder="הקלד" 
+                      type="text"
+                      value={propertyData.propertySize}
+                      onChange={(e) => handlePropertyChange('propertySize', e.target.value)}
+                    />
                   </div>
                   <div className="property-field">
                     <label className="property-label">מגרש</label>
-                    <input className="property-input" placeholder="הקלד" type="text" />
+                    <input 
+                      className="property-input" 
+                      placeholder="הקלד" 
+                      type="text"
+                      value={propertyData.lot}
+                      onChange={(e) => handlePropertyChange('lot', e.target.value)}
+                    />
                   </div>
                   <div className="property-field">
                     <label className="property-label">חלקה</label>
-                    <input className="property-input" placeholder="הקלד" type="text" />
+                    <input 
+                      className="property-input" 
+                      placeholder="הקלד" 
+                      type="text"
+                      value={propertyData.helka}
+                      onChange={(e) => handlePropertyChange('helka', e.target.value)}
+                    />
                   </div>
                   <div className="property-field">
                     <label className="property-label">גוש</label>
-                    <input className="property-input" placeholder="הקלד" type="text" />
+                    <input 
+                      className="property-input" 
+                      placeholder="הקלד" 
+                      type="text"
+                      value={propertyData.gush}
+                      onChange={(e) => handlePropertyChange('gush', e.target.value)}
+                    />
                   </div>
                 </div>
 
@@ -218,17 +347,35 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                 <div className="property-row property-row-secondary">
                   <div className="property-field">
                     <label className="property-label">תאריך הצילום</label>
-                    <div className="property-input date-input">
-                      <span className="date-placeholder">בחר תאריך</span>
-                      <img className="date-icon-img" src="/icons/Calendar.png" alt="calendar" />
-                    </div>
+                    <input
+                      className="property-input date-input"
+                      type="date"
+                      value={propertyData.photoDate}
+                      onChange={(e) => handlePropertyChange('photoDate', e.target.value)}
+                      style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
+                    />
                   </div>
                   <div className="property-field upload-field">
                     <label className="property-label">צירוף צילום הנכס</label>
-                    <div className="property-upload-box">
-                      <span className="upload-placeholder">צירוף קובץ</span>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={(e) => {
+                        const files = Array.from(e.target.files)
+                        handlePropertyChange('propertyPhotos', files)
+                      }}
+                      style={{ display: 'none' }}
+                      id="property-photos-input"
+                    />
+                    <label htmlFor="property-photos-input" className="property-upload-box" style={{ cursor: 'pointer' }}>
+                      <span className="upload-placeholder">
+                        {propertyData.propertyPhotos && propertyData.propertyPhotos.length > 0 
+                          ? `${propertyData.propertyPhotos.length} קבצים נבחרו`
+                          : 'צירוף קובץ'}
+                      </span>
                       <img className="upload-icon-img" src="/icons/Paperclip.png" alt="paperclip" />
-                    </div>
+                    </label>
                     <p className="property-upload-note">חובה לצרף לפחות 3 צילומים</p>
                   </div>
                 </div>
@@ -240,17 +387,32 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                 <div className="registry-row">
                   <div className="registry-field upload">
                     <label className="registry-label">נסח טאבו ממשרד המשפטים</label>
-                    <div className="registry-upload-box">
+                    <input
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      onChange={(e) => handlePropertyFileChange('tabuExtract', e.target.files[0])}
+                      style={{ display: 'none' }}
+                      id="tabu-extract-input"
+                    />
+                    <label htmlFor="tabu-extract-input" className="registry-upload-box" style={{ cursor: 'pointer' }}>
                       <img className="registry-upload-icon" src="/icons/Paperclip.png" alt="paperclip" />
-                      <span className="registry-upload-placeholder">צירוף קובץ</span>
-                    </div>
+                      <span className="registry-upload-placeholder">
+                        {propertyData.tabuExtract ? propertyData.tabuExtract.name : 'צירוף קובץ'}
+                      </span>
+                    </label>
                     <p className="registry-hint">
                       ניתן ללחוץ <a href="#" className="registry-link">כאן</a> כדי לעבור לאתר ולקבל את נסח
                     </p>
                   </div>
                   <div className="registry-field">
                     <label className="registry-label">מספר חוזה ברשות מקרקעי ישראל</label>
-                    <input className="registry-input" placeholder="הקלד" type="text" />
+                    <input 
+                      className="registry-input" 
+                      placeholder="הקלד" 
+                      type="text"
+                      value={propertyData.israelLandAuthorityContract}
+                      onChange={(e) => handlePropertyChange('israelLandAuthorityContract', e.target.value)}
+                    />
                     <p className="registry-hint">
                       ניתן ללחוץ <a href="#" className="registry-link">כאן</a> כדי לעבור לאתר ולקבל את מספר החוזה
                     </p>
@@ -267,14 +429,23 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
               <div className="measurement-row">
                 <div className="measurement-field">
                   <label className="measurement-label">שם המודד</label>
-                  <input className="measurement-input" placeholder="הקלד" type="text" />
+                  <input 
+                    className="measurement-input" 
+                    placeholder="הקלד" 
+                    type="text"
+                    value={measurementData.surveyorName}
+                    onChange={(e) => handleMeasurementChange('surveyorName', e.target.value)}
+                  />
                 </div>
                 <div className="measurement-field">
                   <label className="measurement-label">תאריך מדידה</label>
-                  <div className="measurement-input has-icon">
-                    <span className="measurement-placeholder">בחר תאריך</span>
-                    <img className="measurement-icon" src="/icons/Calendar.png" alt="calendar" />
-                  </div>
+                  <input
+                    className="measurement-input has-icon"
+                    type="date"
+                    value={measurementData.measurementDate}
+                    onChange={(e) => handleMeasurementChange('measurementDate', e.target.value)}
+                    style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
+                  />
                 </div>
               </div>
 
@@ -284,10 +455,19 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                     <span className="measurement-info">i</span>
                     <span className="measurement-upload-label">קובץ PDF</span>
                   </div>
-                  <div className="measurement-upload-box">
-                    <span className="measurement-upload-placeholder">צירוף קובץ</span>
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => handleMeasurementFileChange('pdfFile', e.target.files[0])}
+                    style={{ display: 'none' }}
+                    id="pdf-file-input"
+                  />
+                  <label htmlFor="pdf-file-input" className="measurement-upload-box" style={{ cursor: 'pointer' }}>
+                    <span className="measurement-upload-placeholder">
+                      {measurementData.pdfFile ? measurementData.pdfFile.name : 'צירוף קובץ'}
+                    </span>
                     <img className="measurement-upload-icon" src="/icons/Paperclip.png" alt="paperclip" />
-                  </div>
+                  </label>
                 </div>
 
                 <div className="measurement-upload-card">
@@ -295,10 +475,19 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                     <span className="measurement-info">i</span>
                     <span className="measurement-upload-label">קובץ DWF</span>
                   </div>
-                  <div className="measurement-upload-box">
-                    <span className="measurement-upload-placeholder">צירוף קובץ</span>
+                  <input
+                    type="file"
+                    accept=".dwf"
+                    onChange={(e) => handleMeasurementFileChange('dwfFile', e.target.files[0])}
+                    style={{ display: 'none' }}
+                    id="dwf-file-input"
+                  />
+                  <label htmlFor="dwf-file-input" className="measurement-upload-box" style={{ cursor: 'pointer' }}>
+                    <span className="measurement-upload-placeholder">
+                      {measurementData.dwfFile ? measurementData.dwfFile.name : 'צירוף קובץ'}
+                    </span>
                     <img className="measurement-upload-icon" src="/icons/Paperclip.png" alt="paperclip" />
-                  </div>
+                  </label>
                 </div>
 
                 <div className="measurement-upload-card">
@@ -306,10 +495,19 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                     <span className="measurement-info">i</span>
                     <span className="measurement-upload-label">קובץ DWG</span>
                   </div>
-                  <div className="measurement-upload-box">
-                    <span className="measurement-upload-placeholder">צירוף קובץ</span>
+                  <input
+                    type="file"
+                    accept=".dwg"
+                    onChange={(e) => handleMeasurementFileChange('dwgFile', e.target.files[0])}
+                    style={{ display: 'none' }}
+                    id="dwg-file-input"
+                  />
+                  <label htmlFor="dwg-file-input" className="measurement-upload-box" style={{ cursor: 'pointer' }}>
+                    <span className="measurement-upload-placeholder">
+                      {measurementData.dwgFile ? measurementData.dwgFile.name : 'צירוף קובץ'}
+                    </span>
                     <img className="measurement-upload-icon" src="/icons/Paperclip.png" alt="paperclip" />
-                  </div>
+                  </label>
                 </div>
               </div>
             </div>
@@ -332,7 +530,12 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
               <div className="dream-cards-scroll">
                 <div className="dream-cards-grid">
                   {dreamCards.map(card => (
-                    <div key={card.id} className="dream-card">
+                    <div 
+                      key={card.id} 
+                      className="dream-card"
+                      onClick={() => handleHouseSelect(card)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <div className="dream-card-image-wrapper">
                         <img className="dream-card-image" src={card.image} alt={card.title} />
                         <div className="dream-card-tag">{card.tag}</div>
@@ -340,7 +543,16 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                       <div className="dream-card-body">
                         <h3 className="dream-card-title">{card.title}</h3>
                         <p className="dream-card-desc">{card.desc}</p>
-                        <a className="dream-card-link" href="#!">צפייה בתוכניות הארכיטקטוניות</a>
+                        <a 
+                          className="dream-card-link" 
+                          href="#!"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            // Handle view architectural plans
+                          }}
+                        >
+                          צפייה בתוכניות הארכיטקטוניות
+                        </a>
                         <div className="dream-card-specs">
                           {card.spec.map((item, i) => (
                             <span key={i} className="dream-card-spec">{item}</span>

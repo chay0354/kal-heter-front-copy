@@ -9,6 +9,7 @@ import AdminPage from './pages/AdminPage'
 import MeasurementMapPage from './pages/MeasurementMapPage'
 import ProcessExplanationPage from './pages/ProcessExplanationPage'
 import SurveyorsListPage from './pages/SurveyorsListPage'
+import SummaryPage from './pages/SummaryPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import PlanningRequest from './components/PlanningRequest'
 
@@ -43,7 +44,15 @@ function App() {
             path="/home-catalog" 
             element={
               <ProtectedRoute>
-                <PlanningRequest showFields={false} hideSections={true} hideMeasurement={true} selectedPlan={null} onBack={null} nextPath="/measurement-map" />
+                <PlanningRequest showFields={false} hideSections={true} hideMeasurement={true} selectedPlan={null} onBack={null} nextPath="/summary" />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/summary" 
+            element={
+              <ProtectedRoute>
+                <SummaryPage />
               </ProtectedRoute>
             } 
           />
