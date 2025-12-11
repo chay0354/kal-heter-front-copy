@@ -1,0 +1,360 @@
+/* ============================================
+   FONT FACE DECLARATIONS
+   ============================================ */
+
+@font-face {
+  font-family: 'Tel_Aviv-ModernistRegular';
+  src: url('../../fonts/TelAviv-ModernistRegular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tel_Aviv-ModernistBold';
+  src: url('../../fonts/TelAviv-ModernistBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================
+   PROCESS EXPLANATION PAGE STYLES
+   ============================================ */
+
+.process-explanation-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+  background-color: white;
+}
+
+.process-explanation-container {
+  max-width: 1400px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.process-explanation-content {
+  background-image: url('/eef4e7b9c078d09a23b8f5bf3ffc49e51fb0dee3.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 40px;
+  padding: 80px 60px;
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  direction: rtl;
+}
+
+.back-button:hover {
+  opacity: 0.8;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.back-arrow-icon {
+  width: 20px;
+  height: 20px;
+  color: #002169;
+}
+
+.back-text {
+  font-size: 16px;
+  font-weight: 400;
+  color: #002169;
+}
+
+.logo-section {
+  text-align: center;
+  margin-bottom: 40px;
+  direction: rtl;
+}
+
+.nav-logo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  direction: rtl;
+}
+
+.nav-logo-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.nav-logo-text {
+  font-family: 'Tel_Aviv-ModernistBold', 'Tel Aviv', Helvetica, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #002169;
+  direction: rtl;
+}
+
+.auth-subtitle {
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #6b7280;
+  text-align: center;
+  margin: 0;
+  line-height: 1.6;
+  direction: rtl;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.process-explanation-card {
+  background: white;
+  border-radius: 24px;
+  padding: 60px 50px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
+  margin: 0 auto;
+  direction: rtl;
+  animation: slideIn 0.6s ease-out 0.2s both;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.process-explanation-title {
+  font-family: 'Tel_Aviv-ModernistBold', 'Tel Aviv', Helvetica, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #002169;
+  text-align: center;
+  margin: 0 0 40px 0;
+  line-height: 1.4;
+  direction: rtl;
+}
+
+.process-explanation-text {
+  margin-bottom: 40px;
+  direction: rtl;
+}
+
+.process-explanation-text p {
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #374151;
+  line-height: 1.8;
+  margin: 0 0 20px 0;
+  text-align: right;
+}
+
+.process-explanation-text p:last-child {
+  margin-bottom: 0;
+}
+
+.checkbox-container {
+  margin-bottom: 40px;
+  direction: rtl;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  direction: rtl;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+}
+
+.checkbox-input {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: #FF6B35;
+  flex-shrink: 0;
+}
+
+.checkbox-text {
+  font-size: 16px;
+  font-weight: 400;
+  color: #374151;
+  line-height: 1.6;
+  direction: rtl;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terms-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 2px solid #d1d5db;
+  border-radius: 3px;
+  position: relative;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  margin: 0;
+  padding: 0;
+}
+
+.terms-checkbox:hover {
+  border-color: #10b981;
+  transform: scale(1.1);
+}
+
+.terms-checkbox:checked {
+  background-color: #10b981;
+  border-color: #10b981;
+}
+
+.terms-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60%) rotate(45deg);
+  width: 4px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+}
+
+.continue-button {
+  width: 100%;
+  padding: 18px 32px;
+  background: #FF6B35;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Tel_Aviv-ModernistBold', 'Tel Aviv', Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  direction: rtl;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.continue-button:hover:not(:disabled) {
+  background: #E55A2B;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4);
+}
+
+.continue-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.continue-button:disabled {
+  background: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .process-explanation-content {
+    padding: 50px 35px;
+    border-radius: 30px;
+  }
+
+  .process-explanation-card {
+    padding: 40px 30px;
+  }
+
+  .process-explanation-title {
+    font-size: 24px;
+  }
+
+  .process-explanation-text p {
+    font-size: 14px;
+  }
+
+  .checkbox-text {
+    font-size: 14px;
+  }
+
+  .continue-button {
+    font-size: 18px;
+    padding: 16px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .process-explanation-content {
+    padding: 40px 25px;
+    border-radius: 20px;
+  }
+
+  .process-explanation-card {
+    padding: 30px 20px;
+  }
+
+  .process-explanation-title {
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+
+  .nav-logo-text {
+    font-size: 24px;
+  }
+
+  .auth-subtitle {
+    font-size: 16px;
+  }
+}
+

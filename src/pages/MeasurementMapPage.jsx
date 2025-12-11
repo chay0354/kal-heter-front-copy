@@ -6,8 +6,8 @@ function MeasurementMapPage() {
   const navigate = useNavigate()
 
   const handleYes = () => {
-    // Navigate to next step - you can update this route as needed
-    navigate('/dashboard')
+    // Navigate to process explanation page
+    navigate('/process-explanation')
   }
 
   const handleNo = () => {

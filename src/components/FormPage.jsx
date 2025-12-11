@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import './FormPage.css'
-import PlansGallery from './PlansGallery'
 import PlanningRequest from './PlanningRequest'
 
 const FormPage = () => {
@@ -14,7 +13,6 @@ const FormPage = () => {
   })
 
   const [errors, setErrors] = useState({})
-  const [showPlans, setShowPlans] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState(null)
   const [showPlanningRequest, setShowPlanningRequest] = useState(false)
 
@@ -89,23 +87,12 @@ const FormPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (validateForm()) {
-      setShowPlans(true)
+      setShowPlanningRequest(true)
     }
-  }
-
-
-  const handleSelectPlan = (plan) => {
-    setSelectedPlan(plan)
-    setShowPlanningRequest(true)
   }
 
   const handleBackFromPlanning = () => {
     setShowPlanningRequest(false)
-    setShowPlans(true)
-  }
-
-  const handleBackFromPlans = () => {
-    setShowPlans(false)
     setSelectedPlan(null)
   }
 
@@ -119,20 +106,6 @@ const FormPage = () => {
           <div className="bg-shape bg-shape-4"></div>
         </div>
         <PlanningRequest selectedPlan={selectedPlan} onBack={handleBackFromPlanning} />
-      </div>
-    )
-  }
-
-  if (showPlans) {
-    return (
-      <div className="form-page">
-        <div className="background-elements">
-          <div className="bg-shape bg-shape-1"></div>
-          <div className="bg-shape bg-shape-2"></div>
-          <div className="bg-shape bg-shape-3"></div>
-          <div className="bg-shape bg-shape-4"></div>
-        </div>
-        <PlansGallery onBack={handleBackFromPlans} onSelectPlan={handleSelectPlan} />
       </div>
     )
   }

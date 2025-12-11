@@ -7,8 +7,11 @@ import TermsPage from './pages/TermsPage'
 import DashboardPage from './pages/DashboardPage'
 import AdminPage from './pages/AdminPage'
 import MeasurementMapPage from './pages/MeasurementMapPage'
+import ProcessExplanationPage from './pages/ProcessExplanationPage'
 import SurveyorsListPage from './pages/SurveyorsListPage'
+import SummaryPage from './pages/SummaryPage'
 import ProtectedRoute from './components/ProtectedRoute'
+import PlanningRequest from './components/PlanningRequest'
 
 function App() {
   return (
@@ -18,8 +21,41 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/process-explanation" element={<ProcessExplanationPage />} />
           <Route path="/measurement-map" element={<MeasurementMapPage />} />
           <Route path="/surveyors-list" element={<SurveyorsListPage />} />
+          <Route 
+            path="/property-details" 
+            element={
+              <ProtectedRoute>
+                <PlanningRequest showFields={false} selectedPlan={null} onBack={null} nextPath="/property-details-final" />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/property-details-final" 
+            element={
+              <ProtectedRoute>
+                <PlanningRequest showFields={false} hideSections={true} selectedPlan={null} onBack={null} nextPath="/home-catalog" />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/home-catalog" 
+            element={
+              <ProtectedRoute>
+                <PlanningRequest showFields={false} hideSections={true} hideMeasurement={true} selectedPlan={null} onBack={null} nextPath="/summary" />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/summary" 
+            element={
+              <ProtectedRoute>
+                <SummaryPage />
+              </ProtectedRoute>
+            } 
+          />
           <Route 
             path="/dashboard" 
             element={
