@@ -2,17 +2,38 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../components/PlanningRequest.css'
 import { getFormData, clearFormData } from '../services/formData'
-import { submitForm } from '../services/formSubmission'
+import { submitForm, saveFormDraft } from '../services/formSubmission'
 
 const SummaryPage = () => {
   const navigate = useNavigate()
   const [formData, setFormData] = useState({})
   const [confirmed, setConfirmed] = useState(false)
+  const [draftSaved, setDraftSaved] = useState(false)
 
   useEffect(() => {
     const savedData = getFormData()
     setFormData(savedData)
-  }, [])
+    
+    // Automatically save draft to database when summary page loads
+    if (savedData && Object.keys(savedData).length > 0) {
+      // Check if we have meaningful data to save
+      const hasData = (
+        (savedData.personalDetails && Object.keys(savedData.personalDetails).length > 0) ||
+        (savedData.propertyDetails && Object.keys(savedData.propertyDetails).length > 0) ||
+        (savedData.measurementDetails && Object.keys(savedData.measurementDetails).length > 0) ||
+        (savedData.selectedHouse && Object.keys(savedData.selectedHouse).length > 0)
+      )
+      
+      if (hasData && !draftSaved) {
+        saveFormDraft(savedData).then(() => {
+          setDraftSaved(true)
+          console.log('Form draft saved to database')
+        }).catch(err => {
+          console.error('Failed to save draft:', err)
+        })
+      }
+    }
+  }, [draftSaved])
 
   const steps = [
     { number: 1, label: 'פרטים אישיים' },
