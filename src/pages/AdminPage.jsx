@@ -87,6 +87,33 @@ const AdminPage = () => {
     }
   }
 
+  const handleDownloadFile = async (fileUrl, fileName) => {
+    try {
+      // Try to download directly from the URL
+      const response = await fetch(fileUrl)
+      if (!response.ok) {
+        // If direct download fails, try through our download endpoint
+        const downloadUrl = `${API_BASE_URL}/api/admin/files/download?file_url=${encodeURIComponent(fileUrl)}`
+        window.open(downloadUrl, '_blank')
+        return
+      }
+      
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = fileName || fileUrl.split('/').pop().split('?')[0]
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+    } catch (error) {
+      console.error('Error downloading file:', error)
+      // Fallback: open in new tab
+      window.open(fileUrl, '_blank')
+    }
+  }
+
   // If user is selected, show details view
   if (selectedUser) {
     const user = selectedUser
@@ -216,9 +243,26 @@ const AdminPage = () => {
                             <span className="summary-label">צילום תעודת זהות:</span>
                             <span className="summary-value">
                               {fileUrls.id_photo ? (
-                                <a href={fileUrls.id_photo} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                  צפה בקובץ
-                                </a>
+                                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                  <a href={fileUrls.id_photo} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                    צפה בקובץ
+                                  </a>
+                                  <button
+                                    onClick={() => handleDownloadFile(fileUrls.id_photo, 'id_photo')}
+                                    style={{
+                                      padding: '4px 12px',
+                                      background: '#667eea',
+                                      color: 'white',
+                                      border: 'none',
+                                      borderRadius: '6px',
+                                      cursor: 'pointer',
+                                      fontSize: '0.875rem',
+                                      fontWeight: '500'
+                                    }}
+                                  >
+                                    הורד
+                                  </button>
+                                </div>
                               ) : (
                                 <span className="no-file">לא נבחר קובץ</span>
                               )}
@@ -259,9 +303,26 @@ const AdminPage = () => {
                                     <span className="summary-label">צילום תעודת זהות:</span>
                                     <span className="summary-value">
                                       {additionalRightsHolderPhotos[index] ? (
-                                        <a href={additionalRightsHolderPhotos[index]} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                          צפה בקובץ
-                                        </a>
+                                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                          <a href={additionalRightsHolderPhotos[index]} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                            צפה בקובץ
+                                          </a>
+                                          <button
+                                            onClick={() => handleDownloadFile(additionalRightsHolderPhotos[index], `rights_holder_${index + 1}_id_photo`)}
+                                            style={{
+                                              padding: '4px 12px',
+                                              background: '#667eea',
+                                              color: 'white',
+                                              border: 'none',
+                                              borderRadius: '6px',
+                                              cursor: 'pointer',
+                                              fontSize: '0.875rem',
+                                              fontWeight: '500'
+                                            }}
+                                          >
+                                            הורד
+                                          </button>
+                                        </div>
                                       ) : (
                                         <span className="no-file">לא נבחר קובץ</span>
                                       )}
@@ -335,9 +396,26 @@ const AdminPage = () => {
                             {fileUrls.property_photos && fileUrls.property_photos.length > 0 ? (
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {fileUrls.property_photos.map((url, idx) => (
-                                  <a key={idx} href={url} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                    צילום {idx + 1}
-                                  </a>
+                                  <div key={idx} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                    <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                      צילום {idx + 1}
+                                    </a>
+                                    <button
+                                      onClick={() => handleDownloadFile(url, `property_photo_${idx + 1}`)}
+                                      style={{
+                                        padding: '4px 12px',
+                                        background: '#667eea',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        cursor: 'pointer',
+                                        fontSize: '0.875rem',
+                                        fontWeight: '500'
+                                      }}
+                                    >
+                                      הורד
+                                    </button>
+                                  </div>
                                 ))}
                               </div>
                             ) : (
@@ -355,9 +433,26 @@ const AdminPage = () => {
                           <span className="summary-label">נסח טאבו:</span>
                           <span className="summary-value">
                             {fileUrls.tabu_extract ? (
-                              <a href={fileUrls.tabu_extract} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                צפה בקובץ
-                              </a>
+                              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <a href={fileUrls.tabu_extract} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                  צפה בקובץ
+                                </a>
+                                <button
+                                  onClick={() => handleDownloadFile(fileUrls.tabu_extract, 'tabu_extract')}
+                                  style={{
+                                    padding: '4px 12px',
+                                    background: '#667eea',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '500'
+                                  }}
+                                >
+                                  הורד
+                                </button>
+                              </div>
                             ) : (
                               <span className="no-file">לא נבחר קובץ</span>
                             )}
@@ -402,9 +497,26 @@ const AdminPage = () => {
                           <span className="summary-label">קובץ DWG:</span>
                           <span className="summary-value">
                             {fileUrls.dwg_file ? (
-                              <a href={fileUrls.dwg_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                צפה בקובץ
-                              </a>
+                              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <a href={fileUrls.dwg_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                  צפה בקובץ
+                                </a>
+                                <button
+                                  onClick={() => handleDownloadFile(fileUrls.dwg_file, 'measurement_dwg')}
+                                  style={{
+                                    padding: '4px 12px',
+                                    background: '#667eea',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '500'
+                                  }}
+                                >
+                                  הורד
+                                </button>
+                              </div>
                             ) : (
                               <span className="no-file">לא נבחר קובץ</span>
                             )}
@@ -414,9 +526,26 @@ const AdminPage = () => {
                           <span className="summary-label">קובץ DWF:</span>
                           <span className="summary-value">
                             {fileUrls.dwf_file ? (
-                              <a href={fileUrls.dwf_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                צפה בקובץ
-                              </a>
+                              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <a href={fileUrls.dwf_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                  צפה בקובץ
+                                </a>
+                                <button
+                                  onClick={() => handleDownloadFile(fileUrls.dwf_file, 'measurement_dwf')}
+                                  style={{
+                                    padding: '4px 12px',
+                                    background: '#667eea',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '500'
+                                  }}
+                                >
+                                  הורד
+                                </button>
+                              </div>
                             ) : (
                               <span className="no-file">לא נבחר קובץ</span>
                             )}
@@ -426,9 +555,26 @@ const AdminPage = () => {
                           <span className="summary-label">קובץ PDF:</span>
                           <span className="summary-value">
                             {fileUrls.pdf_file ? (
-                              <a href={fileUrls.pdf_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                צפה בקובץ
-                              </a>
+                              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                <a href={fileUrls.pdf_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                  צפה בקובץ
+                                </a>
+                                <button
+                                  onClick={() => handleDownloadFile(fileUrls.pdf_file, 'measurement_pdf')}
+                                  style={{
+                                    padding: '4px 12px',
+                                    background: '#667eea',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontSize: '0.875rem',
+                                    fontWeight: '500'
+                                  }}
+                                >
+                                  הורד
+                                </button>
+                              </div>
                             ) : (
                               <span className="no-file">לא נבחר קובץ</span>
                             )}
@@ -577,9 +723,26 @@ const AdminPage = () => {
                             <span className="summary-label">מפת מצב:</span>
                             <span className="summary-value">
                               {typeof planningRequest.situationMap === 'string' && planningRequest.situationMap.startsWith('http') ? (
-                                <a href={planningRequest.situationMap} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                  צפה במפה
-                                </a>
+                                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                  <a href={planningRequest.situationMap} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                    צפה במפה
+                                  </a>
+                                  <button
+                                    onClick={() => handleDownloadFile(planningRequest.situationMap, 'situation_map')}
+                                    style={{
+                                      padding: '4px 12px',
+                                      background: '#667eea',
+                                      color: 'white',
+                                      border: 'none',
+                                      borderRadius: '6px',
+                                      cursor: 'pointer',
+                                      fontSize: '0.875rem',
+                                      fontWeight: '500'
+                                    }}
+                                  >
+                                    הורד
+                                  </button>
+                                </div>
                               ) : (
                                 planningRequest.situationMap
                               )}
@@ -591,9 +754,26 @@ const AdminPage = () => {
                             <span className="summary-label">צילום מגרש:</span>
                             <span className="summary-value">
                               {typeof planningRequest.plotPhoto === 'string' && planningRequest.plotPhoto.startsWith('http') ? (
-                                <a href={planningRequest.plotPhoto} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                  צפה בתמונה
-                                </a>
+                                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                  <a href={planningRequest.plotPhoto} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                    צפה בתמונה
+                                  </a>
+                                  <button
+                                    onClick={() => handleDownloadFile(planningRequest.plotPhoto, 'plot_photo')}
+                                    style={{
+                                      padding: '4px 12px',
+                                      background: '#667eea',
+                                      color: 'white',
+                                      border: 'none',
+                                      borderRadius: '6px',
+                                      cursor: 'pointer',
+                                      fontSize: '0.875rem',
+                                      fontWeight: '500'
+                                    }}
+                                  >
+                                    הורד
+                                  </button>
+                                </div>
                               ) : (
                                 planningRequest.plotPhoto
                               )}
