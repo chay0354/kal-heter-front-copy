@@ -122,18 +122,29 @@ const AdminPage = () => {
       ? user.form_submissions[user.form_submissions.length - 1]
       : null
     
-    const personalDetails = latestSubmission?.personal_details || {}
-    const propertyDetails = latestSubmission?.property_details || {}
-    const measurementDetails = latestSubmission?.measurement_details || {}
-    const selectedHouse = latestSubmission?.selected_house || {}
-    const fileUrls = latestSubmission?.file_urls || {}
-    
-    // Get planning request from application_data
+    // Get planning request from application_data - this might contain all the form data
     const planningRequest = user.application_data?.planningRequest || {}
+    const selectedPlan = user.application_data?.selectedPlan || {}
     
-    // Get additional rights holders
-    const additionalRightsHolders = personalDetails.additionalRightsHolders || []
-    const additionalRightsHolderPhotos = fileUrls.additional_rights_holders_photos || []
+    // Merge data from form_submissions and planningRequest
+    // planningRequest might have personal details, property details, etc.
+    const personalDetails = latestSubmission?.personal_details || planningRequest.personalDetails || planningRequest || {}
+    const propertyDetails = latestSubmission?.property_details || planningRequest.propertyDetails || {}
+    const measurementDetails = latestSubmission?.measurement_details || planningRequest.measurementDetails || {}
+    const selectedHouse = latestSubmission?.selected_house || selectedPlan || planningRequest.selectedHouse || {}
+    const fileUrls = latestSubmission?.file_urls || planningRequest.fileUrls || {}
+    
+    // Get additional rights holders - check both sources
+    const additionalRightsHolders = personalDetails.additionalRightsHolders || planningRequest.additionalRightsHolders || []
+    const additionalRightsHolderPhotos = fileUrls.additional_rights_holders_photos || planningRequest.additionalRightsHolderPhotos || []
+    
+    // Debug: log what data we have
+    console.log('User data:', {
+      hasFormSubmissions: !!latestSubmission,
+      hasApplicationData: !!user.application_data,
+      planningRequestKeys: Object.keys(planningRequest),
+      selectedPlan: selectedPlan
+    })
 
   return (
       <div className="personal-details-page">
