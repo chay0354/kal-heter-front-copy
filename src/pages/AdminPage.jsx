@@ -166,12 +166,15 @@ const AdminPage = () => {
     // Debug: log what data we have
     console.log('User data debug:', {
       hasFormSubmissions: !!latestSubmission,
+      formSubmissionsCount: user.form_submissions?.length || 0,
       hasApplicationData: !!user.application_data,
       planningRequestKeys: Object.keys(planningRequest),
       selectedPlan: selectedPlan,
       personalDetailsKeys: Object.keys(personalDetails),
       propertyDetailsKeys: Object.keys(propertyDetails),
       fileUrlsKeys: Object.keys(fileUrls),
+      latestSubmission: latestSubmission,
+      applicationData: user.application_data,
       fullUserData: user
     })
 
