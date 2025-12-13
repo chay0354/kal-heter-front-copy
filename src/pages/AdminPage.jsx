@@ -15,7 +15,18 @@ const AdminPage = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`${API_BASE_URL}/api/admin/users`)
+      const token = localStorage.getItem('access_token')
+      if (!token) {
+        throw new Error('User not authenticated')
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
       
       if (!response.ok) {
         throw new Error('Failed to fetch users')
