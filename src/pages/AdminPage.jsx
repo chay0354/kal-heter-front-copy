@@ -128,22 +128,51 @@ const AdminPage = () => {
     
     // Merge data from form_submissions and planningRequest
     // planningRequest might have personal details, property details, etc.
-    const personalDetails = latestSubmission?.personal_details || planningRequest.personalDetails || planningRequest || {}
-    const propertyDetails = latestSubmission?.property_details || planningRequest.propertyDetails || {}
-    const measurementDetails = latestSubmission?.measurement_details || planningRequest.measurementDetails || {}
-    const selectedHouse = latestSubmission?.selected_house || selectedPlan || planningRequest.selectedHouse || {}
-    const fileUrls = latestSubmission?.file_urls || planningRequest.fileUrls || {}
+    // Also check if planningRequest itself contains the fields directly
+    const personalDetails = latestSubmission?.personal_details || planningRequest.personalDetails || {
+      firstName: planningRequest.firstName,
+      lastName: planningRequest.lastName,
+      phone: planningRequest.phone || user.phone,
+      email: planningRequest.email || user.email,
+      idNumber: planningRequest.idNumber || user.id_number,
+      ...planningRequest
+    }
+    
+    const propertyDetails = latestSubmission?.property_details || planningRequest.propertyDetails || {
+      city: planningRequest.city,
+      council: planningRequest.council || user.application_data?.council,
+      street: planningRequest.street,
+      propertySize: planningRequest.propertySize,
+      lot: planningRequest.lot,
+      helka: planningRequest.helka || user.application_data?.helka,
+      gush: planningRequest.gush || user.application_data?.gush,
+      photoDate: planningRequest.photoDate,
+      ...planningRequest
+    }
+    
+    const measurementDetails = latestSubmission?.measurement_details || planningRequest.measurementDetails || {
+      surveyorName: planningRequest.surveyorName,
+      measurementDate: planningRequest.measurementDate,
+      ...planningRequest
+    }
+    
+    const selectedHouse = latestSubmission?.selected_house || selectedPlan || planningRequest.selectedHouse || planningRequest.selectedPlan || {}
+    const fileUrls = latestSubmission?.file_urls || planningRequest.fileUrls || planningRequest.file_urls || {}
     
     // Get additional rights holders - check both sources
     const additionalRightsHolders = personalDetails.additionalRightsHolders || planningRequest.additionalRightsHolders || []
-    const additionalRightsHolderPhotos = fileUrls.additional_rights_holders_photos || planningRequest.additionalRightsHolderPhotos || []
+    const additionalRightsHolderPhotos = fileUrls.additional_rights_holders_photos || planningRequest.additionalRightsHolderPhotos || fileUrls.additionalRightsHolderPhotos || []
     
     // Debug: log what data we have
-    console.log('User data:', {
+    console.log('User data debug:', {
       hasFormSubmissions: !!latestSubmission,
       hasApplicationData: !!user.application_data,
       planningRequestKeys: Object.keys(planningRequest),
-      selectedPlan: selectedPlan
+      selectedPlan: selectedPlan,
+      personalDetailsKeys: Object.keys(personalDetails),
+      propertyDetailsKeys: Object.keys(propertyDetails),
+      fileUrlsKeys: Object.keys(fileUrls),
+      fullUserData: user
     })
 
   return (
