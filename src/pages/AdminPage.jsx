@@ -191,12 +191,11 @@ const AdminPage = () => {
                     </div>
 
                     {/* Personal Details from Form - Stage 1 */}
-                    {(Object.keys(personalDetails).length > 0 || user.email) && (
-                      <div className="summary-section">
-                        <div className="summary-section-header">
-                          <h3 className="summary-section-title">שלב 1: פרטים אישיים בעל הנכס</h3>
-                        </div>
-                        <div className="summary-details-grid">
+                    <div className="summary-section">
+                      <div className="summary-section-header">
+                        <h3 className="summary-section-title">שלב 1: פרטים אישיים בעל הנכס</h3>
+                      </div>
+                      <div className="summary-details-grid">
                           <div className="summary-detail-item">
                             <span className="summary-label">שם פרטי:</span>
                             <span className="summary-value">{personalDetails.firstName || '-'}</span>
@@ -274,15 +273,14 @@ const AdminPage = () => {
                           )}
                         </div>
                       </div>
-                    )}
+                    </div>
 
                     {/* Property Details Section - Stage 2 */}
-                    {(Object.keys(propertyDetails).length > 0 || user.application_data) && (
-                      <div className="summary-section">
-                        <div className="summary-section-header">
-                          <h3 className="summary-section-title">שלב 2: פרטי הנכס</h3>
-                        </div>
-                        <div className="summary-details-grid">
+                    <div className="summary-section">
+                      <div className="summary-section-header">
+                        <h3 className="summary-section-title">שלב 2: פרטי הנכס</h3>
+                      </div>
+                      <div className="summary-details-grid">
                           {/* From application_data (initial form) */}
                           {user.application_data?.region && (
                             <div className="summary-detail-item">
@@ -382,15 +380,14 @@ const AdminPage = () => {
                           )}
                         </div>
                       </div>
-                    )}
+                    </div>
 
                     {/* Measurement Map Section - Stage 3 */}
-                    {(Object.keys(measurementDetails).length > 0 || fileUrls.dwg_file || fileUrls.dwf_file || fileUrls.pdf_file) && (
-                      <div className="summary-section">
-                        <div className="summary-section-header">
-                          <h3 className="summary-section-title">שלב 3: מפת מדידה</h3>
-                        </div>
-                        <div className="summary-details-grid">
+                    <div className="summary-section">
+                      <div className="summary-section-header">
+                        <h3 className="summary-section-title">שלב 3: מפת מדידה</h3>
+                      </div>
+                      <div className="summary-details-grid">
                           {measurementDetails.surveyorName && (
                             <div className="summary-detail-item">
                               <span className="summary-label">שם המודד:</span>
@@ -441,15 +438,14 @@ const AdminPage = () => {
                           </div>
                         </div>
                       </div>
-                    )}
+                    </div>
 
                     {/* Dream Home Section - Stage 4 */}
-                    {(selectedHouse && selectedHouse.id) || user.application_data?.selectedPlan && (
-                      <div className="summary-section">
-                        <div className="summary-section-header">
-                          <h3 className="summary-section-title">שלב 4: בחירת בית חלומות</h3>
-                        </div>
-                        {selectedHouse && selectedHouse.id ? (
+                    <div className="summary-section">
+                      <div className="summary-section-header">
+                        <h3 className="summary-section-title">שלב 4: בחירת בית חלומות</h3>
+                      </div>
+                      {selectedHouse && selectedHouse.id ? (
                           <div className="summary-house-card">
                             <img 
                               src={selectedHouse.image || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80'} 
@@ -499,17 +495,22 @@ const AdminPage = () => {
                               </span>
                             </div>
                           </div>
-                        ) : null}
-                      </div>
-                    )}
+                        ) : (
+                          <div className="summary-details-grid">
+                            <div className="summary-detail-item">
+                              <span className="summary-label">בית חלומות:</span>
+                              <span className="summary-value">לא נבחר</span>
+                            </div>
+                          </div>
+                        )}
+                    </div>
 
                     {/* Planning Request Section - Stage 5 */}
-                    {Object.keys(planningRequest).length > 0 && (
-                      <div className="summary-section">
-                        <div className="summary-section-header">
-                          <h3 className="summary-section-title">שלב 5: בקשת תכנון</h3>
-                        </div>
-                        <div className="summary-details-grid">
+                    <div className="summary-section">
+                      <div className="summary-section-header">
+                        <h3 className="summary-section-title">שלב 5: בקשת תכנון</h3>
+                      </div>
+                      <div className="summary-details-grid">
                           {planningRequest.idNumber && (
                             <div className="summary-detail-item">
                               <span className="summary-label">מספר תעודת זהות:</span>
@@ -618,8 +619,14 @@ const AdminPage = () => {
                             </div>
                           ))}
                         </div>
+                        {Object.keys(planningRequest).length === 0 && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">בקשת תכנון:</span>
+                            <span className="summary-value">לא הושלמה</span>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </>
                 )}
               </div>
