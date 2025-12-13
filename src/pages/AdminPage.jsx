@@ -386,54 +386,53 @@ const AdminPage = () => {
                         <h3 className="summary-section-title">שלב 3: מפת מדידה</h3>
                       </div>
                       <div className="summary-details-grid">
-                          {measurementDetails.surveyorName && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">שם המודד:</span>
-                              <span className="summary-value">{measurementDetails.surveyorName}</span>
-                            </div>
-                          )}
-                          {measurementDetails.measurementDate && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">תאריך מדידה:</span>
-                              <span className="summary-value">{formatDate(measurementDetails.measurementDate)}</span>
-                            </div>
-                          )}
+                        {measurementDetails.surveyorName && (
                           <div className="summary-detail-item">
-                            <span className="summary-label">קובץ DWG:</span>
-                            <span className="summary-value">
-                              {fileUrls.dwg_file ? (
-                                <a href={fileUrls.dwg_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                  צפה בקובץ
-                                </a>
-                              ) : (
-                                <span className="no-file">לא נבחר קובץ</span>
-                              )}
-                            </span>
+                            <span className="summary-label">שם המודד:</span>
+                            <span className="summary-value">{measurementDetails.surveyorName}</span>
                           </div>
+                        )}
+                        {measurementDetails.measurementDate && (
                           <div className="summary-detail-item">
-                            <span className="summary-label">קובץ DWF:</span>
-                            <span className="summary-value">
-                              {fileUrls.dwf_file ? (
-                                <a href={fileUrls.dwf_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                  צפה בקובץ
-                                </a>
-                              ) : (
-                                <span className="no-file">לא נבחר קובץ</span>
-                              )}
-                            </span>
+                            <span className="summary-label">תאריך מדידה:</span>
+                            <span className="summary-value">{formatDate(measurementDetails.measurementDate)}</span>
                           </div>
-                          <div className="summary-detail-item">
-                            <span className="summary-label">קובץ PDF:</span>
-                            <span className="summary-value">
-                              {fileUrls.pdf_file ? (
-                                <a href={fileUrls.pdf_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                  צפה בקובץ
-                                </a>
-                              ) : (
-                                <span className="no-file">לא נבחר קובץ</span>
-                              )}
-                            </span>
-                          </div>
+                        )}
+                        <div className="summary-detail-item">
+                          <span className="summary-label">קובץ DWG:</span>
+                          <span className="summary-value">
+                            {fileUrls.dwg_file ? (
+                              <a href={fileUrls.dwg_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                צפה בקובץ
+                              </a>
+                            ) : (
+                              <span className="no-file">לא נבחר קובץ</span>
+                            )}
+                          </span>
+                        </div>
+                        <div className="summary-detail-item">
+                          <span className="summary-label">קובץ DWF:</span>
+                          <span className="summary-value">
+                            {fileUrls.dwf_file ? (
+                              <a href={fileUrls.dwf_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                צפה בקובץ
+                              </a>
+                            ) : (
+                              <span className="no-file">לא נבחר קובץ</span>
+                            )}
+                          </span>
+                        </div>
+                        <div className="summary-detail-item">
+                          <span className="summary-label">קובץ PDF:</span>
+                          <span className="summary-value">
+                            {fileUrls.pdf_file ? (
+                              <a href={fileUrls.pdf_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                צפה בקובץ
+                              </a>
+                            ) : (
+                              <span className="no-file">לא נבחר קובץ</span>
+                            )}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -444,63 +443,63 @@ const AdminPage = () => {
                         <h3 className="summary-section-title">שלב 4: בחירת בית חלומות</h3>
                       </div>
                       {selectedHouse && selectedHouse.id ? (
-                          <div className="summary-house-card">
-                            <img 
-                              src={selectedHouse.image || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80'} 
-                              alt={selectedHouse.title}
-                              className="summary-house-image"
-                            />
-                            <div className="summary-house-details">
-                              <h4 className="summary-house-title">{selectedHouse.title || selectedHouse.name || 'שם הדגם'}</h4>
-                              {selectedHouse.desc && (
-                                <p style={{ margin: '10px 0', color: '#6b7280' }}>{selectedHouse.desc}</p>
-                              )}
-                              {selectedHouse.tag && (
-                                <span style={{ 
-                                  display: 'inline-block', 
-                                  padding: '4px 12px', 
-                                  background: '#667eea', 
-                                  color: 'white', 
-                                  borderRadius: '12px', 
-                                  fontSize: '0.875rem',
-                                  marginBottom: '10px'
-                                }}>
-                                  {selectedHouse.tag}
-                                </span>
-                              )}
-                              {selectedHouse.spec && selectedHouse.spec.length > 0 && (
-                                <div className="summary-house-specs">
-                                  {selectedHouse.spec.map((item, i) => (
-                                    <span key={i} className="summary-house-spec">{item}</span>
-                                  ))}
-                                </div>
-                              )}
-                              {selectedHouse.id && (
-                                <div style={{ marginTop: '15px', fontSize: '0.9rem', color: '#6b7280' }}>
-                                  ID: {selectedHouse.id}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        ) : user.application_data?.selectedPlan ? (
-                          <div className="summary-details-grid">
-                            <div className="summary-detail-item" style={{ gridColumn: '1 / -1' }}>
-                              <span className="summary-label">תוכנית נבחרת:</span>
-                              <span className="summary-value">
-                                {typeof user.application_data.selectedPlan === 'object' 
-                                  ? JSON.stringify(user.application_data.selectedPlan, null, 2)
-                                  : user.application_data.selectedPlan}
+                        <div className="summary-house-card">
+                          <img 
+                            src={selectedHouse.image || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80'} 
+                            alt={selectedHouse.title}
+                            className="summary-house-image"
+                          />
+                          <div className="summary-house-details">
+                            <h4 className="summary-house-title">{selectedHouse.title || selectedHouse.name || 'שם הדגם'}</h4>
+                            {selectedHouse.desc && (
+                              <p style={{ margin: '10px 0', color: '#6b7280' }}>{selectedHouse.desc}</p>
+                            )}
+                            {selectedHouse.tag && (
+                              <span style={{ 
+                                display: 'inline-block', 
+                                padding: '4px 12px', 
+                                background: '#667eea', 
+                                color: 'white', 
+                                borderRadius: '12px', 
+                                fontSize: '0.875rem',
+                                marginBottom: '10px'
+                              }}>
+                                {selectedHouse.tag}
                               </span>
-                            </div>
+                            )}
+                            {selectedHouse.spec && selectedHouse.spec.length > 0 && (
+                              <div className="summary-house-specs">
+                                {selectedHouse.spec.map((item, i) => (
+                                  <span key={i} className="summary-house-spec">{item}</span>
+                                ))}
+                              </div>
+                            )}
+                            {selectedHouse.id && (
+                              <div style={{ marginTop: '15px', fontSize: '0.9rem', color: '#6b7280' }}>
+                                ID: {selectedHouse.id}
+                              </div>
+                            )}
                           </div>
-                        ) : (
-                          <div className="summary-details-grid">
-                            <div className="summary-detail-item">
-                              <span className="summary-label">בית חלומות:</span>
-                              <span className="summary-value">לא נבחר</span>
-                            </div>
+                        </div>
+                      ) : user.application_data?.selectedPlan ? (
+                        <div className="summary-details-grid">
+                          <div className="summary-detail-item" style={{ gridColumn: '1 / -1' }}>
+                            <span className="summary-label">תוכנית נבחרת:</span>
+                            <span className="summary-value">
+                              {typeof user.application_data.selectedPlan === 'object' 
+                                ? JSON.stringify(user.application_data.selectedPlan, null, 2)
+                                : user.application_data.selectedPlan}
+                            </span>
                           </div>
-                        )}
+                        </div>
+                      ) : (
+                        <div className="summary-details-grid">
+                          <div className="summary-detail-item">
+                            <span className="summary-label">בית חלומות:</span>
+                            <span className="summary-value">לא נבחר</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     {/* Planning Request Section - Stage 5 */}
@@ -509,114 +508,113 @@ const AdminPage = () => {
                         <h3 className="summary-section-title">שלב 5: בקשת תכנון</h3>
                       </div>
                       <div className="summary-details-grid">
-                          {planningRequest.idNumber && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">מספר תעודת זהות:</span>
-                              <span className="summary-value">{planningRequest.idNumber}</span>
-                            </div>
-                          )}
-                          {planningRequest.fullName && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">שם מלא:</span>
-                              <span className="summary-value">{planningRequest.fullName}</span>
-                            </div>
-                          )}
-                          {planningRequest.requestorType && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">סוג מבקש:</span>
-                              <span className="summary-value">{planningRequest.requestorType}</span>
-                            </div>
-                          )}
-                          {planningRequest.contactMethods && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">אמצעי קשר:</span>
-                              <span className="summary-value">
-                                {Array.isArray(planningRequest.contactMethods) 
-                                  ? planningRequest.contactMethods.join(', ')
-                                  : planningRequest.contactMethods}
-                              </span>
-                            </div>
-                          )}
-                          {planningRequest.propertyRights && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">זכויות בנכס:</span>
-                              <span className="summary-value">{planningRequest.propertyRights}</span>
-                            </div>
-                          )}
-                          {planningRequest.gush && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">גוש:</span>
-                              <span className="summary-value">{planningRequest.gush}</span>
-                            </div>
-                          )}
-                          {planningRequest.helka && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">חלקה:</span>
-                              <span className="summary-value">{planningRequest.helka}</span>
-                            </div>
-                          )}
-                          {planningRequest.plotArea && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">שטח מגרש:</span>
-                              <span className="summary-value">{planningRequest.plotArea}</span>
-                            </div>
-                          )}
-                          {planningRequest.constructionType && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">סוג בנייה:</span>
-                              <span className="summary-value">{planningRequest.constructionType}</span>
-                            </div>
-                          )}
-                          {planningRequest.propertyUsage && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">שימוש בנכס:</span>
-                              <span className="summary-value">{planningRequest.propertyUsage}</span>
-                            </div>
-                          )}
-                          {planningRequest.situationMap && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">מפת מצב:</span>
-                              <span className="summary-value">
-                                {typeof planningRequest.situationMap === 'string' && planningRequest.situationMap.startsWith('http') ? (
-                                  <a href={planningRequest.situationMap} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                    צפה במפה
-                                  </a>
-                                ) : (
-                                  planningRequest.situationMap
-                                )}
-                              </span>
-                            </div>
-                          )}
-                          {planningRequest.plotPhoto && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">צילום מגרש:</span>
-                              <span className="summary-value">
-                                {typeof planningRequest.plotPhoto === 'string' && planningRequest.plotPhoto.startsWith('http') ? (
-                                  <a href={planningRequest.plotPhoto} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                    צפה בתמונה
-                                  </a>
-                                ) : (
-                                  planningRequest.plotPhoto
-                                )}
-                              </span>
-                            </div>
-                          )}
-                          {/* Display any other planning request fields */}
-                          {Object.keys(planningRequest).filter(key => 
-                            !['idNumber', 'fullName', 'requestorType', 'contactMethods', 'propertyRights', 
-                              'gush', 'helka', 'plotArea', 'constructionType', 'propertyUsage', 
-                              'situationMap', 'plotPhoto'].includes(key)
-                          ).map(key => (
-                            <div key={key} className="summary-detail-item">
-                              <span className="summary-label">{key}:</span>
-                              <span className="summary-value">
-                                {typeof planningRequest[key] === 'object' 
-                                  ? JSON.stringify(planningRequest[key])
-                                  : String(planningRequest[key] || '-')}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
+                        {planningRequest.idNumber && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">מספר תעודת זהות:</span>
+                            <span className="summary-value">{planningRequest.idNumber}</span>
+                          </div>
+                        )}
+                        {planningRequest.fullName && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">שם מלא:</span>
+                            <span className="summary-value">{planningRequest.fullName}</span>
+                          </div>
+                        )}
+                        {planningRequest.requestorType && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">סוג מבקש:</span>
+                            <span className="summary-value">{planningRequest.requestorType}</span>
+                          </div>
+                        )}
+                        {planningRequest.contactMethods && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">אמצעי קשר:</span>
+                            <span className="summary-value">
+                              {Array.isArray(planningRequest.contactMethods) 
+                                ? planningRequest.contactMethods.join(', ')
+                                : planningRequest.contactMethods}
+                            </span>
+                          </div>
+                        )}
+                        {planningRequest.propertyRights && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">זכויות בנכס:</span>
+                            <span className="summary-value">{planningRequest.propertyRights}</span>
+                          </div>
+                        )}
+                        {planningRequest.gush && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">גוש:</span>
+                            <span className="summary-value">{planningRequest.gush}</span>
+                          </div>
+                        )}
+                        {planningRequest.helka && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">חלקה:</span>
+                            <span className="summary-value">{planningRequest.helka}</span>
+                          </div>
+                        )}
+                        {planningRequest.plotArea && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">שטח מגרש:</span>
+                            <span className="summary-value">{planningRequest.plotArea}</span>
+                          </div>
+                        )}
+                        {planningRequest.constructionType && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">סוג בנייה:</span>
+                            <span className="summary-value">{planningRequest.constructionType}</span>
+                          </div>
+                        )}
+                        {planningRequest.propertyUsage && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">שימוש בנכס:</span>
+                            <span className="summary-value">{planningRequest.propertyUsage}</span>
+                          </div>
+                        )}
+                        {planningRequest.situationMap && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">מפת מצב:</span>
+                            <span className="summary-value">
+                              {typeof planningRequest.situationMap === 'string' && planningRequest.situationMap.startsWith('http') ? (
+                                <a href={planningRequest.situationMap} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                  צפה במפה
+                                </a>
+                              ) : (
+                                planningRequest.situationMap
+                              )}
+                            </span>
+                          </div>
+                        )}
+                        {planningRequest.plotPhoto && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">צילום מגרש:</span>
+                            <span className="summary-value">
+                              {typeof planningRequest.plotPhoto === 'string' && planningRequest.plotPhoto.startsWith('http') ? (
+                                <a href={planningRequest.plotPhoto} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                  צפה בתמונה
+                                </a>
+                              ) : (
+                                planningRequest.plotPhoto
+                              )}
+                            </span>
+                          </div>
+                        )}
+                        {/* Display any other planning request fields */}
+                        {Object.keys(planningRequest).filter(key => 
+                          !['idNumber', 'fullName', 'requestorType', 'contactMethods', 'propertyRights', 
+                            'gush', 'helka', 'plotArea', 'constructionType', 'propertyUsage', 
+                            'situationMap', 'plotPhoto'].includes(key)
+                        ).map(key => (
+                          <div key={key} className="summary-detail-item">
+                            <span className="summary-label">{key}:</span>
+                            <span className="summary-value">
+                              {typeof planningRequest[key] === 'object' 
+                                ? JSON.stringify(planningRequest[key])
+                                : String(planningRequest[key] || '-')}
+                            </span>
+                          </div>
+                        ))}
                         {Object.keys(planningRequest).length === 0 && (
                           <div className="summary-detail-item">
                             <span className="summary-label">בקשת תכנון:</span>
