@@ -90,22 +90,23 @@ const AdminPage = () => {
   // If user is selected, show details view
   if (selectedUser) {
     const user = selectedUser
-    const personalDetails = user.form_submissions && user.form_submissions.length > 0 
-      ? user.form_submissions[0].personal_details || {}
-      : {}
-    const propertyDetails = user.form_submissions && user.form_submissions.length > 0
-      ? user.form_submissions[0].property_details || {}
-      : {}
-    const measurementDetails = user.form_submissions && user.form_submissions.length > 0
-      ? user.form_submissions[0].measurement_details || {}
-      : {}
-    const selectedHouse = user.form_submissions && user.form_submissions.length > 0
-      ? user.form_submissions[0].selected_house || {}
-      : {}
-    const fileUrls = user.form_submissions && user.form_submissions.length > 0
-      ? user.form_submissions[0].file_urls || {}
-      : {}
+    // Get data from form submissions (most recent)
+    const latestSubmission = user.form_submissions && user.form_submissions.length > 0 
+      ? user.form_submissions[user.form_submissions.length - 1]
+      : null
+    
+    const personalDetails = latestSubmission?.personal_details || {}
+    const propertyDetails = latestSubmission?.property_details || {}
+    const measurementDetails = latestSubmission?.measurement_details || {}
+    const selectedHouse = latestSubmission?.selected_house || {}
+    const fileUrls = latestSubmission?.file_urls || {}
+    
+    // Get planning request from application_data
     const planningRequest = user.application_data?.planningRequest || {}
+    
+    // Get additional rights holders
+    const additionalRightsHolders = personalDetails.additionalRightsHolders || []
+    const additionalRightsHolderPhotos = fileUrls.additional_rights_holders_photos || []
 
   return (
       <div className="personal-details-page">
@@ -189,11 +190,11 @@ const AdminPage = () => {
                       </div>
                     </div>
 
-                    {/* Personal Details from Form */}
-                    {Object.keys(personalDetails).length > 0 && (
+                    {/* Personal Details from Form - Stage 1 */}
+                    {(Object.keys(personalDetails).length > 0 || user.email) && (
                       <div className="summary-section">
                         <div className="summary-section-header">
-                          <h3 className="summary-section-title">פרטים אישיים בעל הנכס</h3>
+                          <h3 className="summary-section-title">שלב 1: פרטים אישיים בעל הנכס</h3>
                         </div>
                         <div className="summary-details-grid">
                           <div className="summary-detail-item">
@@ -206,11 +207,11 @@ const AdminPage = () => {
                           </div>
                           <div className="summary-detail-item">
                             <span className="summary-label">טלפון:</span>
-                            <span className="summary-value">{personalDetails.phone || '-'}</span>
+                            <span className="summary-value">{personalDetails.phone || user.phone || '-'}</span>
                           </div>
                           <div className="summary-detail-item">
                             <span className="summary-label">מספר תעודת זהות:</span>
-                            <span className="summary-value">{personalDetails.idNumber || '-'}</span>
+                            <span className="summary-value">{personalDetails.idNumber || user.id_number || '-'}</span>
                           </div>
                           <div className="summary-detail-item">
                             <span className="summary-label">צילום תעודת זהות:</span>
@@ -226,65 +227,91 @@ const AdminPage = () => {
                           </div>
                           <div className="summary-detail-item">
                             <span className="summary-label">אימייל:</span>
-                            <span className="summary-value">{personalDetails.email || '-'}</span>
+                            <span className="summary-value">{personalDetails.email || user.email || '-'}</span>
                           </div>
+                          {/* Additional Rights Holders */}
+                          {additionalRightsHolders.length > 0 && (
+                            <>
+                              <div className="summary-detail-item" style={{ gridColumn: '1 / -1', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #e5e7eb' }}>
+                                <span className="summary-label" style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '15px', display: 'block' }}>
+                                  בעלי זכויות נוספים:
+                                </span>
+                              </div>
+                              {additionalRightsHolders.map((holder, index) => (
+                                <React.Fragment key={index}>
+                                  <div className="summary-detail-item" style={{ gridColumn: '1 / -1', marginRight: '20px' }}>
+                                    <span className="summary-label" style={{ fontWeight: '600' }}>
+                                      בעל זכות {index + 1}:
+                                    </span>
+                                  </div>
+                                  <div className="summary-detail-item">
+                                    <span className="summary-label">שם פרטי:</span>
+                                    <span className="summary-value">{holder.firstName || '-'}</span>
+                                  </div>
+                                  <div className="summary-detail-item">
+                                    <span className="summary-label">שם משפחה:</span>
+                                    <span className="summary-value">{holder.lastName || '-'}</span>
+                                  </div>
+                                  <div className="summary-detail-item">
+                                    <span className="summary-label">מספר תעודת זהות:</span>
+                                    <span className="summary-value">{holder.idNumber || '-'}</span>
+                                  </div>
+                                  <div className="summary-detail-item">
+                                    <span className="summary-label">צילום תעודת זהות:</span>
+                                    <span className="summary-value">
+                                      {additionalRightsHolderPhotos[index] ? (
+                                        <a href={additionalRightsHolderPhotos[index]} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                          צפה בקובץ
+                                        </a>
+                                      ) : (
+                                        <span className="no-file">לא נבחר קובץ</span>
+                                      )}
+                                    </span>
+                                  </div>
+                                </React.Fragment>
+                              ))}
+                            </>
+                          )}
                         </div>
                       </div>
                     )}
 
-                    {/* Property Details Section */}
+                    {/* Property Details Section - Stage 2 */}
                     {(Object.keys(propertyDetails).length > 0 || user.application_data) && (
                       <div className="summary-section">
                         <div className="summary-section-header">
-                          <h3 className="summary-section-title">פרטי הנכס</h3>
+                          <h3 className="summary-section-title">שלב 2: פרטי הנכס</h3>
                         </div>
                         <div className="summary-details-grid">
+                          {/* From application_data (initial form) */}
                           {user.application_data?.region && (
                             <div className="summary-detail-item">
                               <span className="summary-label">אזור:</span>
                               <span className="summary-value">{user.application_data.region}</span>
                             </div>
                           )}
-                          {user.application_data?.council && (
+                          {(user.application_data?.council || propertyDetails.council) && (
                             <div className="summary-detail-item">
                               <span className="summary-label">מועצה / עירייה:</span>
-                              <span className="summary-value">{user.application_data.council}</span>
+                              <span className="summary-value">{propertyDetails.council || user.application_data?.council || '-'}</span>
                             </div>
                           )}
-                          {user.application_data?.gush && (
+                          {(user.application_data?.gush || propertyDetails.gush) && (
                             <div className="summary-detail-item">
                               <span className="summary-label">גוש:</span>
-                              <span className="summary-value">{user.application_data.gush}</span>
+                              <span className="summary-value">{propertyDetails.gush || user.application_data?.gush || '-'}</span>
                             </div>
                           )}
-                          {user.application_data?.helka && (
+                          {(user.application_data?.helka || propertyDetails.helka) && (
                             <div className="summary-detail-item">
                               <span className="summary-label">חלקה:</span>
-                              <span className="summary-value">{user.application_data.helka}</span>
+                              <span className="summary-value">{propertyDetails.helka || user.application_data?.helka || '-'}</span>
                             </div>
                           )}
                           {propertyDetails.city && (
                             <div className="summary-detail-item">
                               <span className="summary-label">עיר / מושב / קיבוץ:</span>
                               <span className="summary-value">{propertyDetails.city}</span>
-                            </div>
-                          )}
-                          {propertyDetails.council && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">מועצה / עירייה:</span>
-                              <span className="summary-value">{propertyDetails.council}</span>
-                            </div>
-                          )}
-                          {propertyDetails.gush && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">גוש:</span>
-                              <span className="summary-value">{propertyDetails.gush}</span>
-                            </div>
-                          )}
-                          {propertyDetails.helka && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">חלקה:</span>
-                              <span className="summary-value">{propertyDetails.helka}</span>
                             </div>
                           )}
                           {propertyDetails.street && (
@@ -339,21 +366,29 @@ const AdminPage = () => {
                               )}
                             </span>
                           </div>
-                          {user.application_data?.isIsraelLandAuthority && (
+                          {(propertyDetails.israelLandAuthorityContract || user.application_data?.isIsraelLandAuthority !== undefined) && (
                             <div className="summary-detail-item">
                               <span className="summary-label">חוזה רשות מקרקעי ישראל:</span>
-                              <span className="summary-value">{user.application_data.isIsraelLandAuthority ? 'כן' : 'לא'}</span>
+                              <span className="summary-value">
+                                {propertyDetails.israelLandAuthorityContract || (user.application_data?.isIsraelLandAuthority ? 'כן' : 'לא')}
+                              </span>
+                            </div>
+                          )}
+                          {user.application_data?.surveyMap && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">מפת מדידה ראשונית:</span>
+                              <span className="summary-value">{user.application_data.surveyMap}</span>
                             </div>
                           )}
                         </div>
                       </div>
                     )}
 
-                    {/* Measurement Map Section */}
-                    {Object.keys(measurementDetails).length > 0 && (
+                    {/* Measurement Map Section - Stage 3 */}
+                    {(Object.keys(measurementDetails).length > 0 || fileUrls.dwg_file || fileUrls.dwf_file || fileUrls.pdf_file) && (
                       <div className="summary-section">
                         <div className="summary-section-header">
-                          <h3 className="summary-section-title">מפת מדידה</h3>
+                          <h3 className="summary-section-title">שלב 3: מפת מדידה</h3>
                         </div>
                         <div className="summary-details-grid">
                           {measurementDetails.surveyorName && (
@@ -408,37 +443,71 @@ const AdminPage = () => {
                       </div>
                     )}
 
-                    {/* Dream Home Section */}
-                    {selectedHouse && selectedHouse.id && (
+                    {/* Dream Home Section - Stage 4 */}
+                    {(selectedHouse && selectedHouse.id) || user.application_data?.selectedPlan && (
                       <div className="summary-section">
                         <div className="summary-section-header">
-                          <h3 className="summary-section-title">בית חלומות</h3>
+                          <h3 className="summary-section-title">שלב 4: בחירת בית חלומות</h3>
                         </div>
-                        <div className="summary-house-card">
-                          <img 
-                            src={selectedHouse.image || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80'} 
-                            alt={selectedHouse.title}
-                            className="summary-house-image"
-                          />
-                          <div className="summary-house-details">
-                            <h4 className="summary-house-title">{selectedHouse.title || 'שם הדגם'}</h4>
-                            {selectedHouse.spec && selectedHouse.spec.length > 0 && (
-                              <div className="summary-house-specs">
-                                {selectedHouse.spec.map((item, i) => (
-                                  <span key={i} className="summary-house-spec">{item}</span>
-                                ))}
-                              </div>
-                            )}
+                        {selectedHouse && selectedHouse.id ? (
+                          <div className="summary-house-card">
+                            <img 
+                              src={selectedHouse.image || 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80'} 
+                              alt={selectedHouse.title}
+                              className="summary-house-image"
+                            />
+                            <div className="summary-house-details">
+                              <h4 className="summary-house-title">{selectedHouse.title || selectedHouse.name || 'שם הדגם'}</h4>
+                              {selectedHouse.desc && (
+                                <p style={{ margin: '10px 0', color: '#6b7280' }}>{selectedHouse.desc}</p>
+                              )}
+                              {selectedHouse.tag && (
+                                <span style={{ 
+                                  display: 'inline-block', 
+                                  padding: '4px 12px', 
+                                  background: '#667eea', 
+                                  color: 'white', 
+                                  borderRadius: '12px', 
+                                  fontSize: '0.875rem',
+                                  marginBottom: '10px'
+                                }}>
+                                  {selectedHouse.tag}
+                                </span>
+                              )}
+                              {selectedHouse.spec && selectedHouse.spec.length > 0 && (
+                                <div className="summary-house-specs">
+                                  {selectedHouse.spec.map((item, i) => (
+                                    <span key={i} className="summary-house-spec">{item}</span>
+                                  ))}
+                                </div>
+                              )}
+                              {selectedHouse.id && (
+                                <div style={{ marginTop: '15px', fontSize: '0.9rem', color: '#6b7280' }}>
+                                  ID: {selectedHouse.id}
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
+                        ) : user.application_data?.selectedPlan ? (
+                          <div className="summary-details-grid">
+                            <div className="summary-detail-item" style={{ gridColumn: '1 / -1' }}>
+                              <span className="summary-label">תוכנית נבחרת:</span>
+                              <span className="summary-value">
+                                {typeof user.application_data.selectedPlan === 'object' 
+                                  ? JSON.stringify(user.application_data.selectedPlan, null, 2)
+                                  : user.application_data.selectedPlan}
+                              </span>
+                            </div>
+                          </div>
+                        ) : null}
                       </div>
                     )}
 
-                    {/* Planning Request Section */}
+                    {/* Planning Request Section - Stage 5 */}
                     {Object.keys(planningRequest).length > 0 && (
                       <div className="summary-section">
                         <div className="summary-section-header">
-                          <h3 className="summary-section-title">בקשת תכנון</h3>
+                          <h3 className="summary-section-title">שלב 5: בקשת תכנון</h3>
                         </div>
                         <div className="summary-details-grid">
                           {planningRequest.idNumber && (
@@ -457,6 +526,22 @@ const AdminPage = () => {
                             <div className="summary-detail-item">
                               <span className="summary-label">סוג מבקש:</span>
                               <span className="summary-value">{planningRequest.requestorType}</span>
+                            </div>
+                          )}
+                          {planningRequest.contactMethods && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">אמצעי קשר:</span>
+                              <span className="summary-value">
+                                {Array.isArray(planningRequest.contactMethods) 
+                                  ? planningRequest.contactMethods.join(', ')
+                                  : planningRequest.contactMethods}
+                              </span>
+                            </div>
+                          )}
+                          {planningRequest.propertyRights && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">זכויות בנכס:</span>
+                              <span className="summary-value">{planningRequest.propertyRights}</span>
                             </div>
                           )}
                           {planningRequest.gush && (
@@ -489,6 +574,49 @@ const AdminPage = () => {
                               <span className="summary-value">{planningRequest.propertyUsage}</span>
                             </div>
                           )}
+                          {planningRequest.situationMap && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">מפת מצב:</span>
+                              <span className="summary-value">
+                                {typeof planningRequest.situationMap === 'string' && planningRequest.situationMap.startsWith('http') ? (
+                                  <a href={planningRequest.situationMap} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                    צפה במפה
+                                  </a>
+                                ) : (
+                                  planningRequest.situationMap
+                                )}
+                              </span>
+                            </div>
+                          )}
+                          {planningRequest.plotPhoto && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">צילום מגרש:</span>
+                              <span className="summary-value">
+                                {typeof planningRequest.plotPhoto === 'string' && planningRequest.plotPhoto.startsWith('http') ? (
+                                  <a href={planningRequest.plotPhoto} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                    צפה בתמונה
+                                  </a>
+                                ) : (
+                                  planningRequest.plotPhoto
+                                )}
+                              </span>
+                            </div>
+                          )}
+                          {/* Display any other planning request fields */}
+                          {Object.keys(planningRequest).filter(key => 
+                            !['idNumber', 'fullName', 'requestorType', 'contactMethods', 'propertyRights', 
+                              'gush', 'helka', 'plotArea', 'constructionType', 'propertyUsage', 
+                              'situationMap', 'plotPhoto'].includes(key)
+                          ).map(key => (
+                            <div key={key} className="summary-detail-item">
+                              <span className="summary-label">{key}:</span>
+                              <span className="summary-value">
+                                {typeof planningRequest[key] === 'object' 
+                                  ? JSON.stringify(planningRequest[key])
+                                  : String(planningRequest[key] || '-')}
+                              </span>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     )}
