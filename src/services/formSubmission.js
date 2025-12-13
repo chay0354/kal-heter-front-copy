@@ -60,12 +60,32 @@ export const saveFormDraft = async (formData) => {
       body: formDataToSend
     })
 
-    const data = await response.json()
-
     if (!response.ok) {
-      throw new Error(data.detail || 'Failed to save form draft')
+      let errorMessage = 'Failed to save form draft'
+      try {
+        const errorData = await response.json()
+        console.error('Backend error response:', errorData)
+        // Handle different error formats
+        if (errorData.detail) {
+          if (Array.isArray(errorData.detail)) {
+            errorMessage = errorData.detail.map(err => err.msg || JSON.stringify(err)).join(', ')
+          } else {
+            errorMessage = errorData.detail
+          }
+        } else if (errorData.message) {
+          errorMessage = errorData.message
+        } else {
+          errorMessage = JSON.stringify(errorData)
+        }
+      } catch (e) {
+        const text = await response.text()
+        console.error('Error response text:', text)
+        errorMessage = text || `HTTP ${response.status}: ${response.statusText}`
+      }
+      throw new Error(errorMessage)
     }
 
+    const data = await response.json()
     return data
   } catch (error) {
     console.error('Error saving form draft:', error)
