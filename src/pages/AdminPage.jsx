@@ -117,65 +117,35 @@ const AdminPage = () => {
   // If user is selected, show details view
   if (selectedUser) {
     const user = selectedUser
-    // Get data from form submissions (most recent)
+    // Get data from form submissions (most recent) - same as summary page uses
     const latestSubmission = user.form_submissions && user.form_submissions.length > 0 
       ? user.form_submissions[user.form_submissions.length - 1]
       : null
     
-    // Get planning request from application_data - this might contain all the form data
-    const planningRequest = user.application_data?.planningRequest || {}
-    const selectedPlan = user.application_data?.selectedPlan || {}
+    // Use the exact same structure as SummaryPage.jsx
+    // SummaryPage uses: formData.personalDetails, formData.propertyDetails, etc.
+    // form_submissions has: personal_details, property_details, etc.
+    // So we map them to match the summary page structure
+    const personalDetails = latestSubmission?.personal_details || {}
+    const propertyDetails = latestSubmission?.property_details || {}
+    const measurementDetails = latestSubmission?.measurement_details || {}
+    const selectedHouse = latestSubmission?.selected_house || {}
+    const fileUrls = latestSubmission?.file_urls || {}
     
-    // Merge data from form_submissions and planningRequest
-    // planningRequest might have personal details, property details, etc.
-    // Also check if planningRequest itself contains the fields directly
-    const personalDetails = latestSubmission?.personal_details || planningRequest.personalDetails || {
-      firstName: planningRequest.firstName,
-      lastName: planningRequest.lastName,
-      phone: planningRequest.phone || user.phone,
-      email: planningRequest.email || user.email,
-      idNumber: planningRequest.idNumber || user.id_number,
-      ...planningRequest
-    }
-    
-    const propertyDetails = latestSubmission?.property_details || planningRequest.propertyDetails || {
-      city: planningRequest.city,
-      council: planningRequest.council || user.application_data?.council,
-      street: planningRequest.street,
-      propertySize: planningRequest.propertySize,
-      lot: planningRequest.lot,
-      helka: planningRequest.helka || user.application_data?.helka,
-      gush: planningRequest.gush || user.application_data?.gush,
-      photoDate: planningRequest.photoDate,
-      ...planningRequest
-    }
-    
-    const measurementDetails = latestSubmission?.measurement_details || planningRequest.measurementDetails || {
-      surveyorName: planningRequest.surveyorName,
-      measurementDate: planningRequest.measurementDate,
-      ...planningRequest
-    }
-    
-    const selectedHouse = latestSubmission?.selected_house || selectedPlan || planningRequest.selectedHouse || planningRequest.selectedPlan || {}
-    const fileUrls = latestSubmission?.file_urls || planningRequest.fileUrls || planningRequest.file_urls || {}
-    
-    // Get additional rights holders - check both sources
-    const additionalRightsHolders = personalDetails.additionalRightsHolders || planningRequest.additionalRightsHolders || []
-    const additionalRightsHolderPhotos = fileUrls.additional_rights_holders_photos || planningRequest.additionalRightsHolderPhotos || fileUrls.additionalRightsHolderPhotos || []
+    // Get additional rights holders from personal details
+    const additionalRightsHolders = personalDetails.additionalRightsHolders || []
+    const additionalRightsHolderPhotos = fileUrls.additional_rights_holders_photos || []
     
     // Debug: log what data we have
-    console.log('User data debug:', {
+    console.log('Admin page - User data from form_submissions:', {
       hasFormSubmissions: !!latestSubmission,
       formSubmissionsCount: user.form_submissions?.length || 0,
-      hasApplicationData: !!user.application_data,
-      planningRequestKeys: Object.keys(planningRequest),
-      selectedPlan: selectedPlan,
-      personalDetailsKeys: Object.keys(personalDetails),
-      propertyDetailsKeys: Object.keys(propertyDetails),
-      fileUrlsKeys: Object.keys(fileUrls),
       latestSubmission: latestSubmission,
-      applicationData: user.application_data,
-      fullUserData: user
+      personalDetails: personalDetails,
+      propertyDetails: propertyDetails,
+      measurementDetails: measurementDetails,
+      selectedHouse: selectedHouse,
+      fileUrls: fileUrls
     })
 
   return (
@@ -276,36 +246,31 @@ const AdminPage = () => {
                           </div>
                           <div className="summary-detail-item">
                             <span className="summary-label">טלפון:</span>
-                            <span className="summary-value">{personalDetails.phone || user.phone || '-'}</span>
+                            <span className="summary-value">{personalDetails.phone || '-'}</span>
                           </div>
                           <div className="summary-detail-item">
                             <span className="summary-label">מספר תעודת זהות:</span>
-                            <span className="summary-value">{personalDetails.idNumber || user.id_number || '-'}</span>
+                            <span className="summary-value">{personalDetails.idNumber || '-'}</span>
                           </div>
                           <div className="summary-detail-item">
                             <span className="summary-label">צילום תעודת זהות:</span>
                             <span className="summary-value">
                               {fileUrls.id_photo ? (
-                                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                  <a href={fileUrls.id_photo} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                    צפה בקובץ
-                                  </a>
-                                  <button
-                                    onClick={() => handleDownloadFile(fileUrls.id_photo, 'id_photo')}
-                                    style={{
-                                      padding: '4px 12px',
-                                      background: '#667eea',
-                                      color: 'white',
-                                      border: 'none',
-                                      borderRadius: '6px',
-                                      cursor: 'pointer',
-                                      fontSize: '0.875rem',
-                                      fontWeight: '500'
-                                    }}
-                                  >
-                                    הורד
-                                  </button>
-                                </div>
+                                <FileLink url={fileUrls.id_photo} label="קובץ נבחר" fileName="id_photo" />
+                              ) : (
+                                <span className="no-file">לא נבחר קובץ</span>
+                              )}
+                            </span>
+                          </div>
+                          <div className="summary-detail-item">
+                            <span className="summary-label">חוזה רשות מקרקעי ישראל:</span>
+                            <span className="summary-value">{propertyDetails.israelLandAuthorityContract || '-'}</span>
+                          </div>
+                          <div className="summary-detail-item">
+                            <span className="summary-label">נסח טאבו:</span>
+                            <span className="summary-value">
+                              {fileUrls.tabu_extract ? (
+                                <FileLink url={fileUrls.tabu_extract} label="קובץ נבחר" fileName="tabu_extract" />
                               ) : (
                                 <span className="no-file">לא נבחר קובץ</span>
                               )}
@@ -313,7 +278,7 @@ const AdminPage = () => {
                           </div>
                           <div className="summary-detail-item">
                             <span className="summary-label">אימייל:</span>
-                            <span className="summary-value">{personalDetails.email || user.email || '-'}</span>
+                            <span className="summary-value">{personalDetails.email || '-'}</span>
                           </div>
                           {/* Additional Rights Holders */}
                           {additionalRightsHolders.length > 0 && (
@@ -384,137 +349,48 @@ const AdminPage = () => {
                         <h3 className="summary-section-title">שלב 2: פרטי הנכס</h3>
                       </div>
                       <div className="summary-details-grid">
-                        {/* From application_data (initial form) */}
-                        {user.application_data?.region && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">אזור:</span>
-                            <span className="summary-value">{user.application_data.region}</span>
-                          </div>
-                        )}
-                        {(user.application_data?.council || propertyDetails.council) && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">מועצה / עירייה:</span>
-                            <span className="summary-value">{propertyDetails.council || user.application_data?.council || '-'}</span>
-                          </div>
-                        )}
-                        {(user.application_data?.gush || propertyDetails.gush) && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">גוש:</span>
-                            <span className="summary-value">{propertyDetails.gush || user.application_data?.gush || '-'}</span>
-                          </div>
-                        )}
-                        {(user.application_data?.helka || propertyDetails.helka) && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">חלקה:</span>
-                            <span className="summary-value">{propertyDetails.helka || user.application_data?.helka || '-'}</span>
-                          </div>
-                        )}
-                        {propertyDetails.city && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">עיר / מושב / קיבוץ:</span>
-                            <span className="summary-value">{propertyDetails.city}</span>
-                          </div>
-                        )}
-                        {propertyDetails.street && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">רחוב:</span>
-                            <span className="summary-value">{propertyDetails.street}</span>
-                          </div>
-                        )}
-                        {propertyDetails.propertySize && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">גודל נכס:</span>
-                            <span className="summary-value">{propertyDetails.propertySize} מ"ר</span>
-                          </div>
-                        )}
-                        {propertyDetails.lot && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">מגרש:</span>
-                            <span className="summary-value">{propertyDetails.lot}</span>
-                          </div>
-                        )}
+                        <div className="summary-detail-item">
+                          <span className="summary-label">עיר / מושב / קיבוץ:</span>
+                          <span className="summary-value">{propertyDetails.city || '-'}</span>
+                        </div>
+                        <div className="summary-detail-item">
+                          <span className="summary-label">מועצה / עירייה:</span>
+                          <span className="summary-value">{propertyDetails.council || '-'}</span>
+                        </div>
+                        <div className="summary-detail-item">
+                          <span className="summary-label">גוש:</span>
+                          <span className="summary-value">{propertyDetails.gush || '-'}</span>
+                        </div>
+                        <div className="summary-detail-item">
+                          <span className="summary-label">חלקה:</span>
+                          <span className="summary-value">{propertyDetails.helka || '-'}</span>
+                        </div>
+                        <div className="summary-detail-item">
+                          <span className="summary-label">רחוב:</span>
+                          <span className="summary-value">{propertyDetails.street || '-'}</span>
+                        </div>
+                        <div className="summary-detail-item">
+                          <span className="summary-label">גודל נכס:</span>
+                          <span className="summary-value">{propertyDetails.propertySize ? `${propertyDetails.propertySize} מ"ר` : '-'}</span>
+                        </div>
+                        <div className="summary-detail-item">
+                          <span className="summary-label">מגרש:</span>
+                          <span className="summary-value">{propertyDetails.lot || '-'}</span>
+                        </div>
                         <div className="summary-detail-item">
                           <span className="summary-label">צילום נכס:</span>
                           <span className="summary-value">
                             {fileUrls.property_photos && fileUrls.property_photos.length > 0 ? (
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                {fileUrls.property_photos.map((url, idx) => (
-                                  <div key={idx} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                    <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                      צילום {idx + 1}
-                                    </a>
-                                    <button
-                                      onClick={() => handleDownloadFile(url, `property_photo_${idx + 1}`)}
-                                      style={{
-                                        padding: '4px 12px',
-                                        background: '#667eea',
-                                        color: 'white',
-                                        border: 'none',
-                                        borderRadius: '6px',
-                                        cursor: 'pointer',
-                                        fontSize: '0.875rem',
-                                        fontWeight: '500'
-                                      }}
-                                    >
-                                      הורד
-                                    </button>
-                                  </div>
-                                ))}
-                              </div>
+                              <span>{fileUrls.property_photos.length} קבצים נבחרו</span>
                             ) : (
                               <span className="no-file">לא נבחרו קבצים</span>
                             )}
                           </span>
                         </div>
-                        {propertyDetails.photoDate && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">תאריך צילום:</span>
-                            <span className="summary-value">{formatDate(propertyDetails.photoDate)}</span>
-                          </div>
-                        )}
                         <div className="summary-detail-item">
-                          <span className="summary-label">נסח טאבו:</span>
-                          <span className="summary-value">
-                            {fileUrls.tabu_extract ? (
-                              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <a href={fileUrls.tabu_extract} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                  צפה בקובץ
-                                </a>
-                                <button
-                                  onClick={() => handleDownloadFile(fileUrls.tabu_extract, 'tabu_extract')}
-                                  style={{
-                                    padding: '4px 12px',
-                                    background: '#667eea',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '6px',
-                                    cursor: 'pointer',
-                                    fontSize: '0.875rem',
-                                    fontWeight: '500'
-                                  }}
-                                >
-                                  הורד
-                                </button>
-                              </div>
-                            ) : (
-                              <span className="no-file">לא נבחר קובץ</span>
-                            )}
-                          </span>
+                          <span className="summary-label">תאריך צילום:</span>
+                          <span className="summary-value">{propertyDetails.photoDate ? formatDate(propertyDetails.photoDate) : '-'}</span>
                         </div>
-                        {(propertyDetails.israelLandAuthorityContract || user.application_data?.isIsraelLandAuthority !== undefined) && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">חוזה רשות מקרקעי ישראל:</span>
-                            <span className="summary-value">
-                              {propertyDetails.israelLandAuthorityContract || (user.application_data?.isIsraelLandAuthority ? 'כן' : 'לא')}
-                            </span>
-                          </div>
-                        )}
-                        {user.application_data?.surveyMap && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">מפת מדידה ראשונית:</span>
-                            <span className="summary-value">{user.application_data.surveyMap}</span>
-                          </div>
-                        )}
                       </div>
                     </div>
 
@@ -524,42 +400,19 @@ const AdminPage = () => {
                         <h3 className="summary-section-title">שלב 3: מפת מדידה</h3>
                       </div>
                       <div className="summary-details-grid">
-                        {measurementDetails.surveyorName && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">שם המודד:</span>
-                            <span className="summary-value">{measurementDetails.surveyorName}</span>
-                          </div>
-                        )}
-                        {measurementDetails.measurementDate && (
-                          <div className="summary-detail-item">
-                            <span className="summary-label">תאריך מדידה:</span>
-                            <span className="summary-value">{formatDate(measurementDetails.measurementDate)}</span>
-                          </div>
-                        )}
+                        <div className="summary-detail-item">
+                          <span className="summary-label">שם המודד:</span>
+                          <span className="summary-value">{measurementDetails.surveyorName || '-'}</span>
+                        </div>
+                        <div className="summary-detail-item">
+                          <span className="summary-label">תאריך מדידה:</span>
+                          <span className="summary-value">{measurementDetails.measurementDate ? formatDate(measurementDetails.measurementDate) : '-'}</span>
+                        </div>
                         <div className="summary-detail-item">
                           <span className="summary-label">קובץ DWG:</span>
                           <span className="summary-value">
                             {fileUrls.dwg_file ? (
-                              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <a href={fileUrls.dwg_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                  צפה בקובץ
-                                </a>
-                                <button
-                                  onClick={() => handleDownloadFile(fileUrls.dwg_file, 'measurement_dwg')}
-                                  style={{
-                                    padding: '4px 12px',
-                                    background: '#667eea',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '6px',
-                                    cursor: 'pointer',
-                                    fontSize: '0.875rem',
-                                    fontWeight: '500'
-                                  }}
-                                >
-                                  הורד
-                                </button>
-                              </div>
+                              <FileLink url={fileUrls.dwg_file} label="קובץ נבחר" fileName="measurement_dwg" />
                             ) : (
                               <span className="no-file">לא נבחר קובץ</span>
                             )}
@@ -569,26 +422,7 @@ const AdminPage = () => {
                           <span className="summary-label">קובץ DWF:</span>
                           <span className="summary-value">
                             {fileUrls.dwf_file ? (
-                              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <a href={fileUrls.dwf_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                  צפה בקובץ
-                                </a>
-                                <button
-                                  onClick={() => handleDownloadFile(fileUrls.dwf_file, 'measurement_dwf')}
-                                  style={{
-                                    padding: '4px 12px',
-                                    background: '#667eea',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '6px',
-                                    cursor: 'pointer',
-                                    fontSize: '0.875rem',
-                                    fontWeight: '500'
-                                  }}
-                                >
-                                  הורד
-                                </button>
-                              </div>
+                              <FileLink url={fileUrls.dwf_file} label="קובץ נבחר" fileName="measurement_dwf" />
                             ) : (
                               <span className="no-file">לא נבחר קובץ</span>
                             )}
@@ -598,26 +432,7 @@ const AdminPage = () => {
                           <span className="summary-label">קובץ PDF:</span>
                           <span className="summary-value">
                             {fileUrls.pdf_file ? (
-                              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                                <a href={fileUrls.pdf_file} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                  צפה בקובץ
-                                </a>
-                                <button
-                                  onClick={() => handleDownloadFile(fileUrls.pdf_file, 'measurement_pdf')}
-                                  style={{
-                                    padding: '4px 12px',
-                                    background: '#667eea',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '6px',
-                                    cursor: 'pointer',
-                                    fontSize: '0.875rem',
-                                    fontWeight: '500'
-                                  }}
-                                >
-                                  הורד
-                                </button>
-                              </div>
+                              <FileLink url={fileUrls.pdf_file} label="קובץ נבחר" fileName="measurement_pdf" />
                             ) : (
                               <span className="no-file">לא נבחר קובץ</span>
                             )}
