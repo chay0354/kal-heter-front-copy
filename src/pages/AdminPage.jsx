@@ -280,104 +280,103 @@ const AdminPage = () => {
                         <h3 className="summary-section-title">שלב 2: פרטי הנכס</h3>
                       </div>
                       <div className="summary-details-grid">
-                          {/* From application_data (initial form) */}
-                          {user.application_data?.region && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">אזור:</span>
-                              <span className="summary-value">{user.application_data.region}</span>
-                            </div>
-                          )}
-                          {(user.application_data?.council || propertyDetails.council) && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">מועצה / עירייה:</span>
-                              <span className="summary-value">{propertyDetails.council || user.application_data?.council || '-'}</span>
-                            </div>
-                          )}
-                          {(user.application_data?.gush || propertyDetails.gush) && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">גוש:</span>
-                              <span className="summary-value">{propertyDetails.gush || user.application_data?.gush || '-'}</span>
-                            </div>
-                          )}
-                          {(user.application_data?.helka || propertyDetails.helka) && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">חלקה:</span>
-                              <span className="summary-value">{propertyDetails.helka || user.application_data?.helka || '-'}</span>
-                            </div>
-                          )}
-                          {propertyDetails.city && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">עיר / מושב / קיבוץ:</span>
-                              <span className="summary-value">{propertyDetails.city}</span>
-                            </div>
-                          )}
-                          {propertyDetails.street && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">רחוב:</span>
-                              <span className="summary-value">{propertyDetails.street}</span>
-                            </div>
-                          )}
-                          {propertyDetails.propertySize && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">גודל נכס:</span>
-                              <span className="summary-value">{propertyDetails.propertySize} מ"ר</span>
-                            </div>
-                          )}
-                          {propertyDetails.lot && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">מגרש:</span>
-                              <span className="summary-value">{propertyDetails.lot}</span>
-                            </div>
-                          )}
+                        {/* From application_data (initial form) */}
+                        {user.application_data?.region && (
                           <div className="summary-detail-item">
-                            <span className="summary-label">צילום נכס:</span>
-                            <span className="summary-value">
-                              {fileUrls.property_photos && fileUrls.property_photos.length > 0 ? (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                  {fileUrls.property_photos.map((url, idx) => (
-                                    <a key={idx} href={url} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                      צילום {idx + 1}
-                                    </a>
-                                  ))}
-                                </div>
-                              ) : (
-                                <span className="no-file">לא נבחרו קבצים</span>
-                              )}
-                            </span>
+                            <span className="summary-label">אזור:</span>
+                            <span className="summary-value">{user.application_data.region}</span>
                           </div>
-                          {propertyDetails.photoDate && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">תאריך צילום:</span>
-                              <span className="summary-value">{formatDate(propertyDetails.photoDate)}</span>
-                            </div>
-                          )}
+                        )}
+                        {(user.application_data?.council || propertyDetails.council) && (
                           <div className="summary-detail-item">
-                            <span className="summary-label">נסח טאבו:</span>
-                            <span className="summary-value">
-                              {fileUrls.tabu_extract ? (
-                                <a href={fileUrls.tabu_extract} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
-                                  צפה בקובץ
-                                </a>
-                              ) : (
-                                <span className="no-file">לא נבחר קובץ</span>
-                              )}
-                            </span>
+                            <span className="summary-label">מועצה / עירייה:</span>
+                            <span className="summary-value">{propertyDetails.council || user.application_data?.council || '-'}</span>
                           </div>
-                          {(propertyDetails.israelLandAuthorityContract || user.application_data?.isIsraelLandAuthority !== undefined) && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">חוזה רשות מקרקעי ישראל:</span>
-                              <span className="summary-value">
-                                {propertyDetails.israelLandAuthorityContract || (user.application_data?.isIsraelLandAuthority ? 'כן' : 'לא')}
-                              </span>
-                            </div>
-                          )}
-                          {user.application_data?.surveyMap && (
-                            <div className="summary-detail-item">
-                              <span className="summary-label">מפת מדידה ראשונית:</span>
-                              <span className="summary-value">{user.application_data.surveyMap}</span>
-                            </div>
-                          )}
+                        )}
+                        {(user.application_data?.gush || propertyDetails.gush) && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">גוש:</span>
+                            <span className="summary-value">{propertyDetails.gush || user.application_data?.gush || '-'}</span>
+                          </div>
+                        )}
+                        {(user.application_data?.helka || propertyDetails.helka) && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">חלקה:</span>
+                            <span className="summary-value">{propertyDetails.helka || user.application_data?.helka || '-'}</span>
+                          </div>
+                        )}
+                        {propertyDetails.city && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">עיר / מושב / קיבוץ:</span>
+                            <span className="summary-value">{propertyDetails.city}</span>
+                          </div>
+                        )}
+                        {propertyDetails.street && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">רחוב:</span>
+                            <span className="summary-value">{propertyDetails.street}</span>
+                          </div>
+                        )}
+                        {propertyDetails.propertySize && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">גודל נכס:</span>
+                            <span className="summary-value">{propertyDetails.propertySize} מ"ר</span>
+                          </div>
+                        )}
+                        {propertyDetails.lot && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">מגרש:</span>
+                            <span className="summary-value">{propertyDetails.lot}</span>
+                          </div>
+                        )}
+                        <div className="summary-detail-item">
+                          <span className="summary-label">צילום נכס:</span>
+                          <span className="summary-value">
+                            {fileUrls.property_photos && fileUrls.property_photos.length > 0 ? (
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                {fileUrls.property_photos.map((url, idx) => (
+                                  <a key={idx} href={url} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                    צילום {idx + 1}
+                                  </a>
+                                ))}
+                              </div>
+                            ) : (
+                              <span className="no-file">לא נבחרו קבצים</span>
+                            )}
+                          </span>
                         </div>
+                        {propertyDetails.photoDate && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">תאריך צילום:</span>
+                            <span className="summary-value">{formatDate(propertyDetails.photoDate)}</span>
+                          </div>
+                        )}
+                        <div className="summary-detail-item">
+                          <span className="summary-label">נסח טאבו:</span>
+                          <span className="summary-value">
+                            {fileUrls.tabu_extract ? (
+                              <a href={fileUrls.tabu_extract} target="_blank" rel="noopener noreferrer" style={{ color: '#667eea' }}>
+                                צפה בקובץ
+                              </a>
+                            ) : (
+                              <span className="no-file">לא נבחר קובץ</span>
+                            )}
+                          </span>
+                        </div>
+                        {(propertyDetails.israelLandAuthorityContract || user.application_data?.isIsraelLandAuthority !== undefined) && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">חוזה רשות מקרקעי ישראל:</span>
+                            <span className="summary-value">
+                              {propertyDetails.israelLandAuthorityContract || (user.application_data?.isIsraelLandAuthority ? 'כן' : 'לא')}
+                            </span>
+                          </div>
+                        )}
+                        {user.application_data?.surveyMap && (
+                          <div className="summary-detail-item">
+                            <span className="summary-label">מפת מדידה ראשונית:</span>
+                            <span className="summary-value">{user.application_data.surveyMap}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
 
