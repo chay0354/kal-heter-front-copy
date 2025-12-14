@@ -4,12 +4,25 @@ import '../components/PlanningRequest.css'
 // Normalize API base URL - remove trailing slashes to prevent double slashes
 const getApiBaseUrl = () => {
   const url = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
-  const normalized = url.replace(/\/+$/, ''); // Remove all trailing slashes
+  // Remove all trailing slashes and whitespace
+  const normalized = url.trim().replace(/\/+$/, '');
   console.log('[API URL Debug] Original:', url, 'Normalized:', normalized);
   return normalized;
 };
 
-const API_BASE_URL = getApiBaseUrl()
+const API_BASE_URL = getApiBaseUrl();
+
+// Helper function to build API URLs safely (prevents double slashes)
+const buildApiUrl = (path) => {
+  // Ensure base has no trailing slash
+  const base = API_BASE_URL.replace(/\/+$/, '');
+  // Remove leading slashes from path and ensure it starts with /
+  const cleanPath = path.replace(/^\/+/, '');
+  // Combine with exactly one slash
+  const finalUrl = `${base}/${cleanPath}`;
+  console.log('[buildApiUrl] Base:', base, 'Path:', path, 'Final URL:', finalUrl);
+  return finalUrl;
+};
 
 const AdminPage = () => {
   const [users, setUsers] = useState([])
