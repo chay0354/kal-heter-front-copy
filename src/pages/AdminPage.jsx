@@ -88,6 +88,17 @@ const AdminPage = () => {
               console.log('Form draft from backend:', userData.form_draft)
               console.log('Application data from backend:', userData.application_data)
               console.log('All user data keys:', Object.keys(userData))
+              
+              // Debug file URLs
+              if (userData.form_draft) {
+                console.log('Form draft file_urls:', userData.form_draft.file_urls)
+                console.log('Form draft file_urls type:', typeof userData.form_draft.file_urls)
+              }
+              if (userData.form_submissions && userData.form_submissions.length > 0) {
+                console.log('Form submission file_urls:', userData.form_submissions[0].file_urls)
+                console.log('Form submission file_urls type:', typeof userData.form_submissions[0].file_urls)
+              }
+              
               setSelectedUser(userData)
             } catch (err) {
               console.error('Error fetching user details:', err)
@@ -176,19 +187,36 @@ const AdminPage = () => {
 
   // Small helper used throughout the details view
   const FileLink = ({ url, label, fileName }) => {
-    if (!url) return <span className="no-file">לא נבחר קובץ</span>
+    console.log('[FileLink] Rendering with url:', url, 'fileName:', fileName)
+    if (!url || url === '' || url === null || url === undefined) {
+      return <span className="no-file">לא נבחר קובץ</span>
+    }
+    
+    // Ensure URL is a string
+    const fileUrl = String(url).trim()
+    if (!fileUrl || fileUrl === '') {
+      return <span className="no-file">לא נבחר קובץ</span>
+    }
+    
     return (
       <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
         <a
-          href={url}
+          href={fileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: '#667eea' }}
+          style={{ color: '#667eea', textDecoration: 'underline' }}
+          onClick={(e) => {
+            console.log('[FileLink] Opening file:', fileUrl)
+          }}
         >
           {label || 'צפה בקובץ'}
         </a>
         <button
-          onClick={() => handleDownloadFile(url, fileName)}
+          onClick={(e) => {
+            e.preventDefault()
+            console.log('[FileLink] Downloading file:', fileUrl, 'as:', fileName)
+            handleDownloadFile(fileUrl, fileName)
+          }}
           style={{
             padding: '4px 12px',
             background: '#667eea',
@@ -226,6 +254,20 @@ const AdminPage = () => {
     const measurementDetails = dataSource?.measurement_details || {}
     const selectedHouse = dataSource?.selected_house || {}
     const fileUrls = dataSource?.file_urls || {}
+    
+    // Debug file URLs
+    console.log('[AdminPage] Data source:', dataSource ? 'Found' : 'Not found')
+    console.log('[AdminPage] File URLs:', fileUrls)
+    console.log('[AdminPage] File URLs type:', typeof fileUrls)
+    console.log('[AdminPage] File URLs keys:', fileUrls ? Object.keys(fileUrls) : 'No fileUrls')
+    if (fileUrls) {
+      console.log('[AdminPage] ID photo URL:', fileUrls.id_photo)
+      console.log('[AdminPage] Property photos:', fileUrls.property_photos)
+      console.log('[AdminPage] Tabu extract:', fileUrls.tabu_extract)
+      console.log('[AdminPage] PDF file:', fileUrls.pdf_file)
+      console.log('[AdminPage] DWF file:', fileUrls.dwf_file)
+      console.log('[AdminPage] DWG file:', fileUrls.dwg_file)
+    }
     
     // Get additional rights holders from personal details
     const additionalRightsHolders = personalDetails.additionalRightsHolders || []
@@ -637,6 +679,42 @@ const AdminPage = () => {
                               <span className="summary-value">{formatDate(user.application_data.updated_at)}</span>
                             </div>
                           )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Files Debug Section - Show all file URLs */}
+                    {fileUrls && Object.keys(fileUrls).length > 0 && (
+                      <div className="summary-section" style={{ background: '#f0f9ff', border: '2px solid #3b82f6', borderRadius: '8px', padding: '20px', marginTop: '20px' }}>
+                        <div className="summary-section-header">
+                          <h3 className="summary-section-title" style={{ color: '#1e40af' }}>📁 כל הקבצים (Debug)</h3>
+                        </div>
+                        <div style={{ display: 'grid', gap: '12px' }}>
+                          {Object.entries(fileUrls).map(([key, value]) => {
+                            if (!value) return null
+                            if (Array.isArray(value)) {
+                              return (
+                                <div key={key} style={{ padding: '10px', background: 'white', borderRadius: '6px' }}>
+                                  <strong>{key}:</strong> ({value.length} files)
+                                  {value.map((url, idx) => (
+                                    <div key={idx} style={{ marginTop: '8px', padding: '8px', background: '#f8f9fa', borderRadius: '4px' }}>
+                                      <FileLink url={url} label={`${key} ${idx + 1}`} fileName={`${key}_${idx + 1}`} />
+                                      <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '4px', wordBreak: 'break-all' }}>{url}</div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )
+                            }
+                            return (
+                              <div key={key} style={{ padding: '10px', background: 'white', borderRadius: '6px' }}>
+                                <strong>{key}:</strong>
+                                <div style={{ marginTop: '8px' }}>
+                                  <FileLink url={value} label={key} fileName={key} />
+                                  <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '4px', wordBreak: 'break-all' }}>{value}</div>
+                                </div>
+                              </div>
+                            )
+                          })}
                         </div>
                       </div>
                     )}
