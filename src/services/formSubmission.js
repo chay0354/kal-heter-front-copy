@@ -1,4 +1,17 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app'
+// Normalize API base URL to remove trailing slashes
+const getApiBaseUrl = () => {
+  const url = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
+  return url.replace(/\/+$/, ''); // Remove trailing slashes
+};
+
+const API_BASE_URL = getApiBaseUrl()
+
+// Helper function to construct API URLs safely (prevents double slashes)
+const buildApiUrl = (path) => {
+  const base = API_BASE_URL.replace(/\/+$/, ''); // Ensure no trailing slash
+  const cleanPath = path.replace(/^\/+/, ''); // Remove leading slashes from path
+  return `${base}/${cleanPath}`;
+};
 
 export const saveFormDraft = async (formData) => {
   try {
@@ -52,7 +65,7 @@ export const saveFormDraft = async (formData) => {
       })
     }
 
-    const response = await fetch(`${API_BASE_URL}/api/form/save-draft`, {
+    const response = await fetch(buildApiUrl('/api/form/save-draft'), {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -146,7 +159,7 @@ export const submitForm = async (formData) => {
       })
     }
 
-    const response = await fetch(`${API_BASE_URL}/api/form/submit`, {
+    const response = await fetch(buildApiUrl('/api/form/submit'), {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`

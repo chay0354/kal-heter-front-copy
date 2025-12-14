@@ -1,4 +1,17 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
+// Normalize API base URL to remove trailing slashes
+const getApiBaseUrl = () => {
+  const url = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
+  return url.replace(/\/+$/, ''); // Remove trailing slashes
+};
+
+const API_BASE_URL = getApiBaseUrl();
+
+// Helper function to construct API URLs safely (prevents double slashes)
+const buildApiUrl = (path) => {
+  const base = API_BASE_URL.replace(/\/+$/, ''); // Ensure no trailing slash
+  const cleanPath = path.replace(/^\/+/, ''); // Remove leading slashes from path
+  return `${base}/${cleanPath}`;
+};
 
 // Store tokens in localStorage
 export const setAuthTokens = (accessToken, refreshToken) => {
@@ -36,7 +49,7 @@ export const isAuthenticated = () => {
 // Sign up a new user
 export const signUp = async (email, password, phone = null, fullName = null) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+    const response = await fetch(buildApiUrl('/api/auth/signup'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -74,7 +87,7 @@ export const signUp = async (email, password, phone = null, fullName = null) => 
 // Sign in an existing user
 export const signIn = async (email, password) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/signin`, {
+    const response = await fetch(buildApiUrl('/api/auth/signin'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -119,7 +132,7 @@ export const getCurrentUser = async () => {
       return null;
     }
 
-    const response = await fetch(`${API_BASE_URL}/api/auth/user`, {
+    const response = await fetch(buildApiUrl('/api/auth/user'), {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

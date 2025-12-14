@@ -1,7 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import '../components/PlanningRequest.css'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app'
+// Normalize API base URL to remove trailing slashes
+const getApiBaseUrl = () => {
+  const url = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
+  return url.replace(/\/+$/, ''); // Remove trailing slashes
+};
+
+const API_BASE_URL = getApiBaseUrl()
+
+// Helper function to construct API URLs safely (prevents double slashes)
+const buildApiUrl = (path) => {
+  const base = API_BASE_URL.replace(/\/+$/, ''); // Ensure no trailing slash
+  const cleanPath = path.replace(/^\/+/, ''); // Remove leading slashes from path
+  return `${base}/${cleanPath}`;
+};
 
 const AdminPage = () => {
   const [users, setUsers] = useState([])
@@ -17,7 +30,7 @@ const AdminPage = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true)
-      const url = `${API_BASE_URL}/api/admin/users`
+      const url = buildApiUrl('/api/admin/users')
       console.log('Fetching users from:', url)
       
       const response = await fetch(url, {
@@ -50,7 +63,7 @@ const AdminPage = () => {
           const fetchUserDetails = async (userId) => {
             try {
               setLoadingDetails(true)
-              const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
+              const response = await fetch(buildApiUrl(`/api/admin/users/${userId}`), {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
@@ -106,7 +119,7 @@ const AdminPage = () => {
       const response = await fetch(fileUrl)
       if (!response.ok) {
         // If direct download fails, try through our download endpoint
-        const downloadUrl = `${API_BASE_URL}/api/admin/files/download?file_url=${encodeURIComponent(fileUrl)}`
+        const downloadUrl = `${buildApiUrl('/api/admin/files/download')}?file_url=${encodeURIComponent(fileUrl)}`
         window.open(downloadUrl, '_blank')
         return
       }
