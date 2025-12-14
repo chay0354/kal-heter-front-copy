@@ -1,4 +1,12 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app'
+// Normalize API base URL - remove trailing slashes to prevent double slashes
+const getApiBaseUrl = () => {
+  const url = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
+  const normalized = url.replace(/\/+$/, ''); // Remove all trailing slashes
+  console.log('[API URL Debug] Original:', url, 'Normalized:', normalized);
+  return normalized;
+};
+
+const API_BASE_URL = getApiBaseUrl()
 
 export const saveFormDraft = async (formData) => {
   try {

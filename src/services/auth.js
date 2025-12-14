@@ -1,4 +1,12 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
+// Normalize API base URL - remove trailing slashes to prevent double slashes
+const getApiBaseUrl = () => {
+  const url = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
+  const normalized = url.replace(/\/+$/, ''); // Remove all trailing slashes
+  console.log('[API URL Debug] Original:', url, 'Normalized:', normalized);
+  return normalized;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Store tokens in localStorage
 export const setAuthTokens = (accessToken, refreshToken) => {
@@ -74,7 +82,9 @@ export const signUp = async (email, password, phone = null, fullName = null) => 
 // Sign in an existing user
 export const signIn = async (email, password) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/signin`, {
+    const url = `${API_BASE_URL}/api/auth/signin`;
+    console.log('[SignIn Debug] Full URL:', url, 'API_BASE_URL:', API_BASE_URL);
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
