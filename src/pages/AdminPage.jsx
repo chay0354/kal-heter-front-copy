@@ -123,13 +123,38 @@ const AdminPage = () => {
 
   const handleDownloadFile = async (fileUrl, fileName) => {
     try {
-      // Try to download directly from the URL
-      const response = await fetch(fileUrl)
+      // First, try to download directly from Supabase URL (if it's public)
+      try {
+        const response = await fetch(fileUrl, { mode: 'cors' })
+        if (response.ok) {
+          const blob = await response.blob()
+          const url = window.URL.createObjectURL(blob)
+          const a = document.createElement('a')
+          a.href = url
+          a.download = fileName || fileUrl.split('/').pop().split('?')[0]
+          document.body.appendChild(a)
+          a.click()
+          window.URL.revokeObjectURL(url)
+          document.body.removeChild(a)
+          return
+        }
+      } catch (directError) {
+        console.log('Direct download failed, trying through backend:', directError)
+      }
+      
+      // If direct download fails, use our backend download endpoint
+      const downloadUrl = buildApiUrl(`/api/admin/files/download?file_url=${encodeURIComponent(fileUrl)}`)
+      console.log('Downloading file through backend:', downloadUrl)
+      
+      const response = await fetch(downloadUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      
       if (!response.ok) {
-        // If direct download fails, try through our download endpoint
-        const downloadUrl = `${API_BASE_URL}/api/admin/files/download?file_url=${encodeURIComponent(fileUrl)}`
-        window.open(downloadUrl, '_blank')
-        return
+        throw new Error(`Download failed: ${response.status} ${response.statusText}`)
       }
       
       const blob = await response.blob()
@@ -143,6 +168,7 @@ const AdminPage = () => {
       document.body.removeChild(a)
     } catch (error) {
       console.error('Error downloading file:', error)
+      alert(`שגיאה בהורדת הקובץ: ${error.message}`)
       // Fallback: open in new tab
       window.open(fileUrl, '_blank')
     }
