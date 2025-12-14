@@ -1,20 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import '../components/PlanningRequest.css'
-
-// Normalize API base URL to remove trailing slashes
-const getApiBaseUrl = () => {
-  const url = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
-  return url.replace(/\/+$/, ''); // Remove trailing slashes
-};
-
-const API_BASE_URL = getApiBaseUrl()
-
-// Helper function to construct API URLs safely (prevents double slashes)
-const buildApiUrl = (path) => {
-  const base = API_BASE_URL.replace(/\/+$/, ''); // Ensure no trailing slash
-  const cleanPath = path.replace(/^\/+/, ''); // Remove leading slashes from path
-  return `${base}/${cleanPath}`;
-};
+import { buildApiUrl } from '../utils/api'
 
 const AdminPage = () => {
   const [users, setUsers] = useState([])
