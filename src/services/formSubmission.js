@@ -28,6 +28,15 @@ export const saveFormDraft = async (formData) => {
       throw new Error('User not authenticated')
     }
 
+    console.log('[saveFormDraft] Starting draft save with formData:', formData)
+    console.log('[saveFormDraft] Files in formData:')
+    console.log('  - idPhoto:', formData.personalDetails?.idPhoto ? formData.personalDetails.idPhoto.name : 'None')
+    console.log('  - propertyPhotos:', formData.propertyDetails?.propertyPhotos?.length || 0)
+    console.log('  - tabuExtract:', formData.propertyDetails?.tabuExtract ? formData.propertyDetails.tabuExtract.name : 'None')
+    console.log('  - pdfFile:', formData.measurementDetails?.pdfFile ? formData.measurementDetails.pdfFile.name : 'None')
+    console.log('  - dwfFile:', formData.measurementDetails?.dwfFile ? formData.measurementDetails.dwfFile.name : 'None')
+    console.log('  - dwgFile:', formData.measurementDetails?.dwgFile ? formData.measurementDetails.dwgFile.name : 'None')
+
     // Create FormData for multipart/form-data
     const formDataToSend = new FormData()
 
@@ -38,30 +47,43 @@ export const saveFormDraft = async (formData) => {
     formDataToSend.append('selected_house', JSON.stringify(formData.selectedHouse || {}))
 
     // Add files
+    let filesCount = 0
     if (formData.personalDetails?.idPhoto) {
       formDataToSend.append('id_photo', formData.personalDetails.idPhoto)
+      filesCount++
+      console.log('[saveFormDraft] Added id_photo:', formData.personalDetails.idPhoto.name || 'unnamed')
     }
 
     if (formData.propertyDetails?.propertyPhotos && formData.propertyDetails.propertyPhotos.length > 0) {
       formData.propertyDetails.propertyPhotos.forEach((photo, index) => {
         formDataToSend.append('property_photos', photo)
+        filesCount++
+        console.log(`[saveFormDraft] Added property_photo ${index}:`, photo.name || 'unnamed')
       })
     }
 
     if (formData.propertyDetails?.tabuExtract) {
       formDataToSend.append('tabu_extract', formData.propertyDetails.tabuExtract)
+      filesCount++
+      console.log('[saveFormDraft] Added tabu_extract:', formData.propertyDetails.tabuExtract.name || 'unnamed')
     }
 
     if (formData.measurementDetails?.pdfFile) {
       formDataToSend.append('pdf_file', formData.measurementDetails.pdfFile)
+      filesCount++
+      console.log('[saveFormDraft] Added pdf_file:', formData.measurementDetails.pdfFile.name || 'unnamed')
     }
 
     if (formData.measurementDetails?.dwfFile) {
       formDataToSend.append('dwf_file', formData.measurementDetails.dwfFile)
+      filesCount++
+      console.log('[saveFormDraft] Added dwf_file:', formData.measurementDetails.dwfFile.name || 'unnamed')
     }
 
     if (formData.measurementDetails?.dwgFile) {
       formDataToSend.append('dwg_file', formData.measurementDetails.dwgFile)
+      filesCount++
+      console.log('[saveFormDraft] Added dwg_file:', formData.measurementDetails.dwgFile.name || 'unnamed')
     }
 
     // Add additional rights holders photos
@@ -69,9 +91,13 @@ export const saveFormDraft = async (formData) => {
       formData.personalDetails.additionalRightsHolders.forEach((holder, index) => {
         if (holder.idPhoto) {
           formDataToSend.append('additional_rights_holders_photos', holder.idPhoto)
+          filesCount++
+          console.log(`[saveFormDraft] Added additional_rights_holder_photo ${index}:`, holder.idPhoto.name || 'unnamed')
         }
       })
     }
+    
+    console.log(`[saveFormDraft] Total files added to FormData: ${filesCount}`)
 
     const response = await fetch(buildApiUrl('/api/form/save-draft'), {
       method: 'POST',
