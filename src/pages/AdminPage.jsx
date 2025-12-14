@@ -17,18 +17,26 @@ const AdminPage = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`${API_BASE_URL}/api/admin/users`, {
+      const url = `${API_BASE_URL}/api/admin/users`
+      console.log('Fetching users from:', url)
+      
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       })
       
+      console.log('Response status:', response.status, response.statusText)
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch users')
+        const errorText = await response.text()
+        console.error('Error response:', errorText)
+        throw new Error(`Failed to fetch users: ${response.status} ${response.statusText}`)
       }
       
       const data = await response.json()
+      console.log('Users data received:', data)
       setUsers(data.users || [])
       setError(null)
     } catch (err) {
@@ -39,29 +47,34 @@ const AdminPage = () => {
     }
   }
 
-  const fetchUserDetails = async (userId) => {
-    try {
-      setLoadingDetails(true)
-      const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch user details')
-      }
-      
-      const userData = await response.json()
-      setSelectedUser(userData)
-    } catch (err) {
-      console.error('Error fetching user details:', err)
-      alert('שגיאה בטעינת פרטי המשתמש')
-    } finally {
-      setLoadingDetails(false)
-    }
-  }
+          const fetchUserDetails = async (userId) => {
+            try {
+              setLoadingDetails(true)
+              const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              })
+              
+              if (!response.ok) {
+                throw new Error('Failed to fetch user details')
+              }
+              
+              const userData = await response.json()
+              console.log('Backend returned user data:', userData)
+              console.log('Form submissions from backend:', userData.form_submissions)
+              console.log('Form draft from backend:', userData.form_draft)
+              console.log('Application data from backend:', userData.application_data)
+              console.log('All user data keys:', Object.keys(userData))
+              setSelectedUser(userData)
+            } catch (err) {
+              console.error('Error fetching user details:', err)
+              alert('שגיאה בטעינת פרטי המשתמש')
+            } finally {
+              setLoadingDetails(false)
+            }
+          }
 
   const handleUserClick = (user) => {
     fetchUserDetails(user.id)
@@ -114,39 +127,62 @@ const AdminPage = () => {
     }
   }
 
+  // Small helper used throughout the details view
+  const FileLink = ({ url, label, fileName }) => {
+    if (!url) return <span className="no-file">לא נבחר קובץ</span>
+    return (
+      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: '#667eea' }}
+        >
+          {label || 'צפה בקובץ'}
+        </a>
+        <button
+          onClick={() => handleDownloadFile(url, fileName)}
+          style={{
+            padding: '4px 12px',
+            background: '#667eea',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '0.875rem',
+            fontWeight: '500'
+          }}
+        >
+          הורד
+        </button>
+      </div>
+    )
+  }
+
   // If user is selected, show details view
   if (selectedUser) {
     const user = selectedUser
-    // Get data from form submissions (most recent) - same as summary page uses
+    // Prioritize draft if exists, otherwise use latest submission
+    const hasDraft = !!user.form_draft
     const latestSubmission = user.form_submissions && user.form_submissions.length > 0 
-      ? user.form_submissions[user.form_submissions.length - 1]
+      ? user.form_submissions[0]  // Already sorted desc by backend
       : null
+    
+    // Use draft if available, otherwise use latest submission
+    const dataSource = hasDraft ? user.form_draft : latestSubmission
     
     // Use the exact same structure as SummaryPage.jsx
     // SummaryPage uses: formData.personalDetails, formData.propertyDetails, etc.
-    // form_submissions has: personal_details, property_details, etc.
-    // So we map them to match the summary page structure
-    const personalDetails = latestSubmission?.personal_details || {}
-    const propertyDetails = latestSubmission?.property_details || {}
-    const measurementDetails = latestSubmission?.measurement_details || {}
-    const selectedHouse = latestSubmission?.selected_house || {}
-    const fileUrls = latestSubmission?.file_urls || {}
+    // form_submissions/form_drafts have: personal_details, property_details, etc.
+    const personalDetails = dataSource?.personal_details || {}
+    const propertyDetails = dataSource?.property_details || {}
+    const measurementDetails = dataSource?.measurement_details || {}
+    const selectedHouse = dataSource?.selected_house || {}
+    const fileUrls = dataSource?.file_urls || {}
     
     // Get additional rights holders from personal details
     const additionalRightsHolders = personalDetails.additionalRightsHolders || []
     const additionalRightsHolderPhotos = fileUrls.additional_rights_holders_photos || []
-    
-    // Debug: log what data we have
-    console.log('Admin page - User data from form_submissions:', {
-      hasFormSubmissions: !!latestSubmission,
-      formSubmissionsCount: user.form_submissions?.length || 0,
-      latestSubmission: latestSubmission,
-      personalDetails: personalDetails,
-      propertyDetails: propertyDetails,
-      measurementDetails: measurementDetails,
-      selectedHouse: selectedHouse,
-      fileUrls: fileUrls
-    })
 
   return (
       <div className="personal-details-page">
@@ -199,7 +235,7 @@ const AdminPage = () => {
                         </div>
                         <div className="summary-detail-item">
                           <span className="summary-label">שם מלא:</span>
-                          <span className="summary-value">{user.full_name || personalDetails.fullName || '-'}</span>
+                          <span className="summary-value">{user.full_name || personalDetails.fullName || personalDetails.firstName + ' ' + personalDetails.lastName || '-'}</span>
                         </div>
                         <div className="summary-detail-item">
                           <span className="summary-label">טלפון:</span>
@@ -381,7 +417,36 @@ const AdminPage = () => {
                           <span className="summary-label">צילום נכס:</span>
                           <span className="summary-value">
                             {fileUrls.property_photos && fileUrls.property_photos.length > 0 ? (
-                              <span>{fileUrls.property_photos.length} קבצים נבחרו</span>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                <span style={{ marginBottom: '4px' }}>{fileUrls.property_photos.length} קבצים נבחרו:</span>
+                                {fileUrls.property_photos.map((photoUrl, idx) => (
+                                  <div key={idx} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                    <a
+                                      href={photoUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{ color: '#667eea', fontSize: '0.9rem' }}
+                                    >
+                                      צילום {idx + 1}
+                                    </a>
+                                    <button
+                                      onClick={() => handleDownloadFile(photoUrl, `property_photo_${idx + 1}`)}
+                                      style={{
+                                        padding: '4px 12px',
+                                        background: '#667eea',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '6px',
+                                        cursor: 'pointer',
+                                        fontSize: '0.875rem',
+                                        fontWeight: '500'
+                                      }}
+                                    >
+                                      הורד
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
                             ) : (
                               <span className="no-file">לא נבחרו קבצים</span>
                             )}
@@ -440,6 +505,94 @@ const AdminPage = () => {
                         </div>
                       </div>
                     </div>
+
+                    {/* Application Data Section - Initial Form Data */}
+                    {user.application_data && (
+                      <div className="summary-section">
+                        <div className="summary-section-header">
+                          <h3 className="summary-section-title">נתוני בקשה ראשונית</h3>
+                        </div>
+                        <div className="summary-details-grid">
+                          {user.application_data.gush && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">גוש:</span>
+                              <span className="summary-value">{user.application_data.gush}</span>
+                            </div>
+                          )}
+                          {user.application_data.helka && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">חלקה:</span>
+                              <span className="summary-value">{user.application_data.helka}</span>
+                            </div>
+                          )}
+                          {user.application_data.region && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">אזור:</span>
+                              <span className="summary-value">{user.application_data.region}</span>
+                            </div>
+                          )}
+                          {user.application_data.council && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">מועצה / עירייה:</span>
+                              <span className="summary-value">{user.application_data.council}</span>
+                            </div>
+                          )}
+                          {user.application_data.surveyMap && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">מפת מדידה:</span>
+                              <span className="summary-value">{user.application_data.surveyMap}</span>
+                            </div>
+                          )}
+                          <div className="summary-detail-item">
+                            <span className="summary-label">רשות מקרקעי ישראל:</span>
+                            <span className="summary-value">
+                              {user.application_data.isIsraelLandAuthority ? 'כן' : 'לא'}
+                            </span>
+                          </div>
+                          {user.application_data.selectedPlan && (
+                            <div className="summary-detail-item" style={{ gridColumn: '1 / -1' }}>
+                              <span className="summary-label">תוכנית נבחרת:</span>
+                              <span className="summary-value">
+                                {typeof user.application_data.selectedPlan === 'object' 
+                                  ? JSON.stringify(user.application_data.selectedPlan, null, 2)
+                                  : user.application_data.selectedPlan}
+                              </span>
+                            </div>
+                          )}
+                          {user.application_data.planningRequest && (
+                            <div className="summary-detail-item" style={{ gridColumn: '1 / -1' }}>
+                              <span className="summary-label">בקשת תכנון:</span>
+                              <span className="summary-value">
+                                <pre style={{ 
+                                  background: '#f8f9fa', 
+                                  padding: '12px', 
+                                  borderRadius: '8px', 
+                                  overflow: 'auto',
+                                  fontSize: '0.875rem',
+                                  whiteSpace: 'pre-wrap'
+                                }}>
+                                  {typeof user.application_data.planningRequest === 'object' 
+                                    ? JSON.stringify(user.application_data.planningRequest, null, 2)
+                                    : user.application_data.planningRequest}
+                                </pre>
+                              </span>
+                            </div>
+                          )}
+                          {user.application_data.created_at && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">תאריך יצירה:</span>
+                              <span className="summary-value">{formatDate(user.application_data.created_at)}</span>
+                            </div>
+                          )}
+                          {user.application_data.updated_at && (
+                            <div className="summary-detail-item">
+                              <span className="summary-label">תאריך עדכון:</span>
+                              <span className="summary-value">{formatDate(user.application_data.updated_at)}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Dream Home Section - Stage 4 */}
                     <div className="summary-section">
@@ -505,6 +658,40 @@ const AdminPage = () => {
                         </div>
                       )}
                     </div>
+
+                    {/* All Submissions History */}
+                    {user.form_submissions && user.form_submissions.length > 0 && (
+                      <div className="summary-section">
+                        <div className="summary-section-header">
+                          <h3 className="summary-section-title">היסטוריית בקשות ({user.form_submissions.length})</h3>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                          {user.form_submissions.map((submission, idx) => (
+                            <div key={submission.id || idx} style={{
+                              padding: '16px',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '8px',
+                              background: idx === 0 ? '#f8f9fa' : 'white'
+                            }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                                <strong style={{ fontSize: '1rem' }}>
+                                  בקשה #{user.form_submissions.length - idx} {idx === 0 && '(האחרונה)'}
+                                </strong>
+                                <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                                  {formatDate(submission.created_at)}
+                                </span>
+                              </div>
+                              <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>
+                                <div>פרטים אישיים: {submission.personal_details?.firstName || submission.personal_details?.email || 'כן'}</div>
+                                <div>פרטי נכס: {submission.property_details?.city || submission.property_details?.street || 'כן'}</div>
+                                <div>מפת מדידה: {submission.measurement_details?.surveyorName || 'כן'}</div>
+                                <div>בית חלומות: {submission.selected_house?.title || submission.selected_house?.id ? 'כן' : 'לא'}</div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                   </>
                 )}
@@ -631,6 +818,12 @@ const AdminPage = () => {
                             }}>
                               {user.email_confirmed ? '✓ מאומת' : '✗ לא מאומת'}
                             </span>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span style={{ color: '#6b7280' }}>בקשות שהוגשו:</span>
+                          <span style={{ color: '#2C3E50', fontWeight: '500' }}>
+                            {user.submissions_count || 0}
+                          </span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                           <span style={{ color: '#6b7280' }}>תאריך הרשמה:</span>
