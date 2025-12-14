@@ -133,29 +133,45 @@ const AdminPage = () => {
   }
 
   const handleDownloadFile = async (fileUrl, fileName) => {
+    if (!fileUrl) {
+      alert('אין קישור לקובץ להורדה')
+      return
+    }
+    
+    console.log('[Download] Starting download:', fileUrl, 'as:', fileName)
+    
     try {
       // First, try to download directly from Supabase URL (if it's public)
       try {
-        const response = await fetch(fileUrl, { mode: 'cors' })
+        console.log('[Download] Attempting direct download from:', fileUrl)
+        const response = await fetch(fileUrl, { 
+          mode: 'cors',
+          cache: 'no-cache'
+        })
+        
         if (response.ok) {
+          console.log('[Download] Direct download successful')
           const blob = await response.blob()
           const url = window.URL.createObjectURL(blob)
           const a = document.createElement('a')
           a.href = url
-          a.download = fileName || fileUrl.split('/').pop().split('?')[0]
+          a.download = fileName || fileUrl.split('/').pop().split('?')[0] || 'download'
           document.body.appendChild(a)
           a.click()
           window.URL.revokeObjectURL(url)
           document.body.removeChild(a)
+          console.log('[Download] File downloaded successfully via direct method')
           return
+        } else {
+          console.log('[Download] Direct download failed with status:', response.status)
         }
       } catch (directError) {
-        console.log('Direct download failed, trying through backend:', directError)
+        console.log('[Download] Direct download error:', directError)
       }
       
       // If direct download fails, use our backend download endpoint
       const downloadUrl = buildApiUrl(`/api/admin/files/download?file_url=${encodeURIComponent(fileUrl)}`)
-      console.log('Downloading file through backend:', downloadUrl)
+      console.log('[Download] Using backend download endpoint:', downloadUrl)
       
       const response = await fetch(downloadUrl, {
         method: 'GET',
@@ -165,23 +181,33 @@ const AdminPage = () => {
       })
       
       if (!response.ok) {
+        const errorText = await response.text()
+        console.error('[Download] Backend download failed:', response.status, errorText)
         throw new Error(`Download failed: ${response.status} ${response.statusText}`)
       }
       
       const blob = await response.blob()
+      console.log('[Download] Received blob, size:', blob.size, 'bytes')
+      
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = fileName || fileUrl.split('/').pop().split('?')[0]
+      a.download = fileName || fileUrl.split('/').pop().split('?')[0] || 'download'
       document.body.appendChild(a)
       a.click()
       window.URL.revokeObjectURL(url)
       document.body.removeChild(a)
+      console.log('[Download] File downloaded successfully via backend')
     } catch (error) {
-      console.error('Error downloading file:', error)
-      alert(`שגיאה בהורדת הקובץ: ${error.message}`)
+      console.error('[Download] Error downloading file:', error)
+      alert(`שגיאה בהורדת הקובץ: ${error.message}\n\nנסה לפתוח את הקובץ בחלון חדש.`)
       // Fallback: open in new tab
-      window.open(fileUrl, '_blank')
+      try {
+        window.open(fileUrl, '_blank')
+      } catch (openError) {
+        console.error('[Download] Failed to open file in new tab:', openError)
+        alert('לא ניתן להוריד או לפתוח את הקובץ. בדוק את הקישור.')
+      }
     }
   }
 
@@ -683,19 +709,21 @@ const AdminPage = () => {
                       </div>
                     )}
 
-                    {/* Files Debug Section - Show all file URLs */}
-                    {fileUrls && Object.keys(fileUrls).length > 0 && (
-                      <div className="summary-section" style={{ background: '#f0f9ff', border: '2px solid #3b82f6', borderRadius: '8px', padding: '20px', marginTop: '20px' }}>
-                        <div className="summary-section-header">
-                          <h3 className="summary-section-title" style={{ color: '#1e40af' }}>📁 כל הקבצים (Debug)</h3>
-                        </div>
+                    {/* Files Section - Show all file URLs */}
+                    <div className="summary-section" style={{ background: fileUrls && Object.keys(fileUrls).length > 0 ? '#f0f9ff' : '#fff3cd', border: `2px solid ${fileUrls && Object.keys(fileUrls).length > 0 ? '#3b82f6' : '#ffc107'}`, borderRadius: '8px', padding: '20px', marginTop: '20px' }}>
+                      <div className="summary-section-header">
+                        <h3 className="summary-section-title" style={{ color: fileUrls && Object.keys(fileUrls).length > 0 ? '#1e40af' : '#856404' }}>
+                          {fileUrls && Object.keys(fileUrls).length > 0 ? '📁 כל הקבצים' : '⚠️ אין קבצים'}
+                        </h3>
+                      </div>
+                      {fileUrls && Object.keys(fileUrls).length > 0 ? (
                         <div style={{ display: 'grid', gap: '12px' }}>
                           {Object.entries(fileUrls).map(([key, value]) => {
                             if (!value) return null
                             if (Array.isArray(value)) {
                               return (
-                                <div key={key} style={{ padding: '10px', background: 'white', borderRadius: '6px' }}>
-                                  <strong>{key}:</strong> ({value.length} files)
+                                <div key={key} style={{ padding: '10px', background: 'white', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+                                  <strong style={{ display: 'block', marginBottom: '8px' }}>{key}:</strong> ({value.length} files)
                                   {value.map((url, idx) => (
                                     <div key={idx} style={{ marginTop: '8px', padding: '8px', background: '#f8f9fa', borderRadius: '4px' }}>
                                       <FileLink url={url} label={`${key} ${idx + 1}`} fileName={`${key}_${idx + 1}`} />
@@ -706,8 +734,8 @@ const AdminPage = () => {
                               )
                             }
                             return (
-                              <div key={key} style={{ padding: '10px', background: 'white', borderRadius: '6px' }}>
-                                <strong>{key}:</strong>
+                              <div key={key} style={{ padding: '10px', background: 'white', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
+                                <strong style={{ display: 'block', marginBottom: '8px' }}>{key}:</strong>
                                 <div style={{ marginTop: '8px' }}>
                                   <FileLink url={value} label={key} fileName={key} />
                                   <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '4px', wordBreak: 'break-all' }}>{value}</div>
@@ -716,8 +744,15 @@ const AdminPage = () => {
                             )
                           })}
                         </div>
-                      </div>
-                    )}
+                      ) : (
+                        <div style={{ padding: '20px', textAlign: 'center', color: '#856404' }}>
+                          <p style={{ fontSize: '1.1rem', marginBottom: '10px' }}>לא נמצאו קבצים עבור בקשה זו</p>
+                          <p style={{ fontSize: '0.9rem', color: '#666' }}>
+                            הקבצים יופיעו כאן לאחר שהמשתמש יטען אותם בטופס
+                          </p>
+                        </div>
+                      )}
+                    </div>
 
                     {/* Dream Home Section - Stage 4 */}
                     <div className="summary-section">
