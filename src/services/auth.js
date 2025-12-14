@@ -1,12 +1,25 @@
 // Normalize API base URL - remove trailing slashes to prevent double slashes
 const getApiBaseUrl = () => {
   const url = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
-  const normalized = url.replace(/\/+$/, ''); // Remove all trailing slashes
+  // Remove all trailing slashes and whitespace
+  const normalized = url.trim().replace(/\/+$/, '');
   console.log('[API URL Debug] Original:', url, 'Normalized:', normalized);
   return normalized;
 };
 
 const API_BASE_URL = getApiBaseUrl();
+
+// Helper function to build API URLs safely (prevents double slashes)
+const buildApiUrl = (path) => {
+  // Ensure base has no trailing slash
+  const base = API_BASE_URL.replace(/\/+$/, '');
+  // Remove leading slashes from path and ensure it starts with /
+  const cleanPath = path.replace(/^\/+/, '');
+  // Combine with exactly one slash
+  const finalUrl = `${base}/${cleanPath}`;
+  console.log('[buildApiUrl] Base:', base, 'Path:', path, 'Final URL:', finalUrl);
+  return finalUrl;
+};
 
 // Store tokens in localStorage
 export const setAuthTokens = (accessToken, refreshToken) => {
@@ -44,7 +57,7 @@ export const isAuthenticated = () => {
 // Sign up a new user
 export const signUp = async (email, password, phone = null, fullName = null) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
+    const response = await fetch(buildApiUrl('/api/auth/signup'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -82,7 +95,7 @@ export const signUp = async (email, password, phone = null, fullName = null) => 
 // Sign in an existing user
 export const signIn = async (email, password) => {
   try {
-    const url = `${API_BASE_URL}/api/auth/signin`;
+    const url = buildApiUrl('/api/auth/signin');
     console.log('[SignIn Debug] Full URL:', url, 'API_BASE_URL:', API_BASE_URL);
     const response = await fetch(url, {
       method: 'POST',
@@ -129,7 +142,7 @@ export const getCurrentUser = async () => {
       return null;
     }
 
-    const response = await fetch(`${API_BASE_URL}/api/auth/user`, {
+    const response = await fetch(buildApiUrl('/api/auth/user'), {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

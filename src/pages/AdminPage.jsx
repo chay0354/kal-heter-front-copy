@@ -25,7 +25,7 @@ const AdminPage = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true)
-      const url = `${API_BASE_URL}/api/admin/users`
+      const url = buildApiUrl('/api/admin/users');
       console.log('Fetching users from:', url)
       
       const response = await fetch(url, {
@@ -58,7 +58,7 @@ const AdminPage = () => {
           const fetchUserDetails = async (userId) => {
             try {
               setLoadingDetails(true)
-              const response = await fetch(`${API_BASE_URL}/api/admin/users/${userId}`, {
+              const response = await fetch(buildApiUrl(`/api/admin/users/${userId}`), {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
