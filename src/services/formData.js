@@ -46,3 +46,30 @@ export const saveFileData = (key, file) => {
   }
 }
 
+// Save file URL instead of file object
+export const saveFileUrl = (key, url, metadata = {}) => {
+  try {
+    const fileData = {
+      url: url,
+      name: metadata.name || 'uploaded-file',
+      size: metadata.size || 0,
+      type: metadata.type || 'application/octet-stream',
+      uploaded: true
+    }
+    const existingData = getFormData()
+    // Navigate to nested key (e.g., "personalDetails.idPhoto" -> existingData.personalDetails.idPhoto)
+    const keys = key.split('.')
+    let current = existingData
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]]) {
+        current[keys[i]] = {}
+      }
+      current = current[keys[i]]
+    }
+    current[keys[keys.length - 1]] = fileData
+    saveFormData(existingData)
+  } catch (error) {
+    console.error('Error saving file URL:', error)
+  }
+}
+

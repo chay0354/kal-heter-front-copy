@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './PlanningRequest.css'
-import { saveFormData, getFormData, saveFileData } from '../services/formData'
+import { saveFormData, getFormData, saveFileData, saveFileUrl } from '../services/formData'
+import { uploadFileImmediately } from '../services/formSubmission'
 
 const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hideSections = false, hideMeasurement = false }) => {
   const navigate = useNavigate()
@@ -69,17 +70,52 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     }
   }
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const { name } = e.target
     const file = e.target.files[0]
     if (file) {
+      // Update UI immediately
       const updatedData = {
         ...formData,
         [name]: file
       }
       setFormData(updatedData)
-      saveFileData(`personalDetails.${name}`, file)
-      saveFormData({ personalDetails: updatedData })
+      
+      // Upload file immediately
+      try {
+        console.log(`[handleFileChange] Uploading ${name} immediately...`)
+        const fileUrl = await uploadFileImmediately(file, name === 'idPhoto' ? 'id_photo' : name)
+        
+        if (fileUrl) {
+          // Store the URL instead of the file object
+          saveFileUrl(`personalDetails.${name}`, fileUrl, {
+            name: file.name,
+            size: file.size,
+            type: file.type
+          })
+          
+          // Update form data with URL object
+          const urlData = {
+            ...formData,
+            [name]: { url: fileUrl, name: file.name, size: file.size, type: file.type, uploaded: true }
+          }
+          setFormData(urlData)
+          saveFormData({ personalDetails: urlData })
+          
+          console.log(`[handleFileChange] ✓ File uploaded and URL saved: ${fileUrl}`)
+        } else {
+          // Fallback: keep file in state but warn
+          console.warn(`[handleFileChange] File uploaded but URL not retrieved, keeping file in state`)
+          saveFileData(`personalDetails.${name}`, file)
+          saveFormData({ personalDetails: updatedData })
+        }
+      } catch (error) {
+        console.error(`[handleFileChange] Error uploading file:`, error)
+        // Keep file in state even if upload fails (user can retry later)
+        saveFileData(`personalDetails.${name}`, file)
+        saveFormData({ personalDetails: updatedData })
+      }
+      
       if (errors[name]) {
         setErrors(prev => ({
           ...prev,
@@ -117,7 +153,10 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     }))
   }
 
-  const handleRightsHolderFileChange = (index, file) => {
+  const handleRightsHolderFileChange = async (index, file) => {
+    if (!file) return
+    
+    // Update UI immediately
     const updatedData = {
       ...formData,
       additionalRightsHolders: formData.additionalRightsHolders.map((holder, i) => 
@@ -125,7 +164,33 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
       )
     }
     setFormData(updatedData)
-    saveFormData({ personalDetails: updatedData })
+    
+    // Upload file immediately
+    try {
+      console.log(`[handleRightsHolderFileChange] Uploading rights holder ${index} photo immediately...`)
+      const fileUrl = await uploadFileImmediately(file, 'additional_rights_holders_photos')
+      
+      if (fileUrl) {
+        // Store the URL instead of the file object
+        const urlData = {
+          ...formData,
+          additionalRightsHolders: formData.additionalRightsHolders.map((holder, i) => 
+            i === index ? { ...holder, idPhoto: { url: fileUrl, name: file.name, size: file.size, type: file.type, uploaded: true } } : holder
+          )
+        }
+        setFormData(urlData)
+        saveFormData({ personalDetails: urlData })
+        
+        console.log(`[handleRightsHolderFileChange] ✓ File uploaded and URL saved: ${fileUrl}`)
+      } else {
+        // Fallback: keep file in state
+        saveFormData({ personalDetails: updatedData })
+      }
+    } catch (error) {
+      console.error(`[handleRightsHolderFileChange] Error uploading file:`, error)
+      // Keep file in state even if upload fails
+      saveFormData({ personalDetails: updatedData })
+    }
   }
 
   const handlePropertyChange = (field, value) => {
@@ -146,24 +211,109 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     saveFormData({ measurementDetails: updatedData })
   }
 
-  const handlePropertyFileChange = (field, file) => {
+  const handlePropertyFileChange = async (field, file) => {
+    if (!file) return
+    
+    // Update UI immediately
     const updatedData = {
       ...propertyData,
       [field]: file
     }
     setPropertyData(updatedData)
-    saveFileData(`propertyDetails.${field}`, file)
-    saveFormData({ propertyDetails: updatedData })
+    
+    // Map field names to backend field names
+    const fieldMap = {
+      'tabuExtract': 'tabu_extract',
+      'propertyPhotos': 'property_photos'
+    }
+    const backendField = fieldMap[field] || field
+    
+    // Upload file immediately
+    try {
+      console.log(`[handlePropertyFileChange] Uploading ${field} immediately...`)
+      const fileUrl = await uploadFileImmediately(file, backendField)
+      
+      if (fileUrl) {
+        // Store the URL instead of the file object
+        saveFileUrl(`propertyDetails.${field}`, fileUrl, {
+          name: file.name,
+          size: file.size,
+          type: file.type
+        })
+        
+        // Update form data with URL object
+        const urlData = {
+          ...propertyData,
+          [field]: { url: fileUrl, name: file.name, size: file.size, type: file.type, uploaded: true }
+        }
+        setPropertyData(urlData)
+        saveFormData({ propertyDetails: urlData })
+        
+        console.log(`[handlePropertyFileChange] ✓ File uploaded and URL saved: ${fileUrl}`)
+      } else {
+        // Fallback: keep file in state
+        saveFileData(`propertyDetails.${field}`, file)
+        saveFormData({ propertyDetails: updatedData })
+      }
+    } catch (error) {
+      console.error(`[handlePropertyFileChange] Error uploading file:`, error)
+      // Keep file in state even if upload fails
+      saveFileData(`propertyDetails.${field}`, file)
+      saveFormData({ propertyDetails: updatedData })
+    }
   }
 
-  const handleMeasurementFileChange = (field, file) => {
+  const handleMeasurementFileChange = async (field, file) => {
+    if (!file) return
+    
+    // Update UI immediately
     const updatedData = {
       ...measurementData,
       [field]: file
     }
     setMeasurementData(updatedData)
-    saveFileData(`measurementDetails.${field}`, file)
-    saveFormData({ measurementDetails: updatedData })
+    
+    // Map field names to backend field names
+    const fieldMap = {
+      'pdfFile': 'pdf_file',
+      'dwfFile': 'dwf_file',
+      'dwgFile': 'dwg_file'
+    }
+    const backendField = fieldMap[field] || field
+    
+    // Upload file immediately
+    try {
+      console.log(`[handleMeasurementFileChange] Uploading ${field} immediately...`)
+      const fileUrl = await uploadFileImmediately(file, backendField)
+      
+      if (fileUrl) {
+        // Store the URL instead of the file object
+        saveFileUrl(`measurementDetails.${field}`, fileUrl, {
+          name: file.name,
+          size: file.size,
+          type: file.type
+        })
+        
+        // Update form data with URL object
+        const urlData = {
+          ...measurementData,
+          [field]: { url: fileUrl, name: file.name, size: file.size, type: file.type, uploaded: true }
+        }
+        setMeasurementData(urlData)
+        saveFormData({ measurementDetails: urlData })
+        
+        console.log(`[handleMeasurementFileChange] ✓ File uploaded and URL saved: ${fileUrl}`)
+      } else {
+        // Fallback: keep file in state
+        saveFileData(`measurementDetails.${field}`, file)
+        saveFormData({ measurementDetails: updatedData })
+      }
+    } catch (error) {
+      console.error(`[handleMeasurementFileChange] Error uploading file:`, error)
+      // Keep file in state even if upload fails
+      saveFileData(`measurementDetails.${field}`, file)
+      saveFormData({ measurementDetails: updatedData })
+    }
   }
 
   const handleContinue = () => {

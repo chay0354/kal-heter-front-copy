@@ -1,6 +1,9 @@
 // Normalize API base URL - remove trailing slashes to prevent double slashes
 const getApiBaseUrl = () => {
-  const url = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
+  const url = import.meta.env.VITE_API_BASE_URL;
+  if (!url) {
+    throw new Error('VITE_API_BASE_URL is not set');
+  }
   // Remove all trailing slashes and whitespace
   const normalized = url.trim().replace(/\/+$/, '');
   console.log('[API URL Debug] Original:', url, 'Normalized:', normalized);
@@ -19,6 +22,123 @@ const buildApiUrl = (path) => {
   const finalUrl = `${base}/${cleanPath}`;
   console.log('[buildApiUrl] Base:', base, 'Path:', path, 'Final URL:', finalUrl);
   return finalUrl;
+};
+
+// Helper function to check if something is actually a File instance
+const isFile = (obj) => {
+  if (!obj) return false;
+  // Check for File instance
+  if (obj instanceof File) return true;
+  // Check for Blob (File extends Blob)
+  if (obj instanceof Blob) return true;
+  // Check constructor name
+  if (obj.constructor && obj.constructor.name === 'File') return true;
+  // Check for file-like object with required properties
+  if (typeof obj === 'object' && obj.name !== undefined && obj.size !== undefined && obj.type !== undefined) {
+    // Make sure it's not an empty object or metadata object
+    if (Object.keys(obj).length <= 3 && obj.name && obj.size !== undefined) {
+      // This might be a metadata object, not a real File
+      return false;
+    }
+    // Check if it has File-like methods
+    if (typeof obj.stream === 'function' || typeof obj.arrayBuffer === 'function' || typeof obj.text === 'function') {
+      return true;
+    }
+  }
+  return false;
+};
+
+// Upload a single file immediately and return the URL
+export const uploadFileImmediately = async (file, fileType = 'id_photo') => {
+  try {
+    const token = localStorage.getItem('access_token')
+    if (!token) {
+      throw new Error('User not authenticated')
+    }
+
+    if (!file || !isFile(file)) {
+      throw new Error('Invalid file object')
+    }
+
+    console.log(`[uploadFileImmediately] Uploading ${fileType}:`, file.name, 'size:', file.size)
+
+    // Create FormData with minimal data (just the file)
+    const formData = new FormData()
+    formData.append(fileType, file)
+    
+    // Add minimal required fields (empty objects are fine for draft)
+    formData.append('personal_details', JSON.stringify({}))
+    formData.append('property_details', JSON.stringify({}))
+    formData.append('measurement_details', JSON.stringify({}))
+    formData.append('selected_house', JSON.stringify({}))
+
+    const response = await fetch(buildApiUrl('/api/form/save-draft'), {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    })
+
+    if (!response.ok) {
+      let errorMessage = 'Failed to upload file'
+      try {
+        const errorData = await response.json()
+        errorMessage = errorData.detail || errorMessage
+      } catch (e) {
+        errorMessage = `HTTP ${response.status}: ${response.statusText}`
+      }
+      throw new Error(errorMessage)
+    }
+
+    const data = await response.json()
+    
+    // Wait a moment for the database to sync
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    // Fetch the submission to get the file URL
+    const submissionId = data.id
+    try {
+      const submissionResponse = await fetch(buildApiUrl(`/api/admin/users/${data.user_id}`), {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      
+      if (submissionResponse.ok) {
+        const userData = await submissionResponse.json()
+        const formDraft = userData.form_draft
+        
+        if (formDraft && formDraft.file_urls) {
+          const fileUrls = formDraft.file_urls
+          // Try to find the file URL by type
+          const fileUrl = fileUrls[fileType] || 
+                         fileUrls.id_photo || 
+                         fileUrls.pdf_file || 
+                         fileUrls.dwf_file || 
+                         fileUrls.dwg_file || 
+                         fileUrls.tabu_extract ||
+                         (fileUrls.property_photos && fileUrls.property_photos[0]) ||
+                         (fileUrls.additional_rights_holders_photos && fileUrls.additional_rights_holders_photos[0])
+          
+          if (fileUrl) {
+            console.log(`[uploadFileImmediately] ✓ File uploaded successfully: ${fileUrl}`)
+            return fileUrl
+          }
+        }
+      }
+    } catch (fetchError) {
+      console.warn(`[uploadFileImmediately] Could not fetch submission:`, fetchError)
+    }
+    
+    // Fallback: return null but log success
+    console.warn(`[uploadFileImmediately] Could not get file URL from submission, but upload succeeded. Submission ID: ${submissionId}`)
+    return null
+    
+  } catch (error) {
+    console.error(`[uploadFileImmediately] Error uploading file:`, error)
+    throw error
+  }
 };
 
 export const saveFormDraft = async (formData) => {
@@ -46,53 +166,104 @@ export const saveFormDraft = async (formData) => {
     formDataToSend.append('measurement_details', JSON.stringify(formData.measurementDetails || {}))
     formDataToSend.append('selected_house', JSON.stringify(formData.selectedHouse || {}))
 
-    // Add files
+    // Add files - check if they are File instances OR already uploaded URLs
     let filesCount = 0
-    if (formData.personalDetails?.idPhoto) {
-      formDataToSend.append('id_photo', formData.personalDetails.idPhoto)
-      filesCount++
-      console.log('[saveFormDraft] Added id_photo:', formData.personalDetails.idPhoto.name || 'unnamed')
+    const idPhoto = formData.personalDetails?.idPhoto
+    if (idPhoto) {
+      if (isFile(idPhoto)) {
+        // It's a File object - upload it
+        formDataToSend.append('id_photo', idPhoto)
+        filesCount++
+        console.log('[saveFormDraft] ✓ Added id_photo (File):', idPhoto.name || 'unnamed', 'size:', idPhoto.size, 'type:', idPhoto.type)
+      } else if (idPhoto.url && idPhoto.uploaded) {
+        // It's already uploaded - URL is in personal_details JSON, no need to append file
+        console.log('[saveFormDraft] ✓ id_photo already uploaded, URL in personal_details:', idPhoto.url)
+      } else {
+        console.warn('[saveFormDraft] ✗ Skipping id_photo - not a File instance or uploaded URL:', {
+          type: typeof idPhoto,
+          isObject: typeof idPhoto === 'object',
+          constructor: idPhoto?.constructor?.name,
+          keys: idPhoto && typeof idPhoto === 'object' ? Object.keys(idPhoto) : 'N/A',
+          value: idPhoto
+        })
+      }
+    } else {
+      console.log('[saveFormDraft] No id_photo in formData.personalDetails')
     }
 
-    if (formData.propertyDetails?.propertyPhotos && formData.propertyDetails.propertyPhotos.length > 0) {
+    if (formData.propertyDetails?.propertyPhotos && Array.isArray(formData.propertyDetails.propertyPhotos) && formData.propertyDetails.propertyPhotos.length > 0) {
       formData.propertyDetails.propertyPhotos.forEach((photo, index) => {
-        formDataToSend.append('property_photos', photo)
-        filesCount++
-        console.log(`[saveFormDraft] Added property_photo ${index}:`, photo.name || 'unnamed')
+        if (isFile(photo)) {
+          formDataToSend.append('property_photos', photo)
+          filesCount++
+          console.log(`[saveFormDraft] Added property_photo ${index}:`, photo.name || 'unnamed')
+        } else {
+          console.log(`[saveFormDraft] Skipping property_photo ${index} - not a File instance:`, typeof photo, photo)
+        }
       })
     }
 
     if (formData.propertyDetails?.tabuExtract) {
-      formDataToSend.append('tabu_extract', formData.propertyDetails.tabuExtract)
-      filesCount++
-      console.log('[saveFormDraft] Added tabu_extract:', formData.propertyDetails.tabuExtract.name || 'unnamed')
+      if (isFile(formData.propertyDetails.tabuExtract)) {
+        formDataToSend.append('tabu_extract', formData.propertyDetails.tabuExtract)
+        filesCount++
+        console.log('[saveFormDraft] ✓ Added tabu_extract (File):', formData.propertyDetails.tabuExtract.name || 'unnamed')
+      } else if (formData.propertyDetails.tabuExtract.url && formData.propertyDetails.tabuExtract.uploaded) {
+        console.log('[saveFormDraft] ✓ tabu_extract already uploaded, URL in property_details:', formData.propertyDetails.tabuExtract.url)
+      } else {
+        console.log('[saveFormDraft] ✗ Skipping tabu_extract - not a File instance or uploaded URL:', typeof formData.propertyDetails.tabuExtract, formData.propertyDetails.tabuExtract)
+      }
     }
 
     if (formData.measurementDetails?.pdfFile) {
-      formDataToSend.append('pdf_file', formData.measurementDetails.pdfFile)
-      filesCount++
-      console.log('[saveFormDraft] Added pdf_file:', formData.measurementDetails.pdfFile.name || 'unnamed')
+      if (isFile(formData.measurementDetails.pdfFile)) {
+        formDataToSend.append('pdf_file', formData.measurementDetails.pdfFile)
+        filesCount++
+        console.log('[saveFormDraft] ✓ Added pdf_file (File):', formData.measurementDetails.pdfFile.name || 'unnamed')
+      } else if (formData.measurementDetails.pdfFile.url && formData.measurementDetails.pdfFile.uploaded) {
+        console.log('[saveFormDraft] ✓ pdf_file already uploaded, URL in measurement_details:', formData.measurementDetails.pdfFile.url)
+      } else {
+        console.log('[saveFormDraft] ✗ Skipping pdf_file - not a File instance or uploaded URL:', typeof formData.measurementDetails.pdfFile, formData.measurementDetails.pdfFile)
+      }
     }
 
     if (formData.measurementDetails?.dwfFile) {
-      formDataToSend.append('dwf_file', formData.measurementDetails.dwfFile)
-      filesCount++
-      console.log('[saveFormDraft] Added dwf_file:', formData.measurementDetails.dwfFile.name || 'unnamed')
+      if (isFile(formData.measurementDetails.dwfFile)) {
+        formDataToSend.append('dwf_file', formData.measurementDetails.dwfFile)
+        filesCount++
+        console.log('[saveFormDraft] ✓ Added dwf_file (File):', formData.measurementDetails.dwfFile.name || 'unnamed')
+      } else if (formData.measurementDetails.dwfFile.url && formData.measurementDetails.dwfFile.uploaded) {
+        console.log('[saveFormDraft] ✓ dwf_file already uploaded, URL in measurement_details:', formData.measurementDetails.dwfFile.url)
+      } else {
+        console.log('[saveFormDraft] ✗ Skipping dwf_file - not a File instance or uploaded URL:', typeof formData.measurementDetails.dwfFile, formData.measurementDetails.dwfFile)
+      }
     }
 
     if (formData.measurementDetails?.dwgFile) {
-      formDataToSend.append('dwg_file', formData.measurementDetails.dwgFile)
-      filesCount++
-      console.log('[saveFormDraft] Added dwg_file:', formData.measurementDetails.dwgFile.name || 'unnamed')
+      if (isFile(formData.measurementDetails.dwgFile)) {
+        formDataToSend.append('dwg_file', formData.measurementDetails.dwgFile)
+        filesCount++
+        console.log('[saveFormDraft] ✓ Added dwg_file (File):', formData.measurementDetails.dwgFile.name || 'unnamed')
+      } else if (formData.measurementDetails.dwgFile.url && formData.measurementDetails.dwgFile.uploaded) {
+        console.log('[saveFormDraft] ✓ dwg_file already uploaded, URL in measurement_details:', formData.measurementDetails.dwgFile.url)
+      } else {
+        console.log('[saveFormDraft] ✗ Skipping dwg_file - not a File instance or uploaded URL:', typeof formData.measurementDetails.dwgFile, formData.measurementDetails.dwgFile)
+      }
     }
 
     // Add additional rights holders photos
     if (formData.personalDetails?.additionalRightsHolders) {
       formData.personalDetails.additionalRightsHolders.forEach((holder, index) => {
         if (holder.idPhoto) {
-          formDataToSend.append('additional_rights_holders_photos', holder.idPhoto)
-          filesCount++
-          console.log(`[saveFormDraft] Added additional_rights_holder_photo ${index}:`, holder.idPhoto.name || 'unnamed')
+          if (isFile(holder.idPhoto)) {
+            formDataToSend.append('additional_rights_holders_photos', holder.idPhoto)
+            filesCount++
+            console.log(`[saveFormDraft] ✓ Added additional_rights_holder_photo ${index} (File):`, holder.idPhoto.name || 'unnamed')
+          } else if (holder.idPhoto.url && holder.idPhoto.uploaded) {
+            console.log(`[saveFormDraft] ✓ additional_rights_holder_photo ${index} already uploaded, URL in personal_details:`, holder.idPhoto.url)
+          } else {
+            console.log(`[saveFormDraft] ✗ Skipping additional_rights_holder_photo ${index} - not a File instance or uploaded URL:`, typeof holder.idPhoto, holder.idPhoto)
+          }
         }
       })
     }
@@ -157,37 +328,39 @@ export const submitForm = async (formData) => {
     formDataToSend.append('measurement_details', JSON.stringify(formData.measurementDetails || {}))
     formDataToSend.append('selected_house', JSON.stringify(formData.selectedHouse || {}))
 
-    // Add files
-    if (formData.personalDetails?.idPhoto) {
+    // Add files - only add if they are actual File instances
+    if (formData.personalDetails?.idPhoto && isFile(formData.personalDetails.idPhoto)) {
       formDataToSend.append('id_photo', formData.personalDetails.idPhoto)
     }
 
-    if (formData.propertyDetails?.propertyPhotos && formData.propertyDetails.propertyPhotos.length > 0) {
+    if (formData.propertyDetails?.propertyPhotos && Array.isArray(formData.propertyDetails.propertyPhotos) && formData.propertyDetails.propertyPhotos.length > 0) {
       formData.propertyDetails.propertyPhotos.forEach((photo, index) => {
-        formDataToSend.append('property_photos', photo)
+        if (isFile(photo)) {
+          formDataToSend.append('property_photos', photo)
+        }
       })
     }
 
-    if (formData.propertyDetails?.tabuExtract) {
+    if (formData.propertyDetails?.tabuExtract && isFile(formData.propertyDetails.tabuExtract)) {
       formDataToSend.append('tabu_extract', formData.propertyDetails.tabuExtract)
     }
 
-    if (formData.measurementDetails?.pdfFile) {
+    if (formData.measurementDetails?.pdfFile && isFile(formData.measurementDetails.pdfFile)) {
       formDataToSend.append('pdf_file', formData.measurementDetails.pdfFile)
     }
 
-    if (formData.measurementDetails?.dwfFile) {
+    if (formData.measurementDetails?.dwfFile && isFile(formData.measurementDetails.dwfFile)) {
       formDataToSend.append('dwf_file', formData.measurementDetails.dwfFile)
     }
 
-    if (formData.measurementDetails?.dwgFile) {
+    if (formData.measurementDetails?.dwgFile && isFile(formData.measurementDetails.dwgFile)) {
       formDataToSend.append('dwg_file', formData.measurementDetails.dwgFile)
     }
 
     // Add additional rights holders photos
     if (formData.personalDetails?.additionalRightsHolders) {
       formData.personalDetails.additionalRightsHolders.forEach((holder, index) => {
-        if (holder.idPhoto) {
+        if (holder.idPhoto && isFile(holder.idPhoto)) {
           formDataToSend.append('additional_rights_holders_photos', holder.idPhoto)
         }
       })

@@ -3,7 +3,10 @@ import '../components/PlanningRequest.css'
 
 // Normalize API base URL - remove trailing slashes to prevent double slashes
 const getApiBaseUrl = () => {
-  const url = import.meta.env.VITE_API_BASE_URL || 'https://kal-heter-back.vercel.app';
+  const url = import.meta.env.VITE_API_BASE_URL;
+  if (!url) {
+    throw new Error('VITE_API_BASE_URL is not set');
+  }
   // Remove all trailing slashes and whitespace
   const normalized = url.trim().replace(/\/+$/, '');
   console.log('[API URL Debug] Original:', url, 'Normalized:', normalized);
