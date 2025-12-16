@@ -1146,6 +1146,15 @@ const AdminPage = () => {
                             onChange={async (e) => {
                               e.stopPropagation(); // Prevent opening user details
                               const newStatus = e.target.value;
+                              const oldStatus = user.application_status;
+                              
+                              // Optimistically update UI
+                              setUsers(users.map(u => 
+                                u.id === user.id 
+                                  ? { ...u, application_status: newStatus }
+                                  : u
+                              ));
+                              
                               try {
                                 const response = await fetch(buildApiUrl(`/api/admin/users/${user.id}/status`), {
                                   method: 'PUT',
@@ -1156,15 +1165,22 @@ const AdminPage = () => {
                                 });
                                 
                                 if (!response.ok) {
+                                  // Revert on error
+                                  setUsers(users.map(u => 
+                                    u.id === user.id 
+                                      ? { ...u, application_status: oldStatus }
+                                      : u
+                                  ));
                                   throw new Error('Failed to update status');
                                 }
                                 
-                                // Update local state in users array
-                                setUsers(users.map(u => 
-                                  u.id === user.id 
-                                    ? { ...u, application_status: newStatus }
-                                    : u
-                                ));
+                                const result = await response.json();
+                                console.log('[AdminPage] Status update result:', result);
+                                
+                                // Refresh users list to ensure we have the latest data
+                                setTimeout(() => {
+                                  fetchUsers();
+                                }, 500);
                               } catch (error) {
                                 console.error('Error updating status:', error);
                                 alert('שגיאה בעדכון הסטטוס');

@@ -3,12 +3,31 @@ import { useNavigate } from 'react-router-dom'
 import '../components/PlanningRequest.css'
 import { getFormData, clearFormData } from '../services/formData'
 import { submitForm, saveFormDraft } from '../services/formSubmission'
+import { getAccessToken } from '../services/auth'
+
+// Helper function to build API URLs
+const getApiBaseUrl = () => {
+  const url = import.meta.env.VITE_API_BASE_URL;
+  if (!url) {
+    throw new Error('VITE_API_BASE_URL is not set');
+  }
+  const normalized = url.trim().replace(/\/+$/, '');
+  return normalized;
+};
+
+const buildApiUrl = (path) => {
+  const base = getApiBaseUrl().replace(/\/+$/, '');
+  const cleanPath = path.replace(/^\/+/, '');
+  return `${base}/${cleanPath}`;
+};
 
 const SummaryPage = () => {
   const navigate = useNavigate()
   const [formData, setFormData] = useState({})
   const [confirmed, setConfirmed] = useState(false)
   const [draftSaved, setDraftSaved] = useState(false)
+  const [applicationStatus, setApplicationStatus] = useState('בטיפול')
+  const [loadingStatus, setLoadingStatus] = useState(true)
 
   useEffect(() => {
     const savedData = getFormData()
@@ -34,6 +53,71 @@ const SummaryPage = () => {
       }
     }
   }, [draftSaved])
+
+  // Fetch application status
+  useEffect(() => {
+    const fetchApplicationStatus = async () => {
+      try {
+        const token = getAccessToken()
+        if (!token) {
+          setApplicationStatus('בטיפול')
+          setLoadingStatus(false)
+          return
+        }
+
+        // Get user's status from /api/auth/user endpoint
+        try {
+          const response = await fetch(buildApiUrl('/api/auth/user'), {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          })
+
+          if (response.ok) {
+            const userData = await response.json()
+            console.log('[SummaryPage] User data received:', userData)
+            // application_status is now returned from the backend
+            const status = userData.application_status || 'בטיפול'
+            console.log('[SummaryPage] Setting application status to:', status)
+            setApplicationStatus(status)
+          } else {
+            console.error('[SummaryPage] Failed to fetch user data, status:', response.status)
+            setApplicationStatus('בטיפול')
+          }
+        } catch (err) {
+          console.error('Error fetching application status:', err)
+          setApplicationStatus('בטיפול')
+        }
+      } catch (error) {
+        console.error('Error fetching application status:', error)
+        setApplicationStatus('בטיפול')
+      } finally {
+        setLoadingStatus(false)
+      }
+    }
+
+    fetchApplicationStatus()
+    
+    // Refresh status every 5 seconds to catch admin updates
+    const intervalId = setInterval(() => {
+      fetchApplicationStatus()
+    }, 5000)
+    
+    // Also refresh when page becomes visible
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchApplicationStatus()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    return () => {
+      clearInterval(intervalId)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [])
 
   const steps = [
     { number: 1, label: 'פרטים אישיים' },
@@ -364,6 +448,81 @@ const SummaryPage = () => {
                             <span key={i} className="summary-house-spec">{specText}</span>
                           );
                         })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Application Status Section */}
+              <div className="summary-section" style={{
+                background: applicationStatus === 'בקשה טופלה' ? '#f0fdf4' : '#fef3c7',
+                border: `2px solid ${applicationStatus === 'בקשה טופלה' ? '#10b981' : '#f59e0b'}`,
+                borderRadius: '12px',
+                padding: '24px',
+                marginTop: '20px'
+              }}>
+                <div className="summary-section-header">
+                  <h3 className="summary-section-title" style={{
+                    color: applicationStatus === 'בקשה טופלה' ? '#065f46' : '#92400e',
+                    marginBottom: '16px'
+                  }}>
+                    סטטוס הבקשה
+                  </h3>
+                </div>
+                {loadingStatus ? (
+                  <div style={{ textAlign: 'center', padding: '20px' }}>
+                    <p style={{ color: '#6b7280' }}>טוען סטטוס...</p>
+                  </div>
+                ) : (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '16px',
+                    padding: '16px',
+                    background: 'white',
+                    borderRadius: '8px',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                  }}>
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '50%',
+                      background: applicationStatus === 'בקשה טופלה' 
+                        ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' 
+                        : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      {applicationStatus === 'בקשה טופלה' ? (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      ) : (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/>
+                          <path d="M12 6V12L16 14" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      )}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{
+                        fontSize: '1.1rem',
+                        fontWeight: '600',
+                        color: '#2C3E50',
+                        marginBottom: '4px'
+                      }}>
+                        {applicationStatus}
+                      </div>
+                      <div style={{
+                        fontSize: '0.875rem',
+                        color: '#6b7280'
+                      }}>
+                        {applicationStatus === 'בקשה טופלה' 
+                          ? 'הבקשה שלך טופלה בהצלחה' 
+                          : 'הבקשה שלך נמצאת כעת בטיפול'}
                       </div>
                     </div>
                   </div>
