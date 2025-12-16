@@ -1,3 +1,5 @@
+import { authenticatedFetch, getAccessToken } from './auth'
+
 // Normalize API base URL - remove trailing slashes to prevent double slashes
 const getApiBaseUrl = () => {
   const url = import.meta.env.VITE_API_BASE_URL;
