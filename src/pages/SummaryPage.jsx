@@ -67,27 +67,34 @@ const SummaryPage = () => {
 
         // Get user's status from /api/auth/user endpoint
         try {
-          const response = await fetch(buildApiUrl('/api/auth/user'), {
+          // Add cache-busting to ensure we get fresh data
+          const cacheBuster = `?t=${Date.now()}`
+          const response = await fetch(buildApiUrl(`/api/auth/user${cacheBuster}`), {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache',
             },
+            cache: 'no-store'
           })
 
           if (response.ok) {
             const userData = await response.json()
             console.log('[SummaryPage] User data received:', userData)
+            console.log('[SummaryPage] application_status from backend:', userData.application_status)
             // application_status is now returned from the backend
             const status = userData.application_status || 'בטיפול'
             console.log('[SummaryPage] Setting application status to:', status)
             setApplicationStatus(status)
           } else {
-            console.error('[SummaryPage] Failed to fetch user data, status:', response.status)
+            const errorText = await response.text()
+            console.error('[SummaryPage] Failed to fetch user data, status:', response.status, 'error:', errorText)
             setApplicationStatus('בטיפול')
           }
         } catch (err) {
-          console.error('Error fetching application status:', err)
+          console.error('[SummaryPage] Error fetching application status:', err)
           setApplicationStatus('בטיפול')
         }
       } catch (error) {
@@ -100,22 +107,32 @@ const SummaryPage = () => {
 
     fetchApplicationStatus()
     
-    // Refresh status every 5 seconds to catch admin updates
+    // Refresh status every 3 seconds to catch admin updates (more frequent)
     const intervalId = setInterval(() => {
+      console.log('[SummaryPage] Refreshing status...')
       fetchApplicationStatus()
-    }, 5000)
+    }, 3000)
     
     // Also refresh when page becomes visible
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
+        console.log('[SummaryPage] Page visible, refreshing status...')
         fetchApplicationStatus()
       }
     }
     document.addEventListener('visibilitychange', handleVisibilityChange)
     
+    // Also refresh when window gains focus
+    const handleFocus = () => {
+      console.log('[SummaryPage] Window focused, refreshing status...')
+      fetchApplicationStatus()
+    }
+    window.addEventListener('focus', handleFocus)
+    
     return () => {
       clearInterval(intervalId)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('focus', handleFocus)
     }
   }, [])
 
