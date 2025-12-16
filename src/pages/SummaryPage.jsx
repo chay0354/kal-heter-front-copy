@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import '../components/PlanningRequest.css'
 import { getFormData, clearFormData } from '../services/formData'
 import { submitForm, saveFormDraft } from '../services/formSubmission'
-import { getAccessToken } from '../services/auth'
+import { authenticatedFetch, getAccessToken } from '../services/auth'
 
 // Helper function to build API URLs
 const getApiBaseUrl = () => {
@@ -69,10 +69,9 @@ const SummaryPage = () => {
         try {
           // Add cache-busting to ensure we get fresh data
           const cacheBuster = `?t=${Date.now()}`
-          const response = await fetch(buildApiUrl(`/api/auth/user${cacheBuster}`), {
+          const response = await authenticatedFetch(buildApiUrl(`/api/auth/user${cacheBuster}`), {
             method: 'GET',
             headers: {
-              'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
               'Cache-Control': 'no-cache, no-store, must-revalidate',
               'Pragma': 'no-cache',

@@ -72,11 +72,8 @@ export const uploadFileImmediately = async (file, fileType = 'id_photo') => {
     formData.append('measurement_details', JSON.stringify({}))
     formData.append('selected_house', JSON.stringify({}))
 
-    const response = await fetch(buildApiUrl('/api/form/save-draft'), {
+    const response = await authenticatedFetch(buildApiUrl('/api/form/save-draft'), {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
       body: formData
     })
 
@@ -270,11 +267,8 @@ export const saveFormDraft = async (formData) => {
     
     console.log(`[saveFormDraft] Total files added to FormData: ${filesCount}`)
 
-    const response = await fetch(buildApiUrl('/api/form/save-draft'), {
+    const response = await authenticatedFetch(buildApiUrl('/api/form/save-draft'), {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
       body: formDataToSend
     })
 
@@ -366,11 +360,8 @@ export const submitForm = async (formData) => {
       })
     }
 
-    const response = await fetch(buildApiUrl('/api/form/submit'), {
+    const response = await authenticatedFetch(buildApiUrl('/api/form/submit'), {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
       body: formDataToSend
     })
 

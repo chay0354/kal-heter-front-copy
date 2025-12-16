@@ -137,6 +137,128 @@ export const signOut = () => {
   clearAuthTokens();
 };
 
+// Refresh access token using refresh token
+export const refreshAccessToken = async () => {
+  try {
+    const refreshToken = getRefreshToken();
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+
+    // Try backend refresh endpoint first (preferred)
+    try {
+      const response = await fetch(buildApiUrl('/api/auth/refresh'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.access_token) {
+          setAuthTokens(data.access_token, data.refresh_token || refreshToken);
+          console.log('[Auth] Token refreshed via backend endpoint');
+          return data.access_token;
+        }
+      }
+    } catch (backendError) {
+      console.log('[Auth] Backend refresh failed, trying Supabase directly:', backendError);
+    }
+
+    // Fallback: Use Supabase's refresh endpoint directly
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+    
+    if (supabaseUrl && supabaseKey) {
+      const response = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=refresh_token`, {
+        method: 'POST',
+        headers: {
+          'apikey': supabaseKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.access_token) {
+          setAuthTokens(data.access_token, data.refresh_token || refreshToken);
+          console.log('[Auth] Token refreshed via Supabase endpoint');
+          return data.access_token;
+        }
+      }
+    }
+
+    throw new Error('Failed to refresh token - all methods failed');
+  } catch (error) {
+    console.error('[Auth] Error refreshing token:', error);
+    clearAuthTokens();
+    throw error;
+  }
+};
+
+// Helper to make authenticated requests with automatic token refresh
+export const authenticatedFetch = async (url, options = {}) => {
+  let token = getAccessToken();
+  if (!token) {
+    throw new Error('No access token available');
+  }
+
+  // Make initial request
+  let response = await fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  // If token expired, try to refresh and retry once
+  if (response.status === 401) {
+    let errorText = '';
+    try {
+      errorText = await response.clone().text();
+    } catch (e) {
+      // Ignore error reading response
+    }
+    
+    // Check if error is due to expired/invalid token
+    const isTokenError = errorText.includes('expired') || 
+                         errorText.includes('invalid JWT') || 
+                         errorText.includes('token') ||
+                         errorText.includes('Auth session missing');
+    
+    if (isTokenError) {
+      try {
+        console.log('[Auth] Token expired or invalid, attempting refresh...');
+        token = await refreshAccessToken();
+        console.log('[Auth] Token refreshed successfully, retrying request...');
+        
+        // Retry the request with new token
+        response = await fetch(url, {
+          ...options,
+          headers: {
+            ...options.headers,
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+      } catch (refreshError) {
+        console.error('[Auth] Failed to refresh token:', refreshError);
+        clearAuthTokens();
+        // Only redirect if not already on login/signup page
+        if (window.location && window.location.pathname !== '/login' && window.location.pathname !== '/signup') {
+          window.location.href = '/login';
+        }
+        throw new Error('Session expired. Please sign in again.');
+      }
+    }
+  }
+
+  return response;
+};
+
 // Get current user (with token validation)
 export const getCurrentUser = async () => {
   try {
@@ -145,10 +267,9 @@ export const getCurrentUser = async () => {
       return null;
     }
 
-    const response = await fetch(buildApiUrl('/api/auth/user'), {
+    const response = await authenticatedFetch(buildApiUrl('/api/auth/user'), {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
@@ -162,6 +283,7 @@ export const getCurrentUser = async () => {
     setUser(user);
     return user;
   } catch (error) {
+    console.error('[Auth] Error getting current user:', error);
     clearAuthTokens();
     return null;
   }
