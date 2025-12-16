@@ -27,6 +27,141 @@ const buildApiUrl = (path) => {
   return finalUrl;
 };
 
+// Custom Status Dropdown Component
+const StatusDropdown = ({ value, onChange, userId, onStatusChange, onClick }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = React.useRef(null)
+
+  const options = ['בטיפול', 'בקשה טופלה']
+
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
+  const handleSelect = async (newStatus) => {
+    setIsOpen(false)
+    if (onStatusChange) {
+      await onStatusChange(newStatus)
+    }
+    if (onChange) {
+      onChange({ target: { value: newStatus } })
+    }
+  }
+
+  return (
+    <div 
+      ref={dropdownRef}
+      style={{ position: 'relative', width: '100px' }}
+      onClick={(e) => {
+        e.stopPropagation()
+        if (onClick) onClick(e)
+      }}
+    >
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          padding: '6px 28px 6px 12px',
+          borderRadius: '12px',
+          fontSize: '0.875rem',
+          fontWeight: '600',
+          border: '1px solid #e5e7eb',
+          background: 'white',
+          color: '#2C3E50',
+          cursor: 'pointer',
+          textAlign: 'center',
+          transition: 'all 0.2s ease',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          minHeight: '35px'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.borderColor = '#667eea'
+          e.currentTarget.style.boxShadow = '0 2px 6px rgba(102, 126, 234, 0.2)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.borderColor = '#e5e7eb'
+          e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)'
+        }}
+      >
+        <span style={{ flex: 1, textAlign: 'center' }}>{value || 'בטיפול'}</span>
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{
+            marginLeft: '8px',
+            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'transform 0.2s ease'
+          }}
+        >
+          <path d="M6 9L1 4h10z" fill="#6b7280" />
+        </svg>
+      </div>
+      
+      {isOpen && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            right: 0,
+            marginTop: '4px',
+            background: 'white',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            border: '1px solid #e5e7eb',
+            zIndex: 1000,
+            overflow: 'hidden'
+          }}
+        >
+          {options.map((option) => (
+            <div
+              key={option}
+              onClick={() => handleSelect(option)}
+              style={{
+                padding: '10px 16px',
+                fontSize: '0.875rem',
+                fontWeight: value === option ? '600' : '500',
+                color: value === option ? '#667eea' : '#2C3E50',
+                background: value === option ? '#eef2ff' : 'white',
+                cursor: 'pointer',
+                textAlign: 'center',
+                transition: 'all 0.2s ease',
+                borderBottom: option !== options[options.length - 1] ? '1px solid #f3f4f6' : 'none'
+              }}
+              onMouseEnter={(e) => {
+                if (value !== option) {
+                  e.currentTarget.style.background = '#f9fafb'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (value !== option) {
+                  e.currentTarget.style.background = 'white'
+                }
+              }}
+            >
+              {option}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 const AdminPage = () => {
   const [users, setUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState(null)
@@ -368,10 +503,32 @@ const AdminPage = () => {
                           <span className="summary-value">{user.id_number || personalDetails.idNumber || '-'}</span>
                         </div>
                         <div className="summary-detail-item">
-                          <span className="summary-label">אימייל מאומת:</span>
-                          <span className="summary-value">
-                            {user.email_confirmed ? '✓ כן' : '✗ לא'}
-                          </span>
+                          <span className="summary-label">סטטוס:</span>
+                          <StatusDropdown
+                            value={user.application_status || 'בטיפול'}
+                            userId={user.id}
+                            onStatusChange={async (newStatus) => {
+                              try {
+                                const response = await fetch(buildApiUrl(`/api/admin/users/${user.id}/status`), {
+                                  method: 'PUT',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                  },
+                                  body: JSON.stringify({ status: newStatus })
+                                });
+                                
+                                if (!response.ok) {
+                                  throw new Error('Failed to update status');
+                                }
+                                
+                                // Refresh user data
+                                fetchUserDetails(user.id);
+                              } catch (error) {
+                                console.error('Error updating status:', error);
+                                alert('שגיאה בעדכון הסטטוס');
+                              }
+                            }}
+                          />
                         </div>
                         <div className="summary-detail-item">
                           <span className="summary-label">תאריך הרשמה:</span>
@@ -789,9 +946,19 @@ const AdminPage = () => {
                             )}
                             {selectedHouse.spec && selectedHouse.spec.length > 0 && (
                               <div className="summary-house-specs">
-                                {selectedHouse.spec.map((item, i) => (
-                                  <span key={i} className="summary-house-spec">{item}</span>
-                                ))}
+                                {selectedHouse.spec.map((item, i) => {
+                                  // Handle both old format (string) and new format (object with icon and text)
+                                  const specText = typeof item === 'string' ? item : item.text;
+                                  const specIcon = typeof item === 'object' && item.icon ? item.icon : null;
+                                  return (
+                                    <div key={i} className="summary-house-spec-item">
+                                      {specIcon && (
+                                        <img className="summary-house-spec-icon" src={specIcon} alt={specText} />
+                                      )}
+                                      <span className="summary-house-spec">{specText}</span>
+                                    </div>
+                                  );
+                                })}
                               </div>
                             )}
                             {selectedHouse.id && (
@@ -970,17 +1137,98 @@ const AdminPage = () => {
                           </div>
                         )}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ color: '#6b7280' }}>אימייל מאומת:</span>
-                            <span style={{
-                              padding: '4px 12px',
-                              borderRadius: '12px',
-                              fontSize: '0.875rem',
-                              fontWeight: '600',
-                              background: user.email_confirmed ? 'rgba(46, 213, 115, 0.2)' : 'rgba(231, 76, 60, 0.2)',
-                              color: user.email_confirmed ? '#2ed573' : '#e74c3c'
-                            }}>
-                              {user.email_confirmed ? '✓ מאומת' : '✗ לא מאומת'}
-                            </span>
+                          <span style={{ color: '#6b7280' }}>סטטוס:</span>
+                          <select
+                            value={user.application_status || 'בטיפול'}
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent opening user details
+                            }}
+                            onChange={async (e) => {
+                              e.stopPropagation(); // Prevent opening user details
+                              const newStatus = e.target.value;
+                              try {
+                                const response = await fetch(buildApiUrl(`/api/admin/users/${user.id}/status`), {
+                                  method: 'PUT',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                  },
+                                  body: JSON.stringify({ status: newStatus })
+                                });
+                                
+                                if (!response.ok) {
+                                  throw new Error('Failed to update status');
+                                }
+                                
+                                // Update local state in users array
+                                setUsers(users.map(u => 
+                                  u.id === user.id 
+                                    ? { ...u, application_status: newStatus }
+                                    : u
+                                ));
+                              } catch (error) {
+                                console.error('Error updating status:', error);
+                                alert('שגיאה בעדכון הסטטוס');
+                              }
+                            }}
+                             style={{
+                               padding: '6px 28px 6px 12px',
+                               borderRadius: '12px',
+                               fontSize: '0.875rem',
+                               fontWeight: '600',
+                               border: '1px solid #e5e7eb',
+                               background: 'white',
+                               color: '#2C3E50',
+                               cursor: 'pointer',
+                               textAlign: 'center',
+                               textAlignLast: 'center',
+                               appearance: 'none',
+                               WebkitAppearance: 'none',
+                               MozAppearance: 'none',
+                               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                               backgroundRepeat: 'no-repeat',
+                               backgroundPosition: 'right 10px center',
+                               backgroundSize: '12px',
+                               width: '115px',
+                               maxWidth: '115px',
+                               transition: 'all 0.2s ease',
+                               boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                             }}
+                            onMouseEnter={(e) => {
+                              e.target.style.borderColor = '#667eea';
+                              e.target.style.boxShadow = '0 2px 6px rgba(102, 126, 234, 0.2)';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.target.style.borderColor = '#e5e7eb';
+                              e.target.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+                            }}
+                          >
+                            <option 
+                              value="בטיפול" 
+                              style={{ 
+                                textAlign: 'center',
+                                padding: '8px 12px',
+                                backgroundColor: '#fff',
+                                color: '#2C3E50',
+                                fontSize: '0.875rem',
+                                fontWeight: '500'
+                              }}
+                            >
+                              בטיפול
+                            </option>
+                            <option 
+                              value="בקשה טופלה" 
+                              style={{ 
+                                textAlign: 'center',
+                                padding: '8px 12px',
+                                backgroundColor: '#fff',
+                                color: '#2C3E50',
+                                fontSize: '0.875rem',
+                                fontWeight: '500'
+                              }}
+                            >
+                              בקשה טופלה
+                            </option>
+                          </select>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                           <span style={{ color: '#6b7280' }}>בקשות שהוגשו:</span>

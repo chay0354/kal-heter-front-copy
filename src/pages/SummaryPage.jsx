@@ -357,9 +357,13 @@ const SummaryPage = () => {
                     <div className="summary-house-details">
                       <h4 className="summary-house-title">{selectedHouse.title || 'שם הדגם'}</h4>
                       <div className="summary-house-specs">
-                        {selectedHouse.spec && selectedHouse.spec.map((item, i) => (
-                          <span key={i} className="summary-house-spec">{item}</span>
-                        ))}
+                        {selectedHouse.spec && selectedHouse.spec.map((item, i) => {
+                          // Handle both old format (string) and new format (object with icon and text)
+                          const specText = typeof item === 'string' ? item : item.text;
+                          return (
+                            <span key={i} className="summary-house-spec">{specText}</span>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>

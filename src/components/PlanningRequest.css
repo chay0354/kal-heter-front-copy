@@ -176,7 +176,7 @@
   align-items: center;
   gap: 12px;
   position: relative;
-  z-index: 1;
+  z-index: 10;
   flex: 0 0 auto;
 }
 
@@ -189,7 +189,7 @@
   transition: all 0.3s ease;
   border: none;
   position: relative;
-  z-index: 3; /* keep dots/checks above the progress line */
+  z-index: 10; /* keep dots/checks above the progress line */
   flex-shrink: 0;
   top: 0.2px;
   opacity: 1;
@@ -203,6 +203,7 @@
   box-shadow: 0 0 0 1px #E55A2B, 0 0 0 5px #FFFAF5; /* halo to clear the line under the circle */
   top: 0.2px;
   opacity: 1;
+  z-index: 10;
 }
 
 .progress-circle.completed {
@@ -213,6 +214,7 @@
   box-shadow: 0 0 0 1px #E55A2B, 0 0 0 5px #FFFAF5; /* halo to clear the line under the circle */
   top: 0.2px;
   opacity: 1;
+  z-index: 10;
 }
 
 .progress-circle.completed::after {
@@ -225,7 +227,8 @@
   font-size: 12px;
   line-height: 1;
   font-weight: 700;
-  z-index: 4;
+  z-index: 15;
+  pointer-events: none;
 }
 
 .progress-label {
@@ -1187,17 +1190,49 @@
 }
 
 .dream-card-specs {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
   margin-top: 8px;
+  padding: 8px 0;
 }
 
-.dream-card-spec {
+.dream-card-spec-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.dream-card-spec-icon {
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  max-width: 14px;
+  max-height: 14px;
+  object-fit: contain;
+  display: block !important;
+  opacity: 1 !important;
+  flex-shrink: 0;
+  background: transparent;
+  visibility: visible !important;
+  filter: grayscale(100%) brightness(0.6);
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+.dream-card-spec-text {
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
   font-size: 13px;
-  color: #374151;
-  text-align: right;
+  color: #6b7280;
+  text-align: center;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {
@@ -1522,12 +1557,28 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  align-items: center;
 }
 
-.summary-house-spec {
+.summary-house-spec-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   padding: 6px 12px;
   background: #f0f0f0;
   border-radius: 6px;
+}
+
+.summary-house-spec-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  opacity: 0.8;
+  filter: grayscale(100%) brightness(0.6);
+}
+
+.summary-house-spec {
   font-size: 14px;
   color: #666;
 }

@@ -348,7 +348,12 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     tag: 'קל״צ',
     title: idx === 0 ? 'האחוזה של חיים' : 'שם הדגם',
     desc: 'Lorem ipsum mi diam morbi ut morbi arcu augue sed et cursus elit tristique vestibulum eget sap.',
-    spec: ['250 מ״ר', 'חניה 3', 'חדרי שינה 3', '2 מפלסים'],
+    spec: [
+      { icon: '/icons/Ruler Angular.png', text: '250 מ״ר' },
+      { icon: '/icons/car.png', text: '3 חניות' },
+      { icon: '/icons/Bed.png', text: '3 חדרי שינה' },
+      { icon: '/icons/Server.png', text: '2 מפלסים' }
+    ],
     image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80'
   }))
 
@@ -668,14 +673,6 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
             <div className="dream-section">
               <div className="dream-header">
                 <h2 className="dream-title">בחירת בית החלומות</h2>
-                <div className="dream-search">
-                  <input
-                    className="dream-search-input"
-                    placeholder="חיפוש לפי קטגוריה / שם דגם"
-                    type="text"
-                  />
-                  <img className="dream-search-icon-img" src="/icons/Buttons.png" alt="search" />
-                </div>
               </div>
               <div className="dream-cards-scroll">
                 <div className="dream-cards-grid">
@@ -705,7 +702,22 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                         </a>
                         <div className="dream-card-specs">
                           {card.spec.map((item, i) => (
-                            <span key={i} className="dream-card-spec">{item}</span>
+                            <div key={i} className="dream-card-spec-item">
+                              <img 
+                                className="dream-card-spec-icon" 
+                                src={item.icon} 
+                                alt={item.text}
+                                onLoad={() => console.log('Icon loaded successfully:', item.icon)}
+                                onError={(e) => {
+                                  console.error('Failed to load icon:', item.icon);
+                                  console.error('Trying alternative path...');
+                                  // Try without URL encoding
+                                  const altPath = item.icon.replace('%20', ' ');
+                                  e.target.src = altPath;
+                                }}
+                              />
+                              <span className="dream-card-spec-text">{item.text}</span>
+                            </div>
                           ))}
                         </div>
                       </div>

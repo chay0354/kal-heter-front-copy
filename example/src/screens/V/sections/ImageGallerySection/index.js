@@ -1,1 +1,0 @@
-export { ImageGallerySection } from "./ImageGallerySection";
