@@ -247,10 +247,8 @@ export const authenticatedFetch = async (url, options = {}) => {
       } catch (refreshError) {
         console.error('[Auth] Failed to refresh token:', refreshError);
         clearAuthTokens();
-        // Only redirect if not already on login/signup page
-        if (window.location && window.location.pathname !== '/login' && window.location.pathname !== '/signup') {
-          window.location.href = '/login';
-        }
+        // Don't redirect automatically - let the component handle it
+        // This allows the status section to still render with default status
         throw new Error('Session expired. Please sign in again.');
       }
     }

@@ -77,9 +77,14 @@ const SummaryPage = () => {
               'Pragma': 'no-cache',
             },
             cache: 'no-store'
+          }).catch(async (fetchError) => {
+            // If authenticatedFetch throws (e.g., session expired), still try to show status
+            console.error('[SummaryPage] authenticatedFetch error:', fetchError)
+            // Return a mock response so we can still show the status section
+            return { ok: false, status: 401, text: async () => fetchError.message }
           })
 
-          if (response.ok) {
+          if (response && response.ok) {
             const userData = await response.json()
             console.log('[SummaryPage] User data received:', userData)
             console.log('[SummaryPage] application_status from backend:', userData.application_status)
@@ -88,12 +93,14 @@ const SummaryPage = () => {
             console.log('[SummaryPage] Setting application status to:', status)
             setApplicationStatus(status)
           } else {
-            const errorText = await response.text()
-            console.error('[SummaryPage] Failed to fetch user data, status:', response.status, 'error:', errorText)
+            const errorText = response ? await response.text().catch(() => 'Unknown error') : 'No response'
+            console.error('[SummaryPage] Failed to fetch user data, status:', response?.status || 'unknown', 'error:', errorText)
+            // Still show status as 'בטיפול' even if fetch fails
             setApplicationStatus('בטיפול')
           }
         } catch (err) {
           console.error('[SummaryPage] Error fetching application status:', err)
+          // Always set a status so the section is visible
           setApplicationStatus('בטיפול')
         }
       } catch (error) {
@@ -470,13 +477,15 @@ const SummaryPage = () => {
                 )}
               </div>
 
-              {/* Application Status Section */}
+              {/* Application Status Section - Always visible */}
+              {console.log('[SummaryPage Render] applicationStatus:', applicationStatus, 'loadingStatus:', loadingStatus)}
               <div className="summary-section" style={{
                 background: applicationStatus === 'בקשה טופלה' ? '#f0fdf4' : '#fef3c7',
                 border: `2px solid ${applicationStatus === 'בקשה טופלה' ? '#10b981' : '#f59e0b'}`,
                 borderRadius: '12px',
                 padding: '24px',
-                marginTop: '20px'
+                marginTop: '20px',
+                display: 'block' // Ensure it's always visible
               }}>
                 <div className="summary-section-header">
                   <h3 className="summary-section-title" style={{
