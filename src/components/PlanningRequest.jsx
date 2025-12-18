@@ -452,7 +452,7 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
 
               <div className="property-section">
                 <h2 className="property-title">פרטי הנכס</h2>
-                <div className="property-row">
+                <div className="property-row property-row-primary">
                   <div className="property-field">
                     <label className="property-label">גודל הנכס במ"ר</label>
                     <input 
@@ -822,9 +822,6 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
 
               {/* Additional Rights Holders Section */}
               <div className="additional-rights-section">
-                <p className="info-text">
-                  אם קיים בעל זכויות נוסף בנכס, חובה לצרף את פרטיו ואת מסמכי הזיהוי הרלוונטיים
-                </p>
                 <button 
                   type="button"
                   className="add-rights-holder-button"

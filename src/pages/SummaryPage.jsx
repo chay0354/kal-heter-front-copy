@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../components/PlanningRequest.css'
 import { getFormData, clearFormData } from '../services/formData'
-import { submitForm, saveFormDraft } from '../services/formSubmission'
+import { submitForm } from '../services/formSubmission'
 import { authenticatedFetch, getAccessToken } from '../services/auth'
 
 // Helper function to build API URLs
@@ -24,38 +24,20 @@ const buildApiUrl = (path) => {
 const SummaryPage = () => {
   const navigate = useNavigate()
   const [formData, setFormData] = useState({})
-  const [confirmed, setConfirmed] = useState(false)
-  const [draftSaved, setDraftSaved] = useState(false)
   const [applicationStatus, setApplicationStatus] = useState('בטיפול')
   const [loadingStatus, setLoadingStatus] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
+  const [hasSubmitted, setHasSubmitted] = useState(false)
 
   useEffect(() => {
     const savedData = getFormData()
     setFormData(savedData)
-    
-    // Automatically save draft to database when summary page loads
-    if (savedData && Object.keys(savedData).length > 0) {
-      // Check if we have meaningful data to save
-      const hasData = (
-        (savedData.personalDetails && Object.keys(savedData.personalDetails).length > 0) ||
-        (savedData.propertyDetails && Object.keys(savedData.propertyDetails).length > 0) ||
-        (savedData.measurementDetails && Object.keys(savedData.measurementDetails).length > 0) ||
-        (savedData.selectedHouse && Object.keys(savedData.selectedHouse).length > 0)
-      )
-      
-      if (hasData && !draftSaved) {
-        saveFormDraft(savedData).then(() => {
-          setDraftSaved(true)
-          console.log('Form draft saved to database')
-        }).catch(err => {
-          console.error('Failed to save draft:', err)
-        })
-      }
-    }
-  }, [draftSaved])
+  }, [])
 
   // Fetch application status
   useEffect(() => {
+    if (!hasSubmitted) return
+
     const fetchApplicationStatus = async () => {
       try {
         const token = getAccessToken()
@@ -113,11 +95,11 @@ const SummaryPage = () => {
 
     fetchApplicationStatus()
     
-    // Refresh status every 3 seconds to catch admin updates (more frequent)
+    // Refresh status periodically to catch admin updates
     const intervalId = setInterval(() => {
       console.log('[SummaryPage] Refreshing status...')
       fetchApplicationStatus()
-    }, 3000)
+    }, 10000)
     
     // Also refresh when page becomes visible
     const handleVisibilityChange = () => {
@@ -140,7 +122,7 @@ const SummaryPage = () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('focus', handleFocus)
     }
-  }, [])
+  }, [hasSubmitted])
 
   const steps = [
     { number: 1, label: 'פרטים אישיים' },
@@ -156,18 +138,10 @@ const SummaryPage = () => {
   const selectedHouse = formData.selectedHouse || {}
 
   const handleSubmit = async () => {
-    if (!confirmed) {
-      alert('אנא אשר/י שכל הפרטים נכונים')
-      return
-    }
+    if (submitting || hasSubmitted) return
 
     try {
-      // Show loading state
-      const submitButton = document.querySelector('.submit-button-summary')
-      if (submitButton) {
-        submitButton.disabled = true
-        submitButton.textContent = 'שולח...'
-      }
+      setSubmitting(true)
 
       // Submit form to backend
       await submitForm(formData)
@@ -175,19 +149,13 @@ const SummaryPage = () => {
       // Clear form data from localStorage after successful submission
       clearFormData()
       
-      alert('הבקשה נשלחה בהצלחה!')
-      // Navigate to success page or dashboard
-      navigate('/dashboard')
+      setHasSubmitted(true)
+      setLoadingStatus(true)
     } catch (error) {
       console.error('Error submitting form:', error)
-      alert(`שגיאה בשליחת הבקשה: ${error.message}`)
-      
-      // Re-enable button
-      const submitButton = document.querySelector('.submit-button-summary')
-      if (submitButton) {
-        submitButton.disabled = false
-        submitButton.textContent = 'שליחת הבקשה'
-      }
+      alert(`שגיאה בשליחת הבקשה: ${error?.message || 'שגיאה בשליחת הבקשה'}`)
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -211,16 +179,6 @@ const SummaryPage = () => {
         <div className="personal-details-content">
           {/* Header with Logo */}
           <div className="personal-details-header">
-            <button 
-              className="back-link"
-              onClick={() => navigate(-1)}
-              type="button"
-            >
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              חזרה למסך הקודם
-            </button>
             <div className="logo-section">
               <div className="nav-logo-link">
                 <span className="nav-logo-text">קל-היתר</span>
@@ -477,82 +435,82 @@ const SummaryPage = () => {
                 )}
               </div>
 
-              {/* Application Status Section - Always visible */}
-              {console.log('[SummaryPage Render] applicationStatus:', applicationStatus, 'loadingStatus:', loadingStatus)}
-              <div className="summary-section" style={{
-                background: applicationStatus === 'בקשה טופלה' ? '#f0fdf4' : '#fef3c7',
-                border: `2px solid ${applicationStatus === 'בקשה טופלה' ? '#10b981' : '#f59e0b'}`,
-                borderRadius: '12px',
-                padding: '24px',
-                marginTop: '20px',
-                display: 'block' // Ensure it's always visible
-              }}>
-                <div className="summary-section-header">
-                  <h3 className="summary-section-title" style={{
-                    color: applicationStatus === 'בקשה טופלה' ? '#065f46' : '#92400e',
-                    marginBottom: '16px'
-                  }}>
-                    סטטוס הבקשה
-                  </h3>
-                </div>
-                {loadingStatus ? (
-                  <div style={{ textAlign: 'center', padding: '20px' }}>
-                    <p style={{ color: '#6b7280' }}>טוען סטטוס...</p>
+              {/* Application Status Section - visible only after submit */}
+              {hasSubmitted && (
+                <div className="summary-section" style={{
+                  background: applicationStatus === 'בקשה טופלה' ? '#f0fdf4' : '#fef3c7',
+                  border: `2px solid ${applicationStatus === 'בקשה טופלה' ? '#10b981' : '#f59e0b'}`,
+                  borderRadius: '12px',
+                  padding: '24px',
+                  marginTop: '20px'
+                }}>
+                  <div className="summary-section-header">
+                    <h3 className="summary-section-title" style={{
+                      color: applicationStatus === 'בקשה טופלה' ? '#065f46' : '#92400e',
+                      marginBottom: '16px'
+                    }}>
+                      סטטוס הבקשה
+                    </h3>
                   </div>
-                ) : (
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '16px',
-                    padding: '16px',
-                    background: 'white',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                  }}>
+                  {loadingStatus ? (
+                    <div style={{ textAlign: 'center', padding: '20px' }}>
+                      <p style={{ color: '#6b7280' }}>טוען סטטוס...</p>
+                    </div>
+                  ) : (
                     <div style={{
-                      width: '48px',
-                      height: '48px',
-                      borderRadius: '50%',
-                      background: applicationStatus === 'בקשה טופלה' 
-                        ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' 
-                        : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0
+                      gap: '16px',
+                      padding: '16px',
+                      background: 'white',
+                      borderRadius: '8px',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                     }}>
-                      {applicationStatus === 'בקשה טופלה' ? (
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      ) : (
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/>
-                          <path d="M12 6V12L16 14" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                        </svg>
-                      )}
-                    </div>
-                    <div style={{ flex: 1 }}>
                       <div style={{
-                        fontSize: '1.1rem',
-                        fontWeight: '600',
-                        color: '#2C3E50',
-                        marginBottom: '4px'
+                        width: '48px',
+                        height: '48px',
+                        borderRadius: '50%',
+                        background: applicationStatus === 'בקשה טופלה'
+                          ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+                          : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
                       }}>
-                        {applicationStatus}
+                        {applicationStatus === 'בקשה טופלה' ? (
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 6L9 17L4 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        ) : (
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2"/>
+                            <path d="M12 6V12L16 14" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                          </svg>
+                        )}
                       </div>
-                      <div style={{
-                        fontSize: '0.875rem',
-                        color: '#6b7280'
-                      }}>
-                        {applicationStatus === 'בקשה טופלה' 
-                          ? 'הבקשה שלך טופלה בהצלחה' 
-                          : 'הבקשה שלך נמצאת כעת בטיפול'}
+                      <div style={{ flex: 1 }}>
+                        <div style={{
+                          fontSize: '1.1rem',
+                          fontWeight: '600',
+                          color: '#2C3E50',
+                          marginBottom: '4px'
+                        }}>
+                          {applicationStatus}
+                        </div>
+                        <div style={{
+                          fontSize: '0.875rem',
+                          color: '#6b7280'
+                        }}>
+                          {applicationStatus === 'בקשה טופלה'
+                            ? 'הבקשה שלך טופלה בהצלחה'
+                            : 'הבקשה שלך נמצאת כעת בטיפול'}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
 
               {/* Action Buttons */}
               <div className="form-actions">
@@ -562,6 +520,14 @@ const SummaryPage = () => {
                   onClick={() => navigate(-1)}
                 >
                   חזרה למסך קודם
+                </button>
+                <button
+                  type="button"
+                  className="continue-button"
+                  onClick={handleSubmit}
+                  disabled={submitting || hasSubmitted}
+                >
+                  {hasSubmitted ? 'נשלח' : submitting ? 'שולח...' : 'שליחת הבקשה'}
                 </button>
               </div>
             </div>

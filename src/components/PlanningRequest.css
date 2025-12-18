@@ -704,6 +704,17 @@
   gap: 16px;
 }
 
+.property-row-primary {
+  /* Ensure visual order matches DOM order:
+     גודל הנכס במ"ר > מגרש > חלקה > גוש */
+  direction: ltr;
+}
+
+.property-row-primary .property-field {
+  /* Keep Hebrew/RTL behavior inside each field */
+  direction: rtl;
+}
+
 .property-row-secondary {
   grid-template-columns: repeat(2, 1fr);
   align-items: start; /* align items to top so date row lines up with upload */
