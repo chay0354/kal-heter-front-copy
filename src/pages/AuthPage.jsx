@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { signIn, signUp } from '../services/auth'
 import { getFormData } from '../services/formData'
+import { checkSubmissionStatus } from '../services/formSubmission'
 import './AuthPage.css'
 
 function AuthPage() {
@@ -37,24 +38,47 @@ function AuthPage() {
       if (result.success) {
         setSuccessMessage('התחברת בהצלחה!')
         
-        // Check if user has existing form data
-        const existingFormData = getFormData()
-        
-        // Check if form data exists and has meaningful content
-        const hasFormData = existingFormData && (
-          (existingFormData.personalDetails && Object.keys(existingFormData.personalDetails).length > 0) ||
-          (existingFormData.propertyDetails && Object.keys(existingFormData.propertyDetails).length > 0) ||
-          (existingFormData.measurementDetails && Object.keys(existingFormData.measurementDetails).length > 0) ||
-          (existingFormData.selectedHouse && Object.keys(existingFormData.selectedHouse).length > 0)
-        )
-        
-        setTimeout(() => {
-          // If user has form data, redirect to summary page
-          // Otherwise, redirect to dashboard
-          if (hasFormData) {
-            navigate('/summary')
-          } else {
-            navigate('/dashboard')
+        // Check if user has already submitted a form
+        setTimeout(async () => {
+          try {
+            const submissionStatus = await checkSubmissionStatus()
+            if (submissionStatus.has_submitted) {
+              // User has already submitted, redirect to summary page
+              navigate('/summary')
+            } else {
+              // Check if user has existing form data in localStorage
+              const existingFormData = getFormData()
+              const hasFormData = existingFormData && (
+                (existingFormData.personalDetails && Object.keys(existingFormData.personalDetails).length > 0) ||
+                (existingFormData.propertyDetails && Object.keys(existingFormData.propertyDetails).length > 0) ||
+                (existingFormData.measurementDetails && Object.keys(existingFormData.measurementDetails).length > 0) ||
+                (existingFormData.selectedHouse && Object.keys(existingFormData.selectedHouse).length > 0)
+              )
+              
+              // If user has form data, redirect to summary page
+              // Otherwise, redirect to dashboard
+              if (hasFormData) {
+                navigate('/summary')
+              } else {
+                navigate('/dashboard')
+              }
+            }
+          } catch (statusError) {
+            console.error('Error checking submission status:', statusError)
+            // On error, check localStorage as fallback
+            const existingFormData = getFormData()
+            const hasFormData = existingFormData && (
+              (existingFormData.personalDetails && Object.keys(existingFormData.personalDetails).length > 0) ||
+              (existingFormData.propertyDetails && Object.keys(existingFormData.propertyDetails).length > 0) ||
+              (existingFormData.measurementDetails && Object.keys(existingFormData.measurementDetails).length > 0) ||
+              (existingFormData.selectedHouse && Object.keys(existingFormData.selectedHouse).length > 0)
+            )
+            
+            if (hasFormData) {
+              navigate('/summary')
+            } else {
+              navigate('/dashboard')
+            }
           }
         }, 1000)
       }

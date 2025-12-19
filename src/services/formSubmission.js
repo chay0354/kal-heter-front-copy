@@ -379,3 +379,33 @@ export const submitForm = async (formData) => {
   }
 }
 
+// Check if user has already submitted a form
+export const checkSubmissionStatus = async () => {
+  try {
+    const token = localStorage.getItem('access_token')
+    if (!token) {
+      return { has_submitted: false }
+    }
+
+    const response = await authenticatedFetch(buildApiUrl('/api/form/submission-status'), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      // If there's an error, assume no submission to allow user to proceed
+      console.warn('Failed to check submission status:', response.status)
+      return { has_submitted: false }
+    }
+
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error('Error checking submission status:', error)
+    // On error, assume no submission to allow user to proceed
+    return { has_submitted: false }
+  }
+}
+
