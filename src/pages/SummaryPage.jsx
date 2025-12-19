@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../components/PlanningRequest.css'
 import { getFormData, clearFormData } from '../services/formData'
-import { submitForm } from '../services/formSubmission'
+import { submitForm, checkSubmissionStatus } from '../services/formSubmission'
 import { authenticatedFetch, getAccessToken } from '../services/auth'
 
 // Helper function to build API URLs
@@ -32,6 +32,22 @@ const SummaryPage = () => {
   useEffect(() => {
     const savedData = getFormData()
     setFormData(savedData)
+    
+    // Check if user has already submitted on page load
+    const checkIfSubmitted = async () => {
+      try {
+        const status = await checkSubmissionStatus()
+        if (status.has_submitted) {
+          setHasSubmitted(true)
+          setLoadingStatus(true)
+        }
+      } catch (error) {
+        console.error('Error checking submission status:', error)
+        // Don't set hasSubmitted on error - allow user to try
+      }
+    }
+    
+    checkIfSubmitted()
   }, [])
 
   // Fetch application status
@@ -521,14 +537,33 @@ const SummaryPage = () => {
                 >
                   חזרה למסך קודם
                 </button>
-                <button
-                  type="button"
-                  className="continue-button"
-                  onClick={handleSubmit}
-                  disabled={submitting || hasSubmitted}
-                >
-                  {hasSubmitted ? 'נשלח' : submitting ? 'שולח...' : 'שליחת הבקשה'}
-                </button>
+                {!hasSubmitted && (
+                  <button
+                    type="button"
+                    className="continue-button"
+                    onClick={handleSubmit}
+                    disabled={submitting || hasSubmitted}
+                  >
+                    {submitting ? 'שולח...' : 'שליחת הבקשה'}
+                  </button>
+                )}
+                {hasSubmitted && (
+                  <div style={{
+                    padding: '12px 24px',
+                    background: '#10b981',
+                    color: 'white',
+                    borderRadius: '8px',
+                    fontWeight: '600',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    הבקשה נשלחה
+                  </div>
+                )}
               </div>
             </div>
           </div>
