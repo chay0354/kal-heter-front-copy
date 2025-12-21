@@ -14,9 +14,11 @@ function AuthPage() {
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [showPasswordSignIn, setShowPasswordSignIn] = useState(false)
   const [termsAccepted, setTermsAccepted] = useState(false)
   const [error, setError] = useState('')
@@ -101,6 +103,12 @@ function AuthPage() {
       return
     }
 
+    if (password !== confirmPassword) {
+      setError('הסיסמאות אינן תואמות. אנא ודא שהסיסמאות זהות.')
+      setLoading(false)
+      return
+    }
+
     try {
       const fullName = `${firstName} ${lastName}`.trim()
       const result = await signUp(email, password, phone || null, fullName || null)
@@ -123,6 +131,8 @@ function AuthPage() {
     setIsSignUp(true)
     setError('')
     setSuccessMessage('')
+    setPassword('')
+    setConfirmPassword('')
     navigate('/auth?mode=signup')
   }
 
@@ -130,6 +140,8 @@ function AuthPage() {
     setIsSignUp(false)
     setError('')
     setSuccessMessage('')
+    setPassword('')
+    setConfirmPassword('')
     navigate('/auth?mode=signin')
   }
 
@@ -282,6 +294,49 @@ function AuthPage() {
                     </button>
                   </div>
                   <p className="password-requirements">הסיסמה חייבת להכיל לפחות 8 תווים, לפחות תו אחד מיוחד- !@#$%&*</p>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="confirm-password-signup">אישור סיסמה</label>
+                  <div className="password-input-wrapper">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      id="confirm-password-signup"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="הקלד שוב את הסיסמה"
+                      required
+                      style={{ color: '#2C3E50', backgroundColor: 'white' }}
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      aria-label={showConfirmPassword ? 'הסתר סיסמה' : 'הצג סיסמה'}
+                    >
+                      {showConfirmPassword ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                          <path d="M1 1L23 23" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        </svg>
+                      ) : (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                  {confirmPassword && password !== confirmPassword && (
+                    <p className="password-error" style={{ color: '#c33', fontSize: '13px', marginTop: '8px', direction: 'rtl', textAlign: 'right' }}>
+                      הסיסמאות אינן תואמות
+                    </p>
+                  )}
+                  {confirmPassword && password === confirmPassword && password.length > 0 && (
+                    <p className="password-success" style={{ color: '#3c3', fontSize: '13px', marginTop: '8px', direction: 'rtl', textAlign: 'right' }}>
+                      הסיסמאות תואמות
+                    </p>
+                  )}
                 </div>
                 <div className="terms-checkbox-group">
                   <label htmlFor="terms-checkbox" className="terms-label">
