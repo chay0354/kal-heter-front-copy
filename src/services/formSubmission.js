@@ -91,47 +91,56 @@ export const uploadFileImmediately = async (file, fileType = 'id_photo') => {
     }
 
     const data = await response.json()
+    console.log(`[uploadFileImmediately] Response data:`, data)
     
-    // Wait a moment for the database to sync
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // Fetch the submission to get the file URL
-    const submissionId = data.id
-    try {
-      const submissionResponse = await fetch(buildApiUrl(`/api/admin/users/${data.user_id}`), {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+    // The save-draft endpoint returns file_urls directly in the response
+    // No need to fetch from database since drafts aren't saved to DB
+    if (data && data.file_urls && typeof data.file_urls === 'object') {
+      const fileUrls = data.file_urls
+      console.log(`[uploadFileImmediately] File URLs from response:`, fileUrls)
+      console.log(`[uploadFileImmediately] Looking for fileType: ${fileType}`)
+      console.log(`[uploadFileImmediately] Available keys:`, Object.keys(fileUrls))
       
-      if (submissionResponse.ok) {
-        const userData = await submissionResponse.json()
-        const formDraft = userData.form_draft
-        
-        if (formDraft && formDraft.file_urls) {
-          const fileUrls = formDraft.file_urls
-          // Try to find the file URL by type
-          const fileUrl = fileUrls[fileType] || 
-                         fileUrls.id_photo || 
-                         fileUrls.pdf_file || 
-                         fileUrls.dwf_file || 
-                         fileUrls.dwg_file || 
-                         fileUrls.tabu_extract ||
-                         (fileUrls.property_photos && fileUrls.property_photos[0]) ||
-                         (fileUrls.additional_rights_holders_photos && fileUrls.additional_rights_holders_photos[0])
-          
-          if (fileUrl) {
-            console.log(`[uploadFileImmediately] ✓ File uploaded successfully: ${fileUrl}`)
-            return fileUrl
-          }
+      // Try to find the file URL by type - check exact match first
+      let fileUrl = fileUrls[fileType]
+      
+      // If not found, try common variations
+      if (!fileUrl) {
+        // For property_photos, it's an array
+        if (fileType === 'property_photos' && Array.isArray(fileUrls.property_photos) && fileUrls.property_photos.length > 0) {
+          fileUrl = fileUrls.property_photos[0]
+        }
+        // For additional_rights_holders_photos, it's an array
+        else if (fileType === 'additional_rights_holders_photos' && Array.isArray(fileUrls.additional_rights_holders_photos) && fileUrls.additional_rights_holders_photos.length > 0) {
+          fileUrl = fileUrls.additional_rights_holders_photos[0]
+        }
+        // Try other common file types as fallback
+        else {
+          fileUrl = fileUrls.id_photo || 
+                   fileUrls.pdf_file || 
+                   fileUrls.dwf_file || 
+                   fileUrls.dwg_file || 
+                   fileUrls.tabu_extract ||
+                   (Array.isArray(fileUrls.property_photos) && fileUrls.property_photos[0]) ||
+                   (Array.isArray(fileUrls.additional_rights_holders_photos) && fileUrls.additional_rights_holders_photos[0])
         }
       }
-    } catch (fetchError) {
-      console.warn(`[uploadFileImmediately] Could not fetch submission:`, fetchError)
+      
+      if (fileUrl && typeof fileUrl === 'string' && fileUrl.trim()) {
+        console.log(`[uploadFileImmediately] ✓ File uploaded successfully: ${fileUrl}`)
+        return fileUrl
+      } else {
+        console.warn(`[uploadFileImmediately] File URL not found or invalid for type: ${fileType}`)
+        console.warn(`[uploadFileImmediately] Available file URLs:`, Object.keys(fileUrls))
+        console.warn(`[uploadFileImmediately] fileUrl value:`, fileUrl)
+      }
+    } else {
+      console.warn(`[uploadFileImmediately] No file_urls in response or invalid format`)
+      console.warn(`[uploadFileImmediately] Response data:`, JSON.stringify(data, null, 2))
     }
     
     // Fallback: return null but log success
-    console.warn(`[uploadFileImmediately] Could not get file URL from submission, but upload succeeded. Submission ID: ${submissionId}`)
+    console.warn(`[uploadFileImmediately] Could not get file URL from response, but upload succeeded`)
     return null
     
   } catch (error) {
