@@ -509,23 +509,26 @@ const AdminPage = () => {
                             userId={user.id}
                             onStatusChange={async (newStatus) => {
                               try {
+                                const token = localStorage.getItem('access_token');
                                 const response = await fetch(buildApiUrl(`/api/admin/users/${user.id}/status`), {
                                   method: 'PUT',
                                   headers: {
                                     'Content-Type': 'application/json',
+                                    'Authorization': token ? `Bearer ${token}` : '',
                                   },
                                   body: JSON.stringify({ status: newStatus })
                                 });
                                 
                                 if (!response.ok) {
-                                  throw new Error('Failed to update status');
+                                  const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+                                  throw new Error(errorData.detail || 'Failed to update status');
                                 }
                                 
                                 // Refresh user data
                                 fetchUserDetails(user.id);
                               } catch (error) {
                                 console.error('Error updating status:', error);
-                                alert('שגיאה בעדכון הסטטוס');
+                                alert(`שגיאה בעדכון הסטטוס: ${error.message}`);
                               }
                             }}
                           />
@@ -1156,10 +1159,12 @@ const AdminPage = () => {
                               ));
                               
                               try {
+                                const token = localStorage.getItem('access_token');
                                 const response = await fetch(buildApiUrl(`/api/admin/users/${user.id}/status`), {
                                   method: 'PUT',
                                   headers: {
                                     'Content-Type': 'application/json',
+                                    'Authorization': token ? `Bearer ${token}` : '',
                                   },
                                   body: JSON.stringify({ status: newStatus })
                                 });
@@ -1171,7 +1176,8 @@ const AdminPage = () => {
                                       ? { ...u, application_status: oldStatus }
                                       : u
                                   ));
-                                  throw new Error('Failed to update status');
+                                  const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+                                  throw new Error(errorData.detail || 'Failed to update status');
                                 }
                                 
                                 const result = await response.json();
@@ -1183,7 +1189,7 @@ const AdminPage = () => {
                                 }, 500);
                               } catch (error) {
                                 console.error('Error updating status:', error);
-                                alert('שגיאה בעדכון הסטטוס');
+                                alert(`שגיאה בעדכון הסטטוס: ${error.message}`);
                               }
                             }}
                              style={{
