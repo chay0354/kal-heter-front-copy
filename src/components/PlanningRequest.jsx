@@ -454,23 +454,13 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                 <h2 className="property-title">פרטי הנכס</h2>
                 <div className="property-row property-row-primary">
                   <div className="property-field">
-                    <label className="property-label">גודל הנכס במ"ר</label>
+                    <label className="property-label">גוש</label>
                     <input 
                       className="property-input" 
                       placeholder="הקלד" 
                       type="text"
-                      value={propertyData.propertySize}
-                      onChange={(e) => handlePropertyChange('propertySize', e.target.value)}
-                    />
-                  </div>
-                  <div className="property-field">
-                    <label className="property-label">מגרש</label>
-                    <input 
-                      className="property-input" 
-                      placeholder="הקלד" 
-                      type="text"
-                      value={propertyData.lot}
-                      onChange={(e) => handlePropertyChange('lot', e.target.value)}
+                      value={propertyData.gush}
+                      onChange={(e) => handlePropertyChange('gush', e.target.value)}
                     />
                   </div>
                   <div className="property-field">
@@ -484,13 +474,23 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                     />
                   </div>
                   <div className="property-field">
-                    <label className="property-label">גוש</label>
+                    <label className="property-label">מגרש</label>
                     <input 
                       className="property-input" 
                       placeholder="הקלד" 
                       type="text"
-                      value={propertyData.gush}
-                      onChange={(e) => handlePropertyChange('gush', e.target.value)}
+                      value={propertyData.lot}
+                      onChange={(e) => handlePropertyChange('lot', e.target.value)}
+                    />
+                  </div>
+                  <div className="property-field">
+                    <label className="property-label">גודל הנכס במ"ר</label>
+                    <input 
+                      className="property-input" 
+                      placeholder="הקלד" 
+                      type="text"
+                      value={propertyData.propertySize}
+                      onChange={(e) => handlePropertyChange('propertySize', e.target.value)}
                     />
                   </div>
                 </div>

@@ -28,6 +28,8 @@ const SummaryPage = () => {
   const [loadingStatus, setLoadingStatus] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [detailsConfirmed, setDetailsConfirmed] = useState(false)
+  const [showConfirmationError, setShowConfirmationError] = useState(false)
 
   useEffect(() => {
     const savedData = getFormData()
@@ -153,11 +155,27 @@ const SummaryPage = () => {
   const measurementDetails = formData.measurementDetails || {}
   const selectedHouse = formData.selectedHouse || {}
 
-  const handleSubmit = async () => {
-    if (submitting || hasSubmitted) return
+  const handleSubmit = async (e) => {
+    // Prevent any form submission if button is disabled
+    if (submitting || hasSubmitted || !detailsConfirmed) {
+      if (!detailsConfirmed) {
+        setShowConfirmationError(true)
+        // Hide error after 3 seconds
+        setTimeout(() => setShowConfirmationError(false), 3000)
+      }
+      return
+    }
+    
+    // Double check - ensure details are confirmed
+    if (!detailsConfirmed) {
+      setShowConfirmationError(true)
+      setTimeout(() => setShowConfirmationError(false), 3000)
+      return
+    }
 
     try {
       setSubmitting(true)
+      setShowConfirmationError(false)
 
       // Submit form to backend
       await submitForm(formData)
@@ -172,6 +190,15 @@ const SummaryPage = () => {
       alert(`שגיאה בשליחת הבקשה: ${error?.message || 'שגיאה בשליחת הבקשה'}`)
     } finally {
       setSubmitting(false)
+    }
+  }
+  
+  const handleCheckboxChange = (e) => {
+    const isChecked = e.target.checked
+    setDetailsConfirmed(isChecked)
+    // Clear error when checkbox is checked
+    if (isChecked) {
+      setShowConfirmationError(false)
     }
   }
 
@@ -232,17 +259,19 @@ const SummaryPage = () => {
               <div className="summary-section">
                 <div className="summary-section-header">
                   <h3 className="summary-section-title">פרטים אישיים בעל הנכס</h3>
-                  <button 
-                    className="edit-link"
-                    onClick={() => navigate('/property-details')}
-                    type="button"
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M18.5 2.5C18.8978 2.10218 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10218 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10218 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    עריכת פרטים
-                  </button>
+                  {!hasSubmitted && (
+                    <button 
+                      className="edit-link"
+                      onClick={() => navigate('/property-details')}
+                      type="button"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M18.5 2.5C18.8978 2.10218 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10218 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10218 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      עריכת פרטים
+                    </button>
+                  )}
                 </div>
                 <div className="summary-details-grid">
                   <div className="summary-detail-item">
@@ -296,17 +325,19 @@ const SummaryPage = () => {
               <div className="summary-section">
                 <div className="summary-section-header">
                   <h3 className="summary-section-title">פרטי הנכס</h3>
-                  <button 
-                    className="edit-link"
-                    onClick={() => navigate('/property-details')}
-                    type="button"
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M18.5 2.5C18.8978 2.10218 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10218 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10218 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    עריכת פרטים
-                  </button>
+                  {!hasSubmitted && (
+                    <button 
+                      className="edit-link"
+                      onClick={() => navigate('/property-details')}
+                      type="button"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M18.5 2.5C18.8978 2.10218 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10218 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10218 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      עריכת פרטים
+                    </button>
+                  )}
                 </div>
                 <div className="summary-details-grid">
                   <div className="summary-detail-item">
@@ -358,17 +389,19 @@ const SummaryPage = () => {
               <div className="summary-section">
                 <div className="summary-section-header">
                   <h3 className="summary-section-title">מפת מדידה</h3>
-                  <button 
-                    className="edit-link"
-                    onClick={() => navigate('/property-details-final')}
-                    type="button"
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M18.5 2.5C18.8978 2.10218 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10218 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10218 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    עריכת פרטים
-                  </button>
+                  {!hasSubmitted && (
+                    <button 
+                      className="edit-link"
+                      onClick={() => navigate('/property-details-final')}
+                      type="button"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M18.5 2.5C18.8978 2.10218 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10218 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10218 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      עריכת פרטים
+                    </button>
+                  )}
                 </div>
                 <div className="summary-details-grid">
                   <div className="summary-detail-item">
@@ -416,17 +449,19 @@ const SummaryPage = () => {
               <div className="summary-section">
                 <div className="summary-section-header">
                   <h3 className="summary-section-title">בית חלומות</h3>
-                  <button 
-                    className="edit-link"
-                    onClick={() => navigate('/home-catalog')}
-                    type="button"
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M18.5 2.5C18.8978 2.10218 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10218 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10218 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    עריכת פרטים
-                  </button>
+                  {!hasSubmitted && (
+                    <button 
+                      className="edit-link"
+                      onClick={() => navigate('/home-catalog')}
+                      type="button"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M18.5 2.5C18.8978 2.10218 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10218 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10218 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      עריכת פרטים
+                    </button>
+                  )}
                 </div>
                 {selectedHouse && selectedHouse.id && (
                   <div className="summary-house-card">
@@ -528,21 +563,153 @@ const SummaryPage = () => {
                 </div>
               )}
 
+              {/* Confirmation Checkbox */}
+              {!hasSubmitted && (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                  padding: '20px',
+                  background: showConfirmationError ? '#fef2f2' : '#f9fafb',
+                  border: showConfirmationError ? '2px solid #ef4444' : 'none',
+                  borderRadius: '12px',
+                  marginBottom: '20px',
+                  direction: 'rtl'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    position: 'relative'
+                  }}>
+                    <div style={{ position: 'relative', display: 'inline-block', width: '22px', height: '22px', flexShrink: 0 }}>
+                      <input
+                        type="checkbox"
+                        id="details-confirmation"
+                        checked={detailsConfirmed}
+                        onChange={handleCheckboxChange}
+                        style={{
+                          width: '22px',
+                          height: '22px',
+                          minWidth: '22px',
+                          minHeight: '22px',
+                          maxWidth: '22px',
+                          maxHeight: '22px',
+                          cursor: 'pointer',
+                          backgroundColor: detailsConfirmed ? '#0f4eb3' : 'white',
+                          border: detailsConfirmed ? '2px solid #0f4eb3' : '2px solid #d1d5db',
+                          borderRadius: '4px',
+                          appearance: 'none',
+                          WebkitAppearance: 'none',
+                          MozAppearance: 'none',
+                          transition: 'all 0.2s ease',
+                          margin: 0,
+                          padding: 0,
+                          position: 'relative',
+                          zIndex: 1,
+                          boxSizing: 'border-box',
+                          display: 'block'
+                        }}
+                      />
+                      {detailsConfirmed && (
+                        <svg
+                          style={{
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: '14px',
+                            height: '14px',
+                            pointerEvents: 'none',
+                            zIndex: 10,
+                            display: 'block'
+                          }}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M20 6L9 17L4 12"
+                            stroke="#ffffff"
+                            strokeWidth="3.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    <label
+                      htmlFor="details-confirmation"
+                      style={{
+                        fontFamily: 'Tel_Aviv-ModernistRegular, Tel Aviv, Helvetica, sans-serif',
+                        fontSize: '16px',
+                        color: '#374151',
+                        cursor: 'pointer',
+                        userSelect: 'none',
+                        fontWeight: detailsConfirmed ? '500' : '400'
+                      }}
+                    >
+                      הפרטים שהזנתי נכונים
+                    </label>
+                  </div>
+                  {showConfirmationError && (
+                    <div style={{
+                      color: '#ef4444',
+                      fontSize: '14px',
+                      fontFamily: 'Tel_Aviv-ModernistRegular, Tel Aviv, Helvetica, sans-serif',
+                      paddingRight: '32px',
+                      marginTop: '4px'
+                    }}>
+                      יש לאשר שהפרטים נכונים לפני שליחה
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Action Buttons */}
-              <div className="form-actions">
-                <button 
-                  type="button"
-                  className="back-button"
-                  onClick={() => navigate(-1)}
-                >
-                  חזרה למסך קודם
-                </button>
+              <div className="form-actions" style={{ position: 'relative', display: 'flex', gap: '20px', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row-reverse' }}>
+                {!hasSubmitted && (
+                  <button 
+                    type="button"
+                    className="back-button"
+                    onClick={() => navigate('/home-catalog')}
+                    style={{
+                      position: 'relative',
+                      top: 'auto',
+                      left: 'auto',
+                      right: 'auto',
+                      bottom: 'auto',
+                      margin: 0,
+                      padding: '14px 32px',
+                      background: '#9ca3af',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontFamily: 'Tel_Aviv-ModernistBold, Tel Aviv, Helvetica, sans-serif',
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      display: 'inline-block',
+                      visibility: 'visible',
+                      opacity: 1
+                    }}
+                  >
+                    חזרה למסך קודם
+                  </button>
+                )}
                 {!hasSubmitted && (
                   <button
                     type="button"
                     className="continue-button"
                     onClick={handleSubmit}
-                    disabled={submitting || hasSubmitted}
+                    disabled={submitting || hasSubmitted || !detailsConfirmed}
+                    style={{
+                      opacity: !detailsConfirmed ? 0.5 : 1,
+                      cursor: !detailsConfirmed ? 'not-allowed' : 'pointer',
+                      pointerEvents: !detailsConfirmed ? 'none' : 'auto'
+                    }}
+                    aria-disabled={!detailsConfirmed}
                   >
                     {submitting ? 'שולח...' : 'שליחת הבקשה'}
                   </button>

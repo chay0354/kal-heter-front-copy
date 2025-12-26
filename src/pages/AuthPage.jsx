@@ -145,6 +145,24 @@ function AuthPage() {
     navigate('/auth?mode=signin')
   }
 
+  // Custom email validation handler
+  const handleEmailInvalid = (e) => {
+    const emailValue = e.target.value
+    if (!emailValue) {
+      e.target.setCustomValidity('אנא הזן כתובת אימייל')
+    } else if (!emailValue.includes('@')) {
+      e.target.setCustomValidity('אנא כלול את הסימן \'@\' בכתובת האימייל')
+    } else {
+      e.target.setCustomValidity('אנא הזן כתובת אימייל תקינה')
+    }
+  }
+
+  // Clear custom validity when user types
+  const handleEmailChange = (e) => {
+    e.target.setCustomValidity('')
+    setEmail(e.target.value)
+  }
+
   return (
     <div className="home-page">
       <div className="home-container">
@@ -254,7 +272,8 @@ function AuthPage() {
                     type="email"
                     id="email-signup"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={handleEmailChange}
+                    onInvalid={handleEmailInvalid}
                     placeholder="הזן כתובת אימייל"
                     required
                     style={{ color: '#2C3E50', backgroundColor: 'white' }}
@@ -369,7 +388,8 @@ function AuthPage() {
                     type="email"
                     id="email-signin"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={handleEmailChange}
+                    onInvalid={handleEmailInvalid}
                     placeholder="הזן כתובת אימייל"
                     required
                     style={{ color: '#2C3E50', backgroundColor: 'white' }}
