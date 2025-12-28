@@ -25,14 +25,6 @@ function App() {
           <Route path="/measurement-map" element={<MeasurementMapPage />} />
           <Route path="/surveyors-list" element={<SurveyorsListPage />} />
           <Route 
-            path="/personal-details" 
-            element={
-              <ProtectedRoute>
-                <PlanningRequest showFields={true} selectedPlan={null} onBack={null} nextPath="/property-details" />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
             path="/property-details" 
             element={
               <ProtectedRoute>
