@@ -1,9 +1,22 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import './TermsPage.css'
 
 function TermsPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const from = searchParams.get('from')
+  const mode = searchParams.get('mode') || 'signup'
+  
+  const handleClose = () => {
+    if (from === 'auth') {
+      // Navigate back to auth page with the same mode
+      navigate(`/auth?mode=${mode}`)
+    } else {
+      // Default behavior - go to homepage
+      navigate('/')
+    }
+  }
 
   return (
     <div className="home-page">
@@ -29,14 +42,6 @@ function TermsPage() {
           }}>
             <div className="terms-modal-header">
               <h2>תנאי שימוש</h2>
-              <button 
-                className="terms-close-button"
-                onClick={() => navigate('/')}
-              >
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
             </div>
             <div className="terms-modal-content">
               <h3>1. כללי</h3>
@@ -89,9 +94,9 @@ function TermsPage() {
             <div className="terms-modal-footer">
               <button 
                 className="terms-accept-button"
-                onClick={() => navigate('/')}
+                onClick={handleClose}
               >
-                חזרה לעמוד הבית
+                {from === 'auth' ? 'חזרה להרשמה' : 'חזרה לעמוד הבית'}
               </button>
             </div>
           </div>

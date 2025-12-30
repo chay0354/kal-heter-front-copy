@@ -26,6 +26,7 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     gush: '',
     photoDate: '',
     propertyPhotos: [],
+    plotPhoto: null,
     tabuExtract: null,
     israelLandAuthorityContract: ''
   })
@@ -33,6 +34,7 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
   const [measurementData, setMeasurementData] = useState({
     surveyorName: '',
     measurementDate: '',
+    israelMappingNumber: '',
     pdfFile: null,
     dwfFile: null,
     dwgFile: null
@@ -224,7 +226,8 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     // Map field names to backend field names
     const fieldMap = {
       'tabuExtract': 'tabu_extract',
-      'propertyPhotos': 'property_photos'
+      'propertyPhotos': 'property_photos',
+      'plotPhoto': 'plot_photo'
     }
     const backendField = fieldMap[field] || field
     
@@ -322,7 +325,7 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
       navigate(nextPath)
       return
     }
-    navigate(showFields ? '/property-details' : '/measurement-map')
+    navigate(showFields ? '/property-details-final' : '/measurement-map')
   }
 
   const handleBack = () => {
@@ -333,14 +336,14 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     }
   }
 
-  // Steps: 1 personal, 2 property, 3 measurement, 4 dream house, 5 summary
+  // Steps: 1 personal, 2 measurement, 3 property, 4 dream house, 5 summary
   let activeStep = 1
-  if (!showFields && !hideSections) {
-    activeStep = 2
-  } else if (!showFields && hideSections && !hideMeasurement) {
-    activeStep = 3
+  if (!showFields && hideSections && !hideMeasurement) {
+    activeStep = 2  // Measurement Map
+  } else if (!showFields && !hideSections) {
+    activeStep = 3  // Property Details
   } else if (!showFields && hideSections && hideMeasurement) {
-    activeStep = 4
+    activeStep = 4  // Dream Home
   }
 
   const dreamCards = Array.from({ length: 6 }).map((_, idx) => ({
@@ -363,8 +366,8 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
   }
   const steps = [
     { number: 1, label: 'פרטים אישיים' },
-    { number: 2, label: 'פרטי הנכס' },
-    { number: 3, label: 'מפת מדידה' },
+    { number: 2, label: 'מפת מדידה' },
+    { number: 3, label: 'פרטי הנכס' },
     { number: 4, label: 'בחירת בית חלומות' },
     { number: 5, label: 'סיכום ושליחה' }
   ].map(step => ({
@@ -533,6 +536,22 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                     </label>
                     <p className="property-upload-note">חובה לצרף לפחות 3 צילומים</p>
                   </div>
+                  <div className="property-field upload-field">
+                    <label className="property-label">צילום המגרש</label>
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.pdf"
+                      onChange={(e) => handlePropertyFileChange('plotPhoto', e.target.files[0])}
+                      style={{ display: 'none' }}
+                      id="plot-photo-input"
+                    />
+                    <label htmlFor="plot-photo-input" className="property-upload-box" style={{ cursor: 'pointer' }}>
+                      <span className="upload-placeholder">
+                        {propertyData.plotPhoto ? (propertyData.plotPhoto.name || 'קובץ נבחר') : 'צירוף קובץ'}
+                      </span>
+                      <img className="upload-icon-img" src="/icons/Paperclip.png" alt="paperclip" />
+                    </label>
+                  </div>
                 </div>
               </div>
 
@@ -600,6 +619,16 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                     value={measurementData.measurementDate}
                     onChange={(e) => handleMeasurementChange('measurementDate', e.target.value)}
                     style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd' }}
+                  />
+                </div>
+                <div className="measurement-field">
+                  <label className="measurement-label">מספר מיפוי ישראל</label>
+                  <input 
+                    className="measurement-input" 
+                    placeholder="הקלד" 
+                    type="text"
+                    value={measurementData.israelMappingNumber}
+                    onChange={(e) => handleMeasurementChange('israelMappingNumber', e.target.value)}
                   />
                 </div>
               </div>

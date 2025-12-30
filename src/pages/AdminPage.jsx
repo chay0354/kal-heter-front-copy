@@ -168,6 +168,8 @@ const AdminPage = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [loadingDetails, setLoadingDetails] = useState(false)
+  const [adminNotes, setAdminNotes] = useState('')
+  const [savingNotes, setSavingNotes] = useState(false)
 
   useEffect(() => {
     fetchUsers()
@@ -238,11 +240,48 @@ const AdminPage = () => {
               }
               
               setSelectedUser(userData)
+              // Load admin notes from user metadata
+              const notes = userData.user_metadata?.admin_notes || ''
+              setAdminNotes(notes)
             } catch (err) {
               console.error('Error fetching user details:', err)
               alert('שגיאה בטעינת פרטי המשתמש')
             } finally {
               setLoadingDetails(false)
+            }
+          }
+          
+          const saveAdminNotes = async (userId, notes) => {
+            try {
+              setSavingNotes(true)
+              const token = localStorage.getItem('access_token')
+              const response = await fetch(buildApiUrl(`/api/admin/users/${userId}/notes`), {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': token ? `Bearer ${token}` : '',
+                },
+                body: JSON.stringify({ notes })
+              })
+              
+              if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }))
+                throw new Error(errorData.detail || 'Failed to save notes')
+              }
+              
+              // Update local state
+              setSelectedUser(prev => ({
+                ...prev,
+                user_metadata: {
+                  ...prev.user_metadata,
+                  admin_notes: notes
+                }
+              }))
+            } catch (err) {
+              console.error('Error saving notes:', err)
+              alert('שגיאה בשמירת הערות: ' + err.message)
+            } finally {
+              setSavingNotes(false)
             }
           }
 
@@ -484,7 +523,13 @@ const AdminPage = () => {
                       <div className="summary-details-grid">
                         <div className="summary-detail-item">
                           <span className="summary-label">אימייל:</span>
-                          <span className="summary-value">{user.email || '-'}</span>
+                          <span className="summary-value">
+                            {user.email ? (
+                              <a href={`mailto:${user.email}`} style={{ color: '#0f4eb3', textDecoration: 'underline' }}>
+                                {user.email}
+                              </a>
+                            ) : '-'}
+                          </span>
                         </div>
                         <div className="summary-detail-item">
                           <span className="summary-label">שם מלא:</span>
@@ -592,7 +637,13 @@ const AdminPage = () => {
                           </div>
                           <div className="summary-detail-item">
                             <span className="summary-label">אימייל:</span>
-                            <span className="summary-value">{personalDetails.email || '-'}</span>
+                            <span className="summary-value">
+                              {personalDetails.email ? (
+                                <a href={`mailto:${personalDetails.email}`} style={{ color: '#0f4eb3', textDecoration: 'underline' }}>
+                                  {personalDetails.email}
+                                </a>
+                              ) : '-'}
+                            </span>
                           </div>
                           {/* Additional Rights Holders */}
                           {additionalRightsHolders.length > 0 && (
@@ -992,6 +1043,49 @@ const AdminPage = () => {
                       )}
                     </div>
 
+                    {/* Admin Notes Section */}
+                    <div className="summary-section" style={{ 
+                      background: '#f8f9fa', 
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '12px',
+                      padding: '24px'
+                    }}>
+                      <div className="summary-section-header">
+                        <h3 className="summary-section-title" style={{ marginBottom: '16px' }}>הערות מנהל</h3>
+                      </div>
+                      <textarea
+                        value={adminNotes}
+                        onChange={(e) => setAdminNotes(e.target.value)}
+                        onBlur={() => {
+                          if (user.id) {
+                            saveAdminNotes(user.id, adminNotes)
+                          }
+                        }}
+                        placeholder="הוסף הערות פרטיות (רק מנהל יכול לראות)"
+                        style={{
+                          width: '100%',
+                          minHeight: '120px',
+                          padding: '12px',
+                          borderRadius: '8px',
+                          border: '1px solid #d1d5db',
+                          fontSize: '14px',
+                          fontFamily: 'Tel_Aviv-ModernistRegular, Tel Aviv, Helvetica, sans-serif',
+                          resize: 'vertical',
+                          direction: 'rtl',
+                          textAlign: 'right'
+                        }}
+                        disabled={savingNotes}
+                      />
+                      {savingNotes && (
+                        <p style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280', textAlign: 'right' }}>
+                          שומר...
+                        </p>
+                      )}
+                      <p style={{ marginTop: '8px', fontSize: '12px', color: '#6b7280', textAlign: 'right' }}>
+                        הערות אלה נראות רק למנהל
+                      </p>
+                    </div>
+
                     {/* All Submissions History */}
                     {user.form_submissions && user.form_submissions.length > 0 && (
                       <div className="summary-section">
@@ -1128,7 +1222,11 @@ const AdminPage = () => {
                             {user.full_name || user.email}
                           </h3>
                           <p style={{ margin: '4px 0 0', fontSize: '0.9rem', color: '#6b7280' }}>
-                            {user.email}
+                            {user.email ? (
+                              <a href={`mailto:${user.email}`} style={{ color: '#0f4eb3', textDecoration: 'underline' }}>
+                                {user.email}
+                              </a>
+                            ) : '-'}
                           </p>
                         </div>
                       </div>

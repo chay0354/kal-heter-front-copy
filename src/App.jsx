@@ -25,18 +25,18 @@ function App() {
           <Route path="/measurement-map" element={<MeasurementMapPage />} />
           <Route path="/surveyors-list" element={<SurveyorsListPage />} />
           <Route 
-            path="/property-details" 
+            path="/property-details-final" 
             element={
               <ProtectedRoute>
-                <PlanningRequest showFields={false} selectedPlan={null} onBack={null} nextPath="/property-details-final" />
+                <PlanningRequest showFields={false} hideSections={true} selectedPlan={null} onBack={null} nextPath="/property-details" />
               </ProtectedRoute>
             } 
           />
           <Route 
-            path="/property-details-final" 
+            path="/property-details" 
             element={
               <ProtectedRoute>
-                <PlanningRequest showFields={false} hideSections={true} selectedPlan={null} onBack={null} nextPath="/home-catalog" />
+                <PlanningRequest showFields={false} selectedPlan={null} onBack={null} nextPath="/home-catalog" />
               </ProtectedRoute>
             } 
           />

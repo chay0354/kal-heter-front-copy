@@ -121,6 +121,7 @@ export const uploadFileImmediately = async (file, fileType = 'id_photo') => {
                    fileUrls.dwf_file || 
                    fileUrls.dwg_file || 
                    fileUrls.tabu_extract ||
+                   fileUrls.plot_photo ||
                    (Array.isArray(fileUrls.property_photos) && fileUrls.property_photos[0]) ||
                    (Array.isArray(fileUrls.additional_rights_holders_photos) && fileUrls.additional_rights_holders_photos[0])
         }
@@ -161,6 +162,7 @@ export const saveFormDraft = async (formData) => {
     console.log('  - idPhoto:', formData.personalDetails?.idPhoto ? formData.personalDetails.idPhoto.name : 'None')
     console.log('  - propertyPhotos:', formData.propertyDetails?.propertyPhotos?.length || 0)
     console.log('  - tabuExtract:', formData.propertyDetails?.tabuExtract ? formData.propertyDetails.tabuExtract.name : 'None')
+    console.log('  - plotPhoto:', formData.propertyDetails?.plotPhoto ? formData.propertyDetails.plotPhoto.name : 'None')
     console.log('  - pdfFile:', formData.measurementDetails?.pdfFile ? formData.measurementDetails.pdfFile.name : 'None')
     console.log('  - dwfFile:', formData.measurementDetails?.dwfFile ? formData.measurementDetails.dwfFile.name : 'None')
     console.log('  - dwgFile:', formData.measurementDetails?.dwgFile ? formData.measurementDetails.dwgFile.name : 'None')
@@ -220,6 +222,18 @@ export const saveFormDraft = async (formData) => {
         console.log('[saveFormDraft] ✓ tabu_extract already uploaded, URL in property_details:', formData.propertyDetails.tabuExtract.url)
       } else {
         console.log('[saveFormDraft] ✗ Skipping tabu_extract - not a File instance or uploaded URL:', typeof formData.propertyDetails.tabuExtract, formData.propertyDetails.tabuExtract)
+      }
+    }
+
+    if (formData.propertyDetails?.plotPhoto) {
+      if (isFile(formData.propertyDetails.plotPhoto)) {
+        formDataToSend.append('plot_photo', formData.propertyDetails.plotPhoto)
+        filesCount++
+        console.log('[saveFormDraft] ✓ Added plot_photo (File):', formData.propertyDetails.plotPhoto.name || 'unnamed')
+      } else if (formData.propertyDetails.plotPhoto.url && formData.propertyDetails.plotPhoto.uploaded) {
+        console.log('[saveFormDraft] ✓ plot_photo already uploaded, URL in property_details:', formData.propertyDetails.plotPhoto.url)
+      } else {
+        console.log('[saveFormDraft] ✗ Skipping plot_photo - not a File instance or uploaded URL:', typeof formData.propertyDetails.plotPhoto, formData.propertyDetails.plotPhoto)
       }
     }
 
@@ -348,6 +362,10 @@ export const submitForm = async (formData) => {
 
     if (formData.propertyDetails?.tabuExtract && isFile(formData.propertyDetails.tabuExtract)) {
       formDataToSend.append('tabu_extract', formData.propertyDetails.tabuExtract)
+    }
+
+    if (formData.propertyDetails?.plotPhoto && isFile(formData.propertyDetails.plotPhoto)) {
+      formDataToSend.append('plot_photo', formData.propertyDetails.plotPhoto)
     }
 
     if (formData.measurementDetails?.pdfFile && isFile(formData.measurementDetails.pdfFile)) {

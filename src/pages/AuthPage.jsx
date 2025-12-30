@@ -27,6 +27,25 @@ function AuthPage() {
 
   useEffect(() => {
     setIsSignUp(mode === 'signup')
+    
+    // Restore form data from localStorage when returning from terms page
+    const savedFormData = sessionStorage.getItem('authFormData')
+    if (savedFormData) {
+      try {
+        const formData = JSON.parse(savedFormData)
+        if (formData.firstName) setFirstName(formData.firstName)
+        if (formData.lastName) setLastName(formData.lastName)
+        if (formData.phone) setPhone(formData.phone)
+        if (formData.email) setEmail(formData.email)
+        if (formData.password) setPassword(formData.password)
+        if (formData.confirmPassword) setConfirmPassword(formData.confirmPassword)
+        if (formData.termsAccepted !== undefined) setTermsAccepted(formData.termsAccepted)
+        // Clear the saved data after restoring
+        sessionStorage.removeItem('authFormData')
+      } catch (error) {
+        console.error('Error restoring form data:', error)
+      }
+    }
   }, [mode])
 
   const handleSignIn = async (e) => {
@@ -363,7 +382,20 @@ function AuthPage() {
                     <button
                       type="button"
                       className="terms-link-inline"
-                      onClick={() => navigate('/terms')}
+                      onClick={() => {
+                        // Save form data to sessionStorage before navigating
+                        const formDataToSave = {
+                          firstName,
+                          lastName,
+                          phone,
+                          email,
+                          password,
+                          confirmPassword,
+                          termsAccepted
+                        }
+                        sessionStorage.setItem('authFormData', JSON.stringify(formDataToSave))
+                        navigate(`/terms?from=auth&mode=signup`)
+                      }}
                     >
                       תנאי השימוש
                     </button>
