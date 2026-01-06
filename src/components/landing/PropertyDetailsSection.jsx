@@ -22,6 +22,17 @@ export const PropertyDetailsSection = () => {
         </p>
       </div>
 
+      <div className="footer-accessibility-section">
+        <p className="footer-accessibility-title">WCAG – level A</p>
+        <ul className="footer-accessibility-list">
+          <li>ניווט מלא עם מקלדת</li>
+          <li>טקסט חלופי לתמונות</li>
+          <li>מבנה סמנטי תקין</li>
+          <li>אי־הסתמכות על צבע בלבד</li>
+          <li>הימנעות מ־keyboard traps</li>
+        </ul>
+      </div>
+
       <div className="footer-bottom">
         <hr className="footer-divider" aria-hidden="true" />
 

@@ -258,6 +258,10 @@
   text-align: center;
   direction: rtl;
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .success-message {
@@ -271,6 +275,10 @@
   text-align: center;
   direction: rtl;
   font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .sign-in-form {

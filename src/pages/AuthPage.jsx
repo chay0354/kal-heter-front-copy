@@ -224,34 +224,63 @@ function AuthPage() {
           </div>
 
           <div className="sign-in-form-container">
-            <div className="auth-tabs">
+            <div className="auth-tabs" role="tablist" aria-label="סוג כניסה">
               <button
                 type="button"
+                role="tab"
+                aria-selected={isSignUp}
+                aria-controls="signup-panel"
+                id="signup-tab"
                 className={`auth-tab ${isSignUp ? 'active' : ''}`}
                 onClick={switchToSignUp}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    switchToSignUp()
+                  }
+                }}
               >
                 הרשמה
               </button>
               <button
                 type="button"
+                role="tab"
+                aria-selected={!isSignUp}
+                aria-controls="signin-panel"
+                id="signin-tab"
                 className={`auth-tab ${!isSignUp ? 'active' : ''}`}
                 onClick={switchToSignIn}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    switchToSignIn()
+                  }
+                }}
               >
                 התחברות
               </button>
             </div>
             {error && (
-              <div className="error-message">
-                {error}
+              <div className="error-message" role="alert" aria-live="assertive">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ marginLeft: '8px', flexShrink: 0 }}>
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                  <path d="M12 8V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M12 16H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                <span>{error}</span>
               </div>
             )}
             {successMessage && (
-              <div className="success-message">
-                {successMessage}
+              <div className="success-message" role="status" aria-live="polite">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{ marginLeft: '8px', flexShrink: 0 }}>
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                  <path d="M8 12L11 15L16 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span>{successMessage}</span>
               </div>
             )}
             {isSignUp ? (
-              <form className="sign-in-form" onSubmit={handleSignUp}>
+              <form className="sign-in-form" onSubmit={handleSignUp} role="tabpanel" id="signup-panel" aria-labelledby="signup-tab">
                 <div className="form-group">
                   <label htmlFor="firstName">שם פרטי</label>
                   <input
@@ -286,7 +315,9 @@ function AuthPage() {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="email-signup">אימייל</label>
+                  <label htmlFor="email-signup">
+                    אימייל <span className="required-indicator" aria-label="שדה חובה">*</span>
+                  </label>
                   <input
                     type="email"
                     id="email-signup"
@@ -295,11 +326,14 @@ function AuthPage() {
                     onInvalid={handleEmailInvalid}
                     placeholder="הזן כתובת אימייל"
                     required
+                    aria-required="true"
                     style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="password-signup">בחר סיסמה</label>
+                  <label htmlFor="password-signup">
+                    בחר סיסמה <span className="required-indicator" aria-label="שדה חובה">*</span>
+                  </label>
                   <div className="password-input-wrapper">
                     <input
                       type={showPassword ? 'text' : 'password'}
@@ -334,7 +368,9 @@ function AuthPage() {
                   <p className="password-requirements">הסיסמה חייבת להכיל לפחות 8 תווים, לפחות תו אחד מיוחד- !@#$%&*</p>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="confirm-password-signup">אישור סיסמה</label>
+                  <label htmlFor="confirm-password-signup">
+                    אישור סיסמה <span className="required-indicator" aria-label="שדה חובה">*</span>
+                  </label>
                   <div className="password-input-wrapper">
                     <input
                       type={showConfirmPassword ? 'text' : 'password'}
@@ -366,13 +402,22 @@ function AuthPage() {
                     </button>
                   </div>
                   {confirmPassword && password !== confirmPassword && (
-                    <p className="password-error" style={{ color: '#c33', fontSize: '13px', marginTop: '8px', direction: 'rtl', textAlign: 'right' }}>
-                      הסיסמאות אינן תואמות
+                    <p className="password-error" role="alert" style={{ color: '#c33', fontSize: '13px', marginTop: '8px', direction: 'rtl', textAlign: 'right', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M12 8V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                        <path d="M12 16H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      </svg>
+                      <span>הסיסמאות אינן תואמות</span>
                     </p>
                   )}
                   {confirmPassword && password === confirmPassword && password.length > 0 && (
-                    <p className="password-success" style={{ color: '#3c3', fontSize: '13px', marginTop: '8px', direction: 'rtl', textAlign: 'right' }}>
-                      הסיסמאות תואמות
+                    <p className="password-success" role="status" style={{ color: '#3c3', fontSize: '13px', marginTop: '8px', direction: 'rtl', textAlign: 'right', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                        <path d="M8 12L11 15L16 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <span>הסיסמאות תואמות</span>
                     </p>
                   )}
                 </div>
@@ -413,9 +458,11 @@ function AuthPage() {
                 </button>
               </form>
             ) : (
-              <form className="sign-in-form" onSubmit={handleSignIn}>
+              <form className="sign-in-form" onSubmit={handleSignIn} role="tabpanel" id="signin-panel" aria-labelledby="signin-tab">
                 <div className="form-group">
-                  <label htmlFor="email-signin">אימייל</label>
+                  <label htmlFor="email-signin">
+                    אימייל <span className="required-indicator" aria-label="שדה חובה">*</span>
+                  </label>
                   <input
                     type="email"
                     id="email-signin"
@@ -424,11 +471,14 @@ function AuthPage() {
                     onInvalid={handleEmailInvalid}
                     placeholder="הזן כתובת אימייל"
                     required
+                    aria-required="true"
                     style={{ color: '#2C3E50', backgroundColor: 'white' }}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="password-signin">סיסמה</label>
+                  <label htmlFor="password-signin">
+                    סיסמה <span className="required-indicator" aria-label="שדה חובה">*</span>
+                  </label>
                   <div className="password-input-wrapper">
                     <input
                       type={showPasswordSignIn ? 'text' : 'password'}

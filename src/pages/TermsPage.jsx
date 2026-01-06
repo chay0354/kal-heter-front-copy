@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import './TermsPage.css'
 
@@ -7,6 +7,8 @@ function TermsPage() {
   const [searchParams] = useSearchParams()
   const from = searchParams.get('from')
   const mode = searchParams.get('mode') || 'signup'
+  const closeButtonRef = useRef(null)
+  const modalRef = useRef(null)
   
   const handleClose = () => {
     if (from === 'auth') {
@@ -17,6 +19,25 @@ function TermsPage() {
       navigate('/')
     }
   }
+
+  // Keyboard navigation: ESC to close, focus management
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleClose()
+      }
+    }
+
+    // Focus the close button when modal opens
+    if (closeButtonRef.current) {
+      closeButtonRef.current.focus()
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [from, mode])
 
   return (
     <div className="home-page">
@@ -32,16 +53,23 @@ function TermsPage() {
             <div className="title-line"></div>
           </div>
 
-          <div className="terms-modal" style={{ 
-            position: 'relative', 
-            maxWidth: '900px', 
-            margin: '0 auto',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
-            borderRadius: '24px',
-            overflow: 'hidden'
-          }}>
+          <div 
+            className="terms-modal" 
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="terms-modal-title"
+            style={{ 
+              position: 'relative', 
+              maxWidth: '900px', 
+              margin: '0 auto',
+              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
+              borderRadius: '24px',
+              overflow: 'hidden'
+            }}
+          >
             <div className="terms-modal-header">
-              <h2>תנאי שימוש</h2>
+              <h2 id="terms-modal-title">תנאי שימוש</h2>
             </div>
             <div className="terms-modal-content">
               <h3>1. כללי</h3>
@@ -93,8 +121,16 @@ function TermsPage() {
             </div>
             <div className="terms-modal-footer">
               <button 
+                ref={closeButtonRef}
                 className="terms-accept-button"
                 onClick={handleClose}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    handleClose()
+                  }
+                }}
+                aria-label={from === 'auth' ? 'חזרה לעמוד ההרשמה' : 'חזרה לעמוד הבית'}
               >
                 {from === 'auth' ? 'חזרה להרשמה' : 'חזרה לעמוד הבית'}
               </button>
