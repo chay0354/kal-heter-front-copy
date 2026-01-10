@@ -167,6 +167,7 @@ const AdminPage = () => {
   const [selectedUser, setSelectedUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [errorHelp, setErrorHelp] = useState(null)
   const [loadingDetails, setLoadingDetails] = useState(false)
   const [adminNotes, setAdminNotes] = useState('')
   const [savingNotes, setSavingNotes] = useState(false)
@@ -198,10 +199,22 @@ const AdminPage = () => {
       
       const data = await response.json()
       console.log('Users data received:', data)
-      setUsers(data.users || [])
-      setError(null)
+      
+      // Check if the response contains an error message (even with 200 OK status)
+      if (data.error) {
+        const errorMessage = data.message || data.error || 'Unknown error occurred'
+        setError(errorMessage)
+        setErrorHelp(data.help || null)
+        setUsers([])
+        console.error('Backend returned error:', data)
+      } else {
+        setUsers(data.users || [])
+        setError(null)
+        setErrorHelp(null)
+      }
     } catch (err) {
       setError(err.message)
+      setErrorHelp(null)
       console.error('Error fetching users:', err)
     } finally {
       setLoading(false)
@@ -1162,14 +1175,27 @@ const AdminPage = () => {
               <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>טוען משתמשים...</p>
             </div>
           ) : error ? (
-            <div style={{ textAlign: 'center', padding: '40px' }}>
-                  <p style={{ fontSize: '1.2rem', color: '#e74c3c' }}>שגיאה: {error}</p>
+            <div style={{ textAlign: 'center', padding: '40px', direction: 'rtl' }}>
+              <p style={{ fontSize: '1.2rem', color: '#e74c3c', marginBottom: '15px' }}>שגיאה: {error}</p>
+              {errorHelp && (
+                <div style={{ 
+                  background: '#fff3cd', 
+                  border: '1px solid #ffc107', 
+                  borderRadius: '8px', 
+                  padding: '15px', 
+                  margin: '20px auto', 
+                  maxWidth: '600px',
+                  textAlign: 'right'
+                }}>
+                  <p style={{ fontSize: '1rem', color: '#856404', margin: '0', lineHeight: '1.6' }}>{errorHelp}</p>
+                </div>
+              )}
               <button 
                 onClick={fetchUsers}
-                    className="submit-button"
-                    style={{ maxWidth: '300px', margin: '20px auto 0' }}
-                  >
-                    <span>נסה שוב</span>
+                className="submit-button"
+                style={{ maxWidth: '300px', margin: '20px auto 0' }}
+              >
+                <span>נסה שוב</span>
               </button>
             </div>
               ) : users.length === 0 ? (

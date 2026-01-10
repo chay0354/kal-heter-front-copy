@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import './PlanningRequest.css'
 import { saveFormData, getFormData, saveFileData, saveFileUrl } from '../services/formData'
 import { uploadFileImmediately } from '../services/formSubmission'
 
 const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hideSections = false, hideMeasurement = false }) => {
   const navigate = useNavigate()
+  const location = useLocation()
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -331,8 +332,34 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
   const handleBack = () => {
     if (onBack) {
       onBack()
+      return
+    }
+    
+    // Navigate to previous step in form process based on current route
+    const currentPath = location.pathname
+    
+    // Define the form flow steps
+    const formSteps = {
+      '/dashboard': null, // First step, no back
+      '/property-details-final': '/dashboard',
+      '/property-details': '/property-details-final',
+      '/home-catalog': '/property-details',
+      '/summary': '/home-catalog'
+    }
+    
+    // Get the previous step for current path
+    const previousStep = formSteps[currentPath]
+    
+    if (previousStep) {
+      navigate(previousStep)
     } else {
-      navigate(-1)
+      // Fallback: if we're on dashboard or unknown route, go to dashboard
+      // Or if we're on a route not in the form flow, use browser history
+      if (currentPath === '/dashboard') {
+        navigate('/dashboard')
+      } else {
+        navigate(-1) // Fallback to browser history
+      }
     }
   }
 
