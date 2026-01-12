@@ -23,14 +23,7 @@ export const PropertyDetailsSection = () => {
       </div>
 
       <div className="footer-accessibility-section">
-        <p className="footer-accessibility-title">WCAG – level A</p>
-        <ul className="footer-accessibility-list">
-          <li>ניווט מלא עם מקלדת</li>
-          <li>טקסט חלופי לתמונות</li>
-          <li>מבנה סמנטי תקין</li>
-          <li>אי־הסתמכות על צבע בלבד</li>
-          <li>הימנעות מ־keyboard traps</li>
-        </ul>
+        <p className="footer-accessibility-title">האתר נגיש ע״פ תקן WCAG – level A</p>
       </div>
 
       <div className="footer-bottom">
