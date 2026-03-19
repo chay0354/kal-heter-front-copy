@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Allow: /terms
+Allow: /process-explanation
+Allow: /measurement-map
+Allow: /surveyors-list
+
+Disallow: /auth
+Disallow: /dashboard
+Disallow: /admin03254
+Disallow: /property-details
+Disallow: /property-details-final
+Disallow: /home-catalog
+Disallow: /summary
+
+Sitemap: https://kal-heter.com/sitemap.xml
