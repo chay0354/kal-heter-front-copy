@@ -419,6 +419,14 @@
   background: #FAFAFA;
 }
 
+.error-message {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 4px;
+  display: block;
+  text-align: right;
+}
+
 .file-upload-label {
   display: flex;
   align-items: center;

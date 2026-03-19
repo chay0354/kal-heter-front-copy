@@ -22,6 +22,7 @@ function AuthPage() {
   const [showPasswordSignIn, setShowPasswordSignIn] = useState(false)
   const [termsAccepted, setTermsAccepted] = useState(false)
   const [error, setError] = useState('')
+  const [emailExistsError, setEmailExistsError] = useState('')
   const [loading, setLoading] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
 
@@ -113,6 +114,7 @@ function AuthPage() {
   const handleSignUp = async (e) => {
     e.preventDefault()
     setError('')
+    setEmailExistsError('')
     setSuccessMessage('')
     setLoading(true)
 
@@ -140,7 +142,17 @@ function AuthPage() {
         setSuccessMessage('נרשמת בהצלחה! אנא בדוק את האימייל שלך לאישור החשבון.')
       }
     } catch (err) {
-      setError(err.message || 'שגיאה בהרשמה. נסה שוב.')
+      const msg = err.message || ''
+      const isDuplicateEmail = msg.toLowerCase().includes('already registered') ||
+        msg.toLowerCase().includes('already exists') ||
+        msg.toLowerCase().includes('already in use') ||
+        msg.toLowerCase().includes('duplicate') ||
+        msg.toLowerCase().includes('email')
+      if (isDuplicateEmail) {
+        setEmailExistsError('כתובת אימייל כבר קיימת - את/ה כבר רשום')
+      } else {
+        setError(msg || 'שגיאה בהרשמה. נסה שוב.')
+      }
     } finally {
       setLoading(false)
     }
@@ -180,6 +192,7 @@ function AuthPage() {
   const handleEmailChange = (e) => {
     e.target.setCustomValidity('')
     setEmail(e.target.value)
+    if (emailExistsError) setEmailExistsError('')
   }
 
   return (
@@ -456,6 +469,9 @@ function AuthPage() {
                 <button type="submit" className="submit-button" disabled={loading}>
                   {loading ? 'מתבצע...' : 'הרשמה'}
                 </button>
+                {emailExistsError && (
+                  <p className="email-exists-error" role="alert">{emailExistsError}</p>
+                )}
               </form>
             ) : (
               <form className="sign-in-form" onSubmit={handleSignIn} role="tabpanel" id="signin-panel" aria-labelledby="signin-tab">

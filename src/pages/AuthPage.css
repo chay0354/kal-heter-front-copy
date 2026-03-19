@@ -510,6 +510,14 @@
   transform: none !important;
 }
 
+.email-exists-error {
+  color: #dc2626;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  direction: rtl;
+}
+
 .back-button {
   background: transparent;
   color: #6b7280;
