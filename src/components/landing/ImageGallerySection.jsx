@@ -5,7 +5,7 @@ export const ImageGallerySection = () => {
   return (
     <section className="hero-text-overlay">
       <h1 className="hero-text-overlay-title">
-        מהפכה בתחום היתרי בניה.
+        מהפכה בתחום היתרי בניה
       </h1>
 
       <p className="hero-text-overlay-description">
