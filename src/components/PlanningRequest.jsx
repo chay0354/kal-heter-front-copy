@@ -321,6 +321,14 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
   }
 
   const handleContinue = () => {
+    // Validate mandatory fields for step 1 (personal details)
+    if (showFields) {
+      if (!formData.idPhoto) {
+        setErrors(prev => ({ ...prev, idPhoto: 'יש לצרף צילום תעודת זהות' }))
+        return
+      }
+    }
+
     // Navigate to configured next step
     if (nextPath) {
       navigate(nextPath)
@@ -473,9 +481,9 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                     value={propertyData.street}
                     onChange={(e) => handlePropertyChange('street', e.target.value)}
                   />
-                  <p className="location-hint inline-hint">
+                  {/* <p className="location-hint inline-hint">
                     ניתן לנעוץ כתובת מדויקת <a href="#" className="location-link">כאן</a>
-                  </p>
+                  </p> */}
                 </div>
               </div>
               <div className="location-divider" aria-hidden="true"></div>
@@ -526,7 +534,7 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                 </div>
 
                 <div className="property-link-row">
-                  <a href="#" className="property-link">בדיקת מיקום במפ"י</a>
+                  <a href="https://www.gov.il/he/departments/survey_of_israel/govil-landing-page" target="_blank" className="property-link">בדיקת מיקום במפ"י</a>
                 </div>
 
                 <div className="property-row property-row-secondary">
@@ -871,6 +879,9 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                     </label>
                     {formData.idPhoto && (
                       <span className="file-name">{formData.idPhoto.name}</span>
+                    )}
+                    {errors.idPhoto && (
+                      <span className="error-message">{errors.idPhoto}</span>
                     )}
                   </div>
                 </div>

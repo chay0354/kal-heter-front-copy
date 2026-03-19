@@ -64,10 +64,9 @@ function ProcessExplanationPage() {
             </h2>
             
             <div className="process-explanation-text">
-              <p>Lorem ipsum dolor sit amet consectetur. Dui nunc purus mauris nam pretium risus faucibus at. Vulputate penatibus congue netus ultricies velit et. Sagittis integer eu orci in amet euismod diam dignissim vel. Eget suspendisse quisque lacus hendrerit viverra in. Vitae volutpat ultricies nibh .ornare</p>
-              <p>Lorem ipsum dolor sit amet consectetur. Dui nunc purus mauris nam pretium risus faucibus at. Vulputate penatibus congue netus ultricies velit et. Sagittis integer eu orci in amet euismod diam dignissim vel. Eget suspendisse quisque lacus hendrerit viverra in. Vitae volutpat ultricies nibh .ornare</p>
-              <p>Lorem ipsum dolor sit amet consectetur. Dui nunc purus mauris nam pretium risus faucibus at. Vulputate penatibus congue netus ultricies velit et. Sagittis integer eu orci in amet euismod diam dignissim vel. Eget suspendisse quisque lacus hendrerit viverra in. Vitae volutpat ultricies nibh .ornare</p>
-              <p>Lorem ipsum dolor sit amet consectetur. Dui nunc purus mauris nam pretium risus faucibus at. Vulputate penatibus congue netus ultricies velit et. Sagittis integer eu orci in amet euismod diam dignissim vel. Eget suspendisse quisque lacus hendrerit viverra in. Vitae volutpat ultricies nibh .ornare</p>
+              <p>אנו נאסוף מכם כעת נתונים אודות הפרויקט שלכם, בסיום התהליך הצוות שלנו יראה את הבקשה שלכם במערכת הניהול ויצור איתכם קשר.</p>
+              
+              
             </div>
 
             <div className="checkbox-container">
