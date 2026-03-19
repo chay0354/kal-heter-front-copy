@@ -12,9 +12,7 @@ export const FeaturesSection = () => {
         role="presentation"
       />
 
-      <h2 className="features-section-title">
-        איך זה מתבצע<br />התהליך?
-      </h2>
+      <h2 className="features-section-title">איך מתבצע<br />התהליך?</h2>
 
       <p className="features-section-description">
         תהליך קבלת ההיתר הופך אצלנו למסלול פשוט וברור.
