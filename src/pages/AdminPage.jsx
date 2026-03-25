@@ -171,6 +171,7 @@ const AdminPage = () => {
   const [loadingDetails, setLoadingDetails] = useState(false)
   const [adminNotes, setAdminNotes] = useState('')
   const [savingNotes, setSavingNotes] = useState(false)
+  const [viewMode, setViewMode] = useState('card')
 
   useEffect(() => {
     fetchUsers()
@@ -1166,9 +1167,66 @@ const AdminPage = () => {
           <div className="personal-details-card">
             <div className="personal-details-card-content">
               <h2 className="form-title">ניהול משתמשים</h2>
-              <p style={{ fontSize: '1.1rem', color: '#6b7280', marginBottom: '30px', textAlign: 'right' }}>
-                סה"כ משתמשים: <strong>{users.length}</strong>
-              </p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '30px' }}>
+                <p style={{ fontSize: '1.1rem', color: '#6b7280', margin: 0 }}>
+                  סה"כ משתמשים: <strong>{users.length}</strong>
+                </p>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    onClick={() => setViewMode('card')}
+                    title="תצוגת כרטיסים"
+                    style={{
+                      padding: '8px 14px',
+                      borderRadius: '10px',
+                      border: '1.5px solid',
+                      borderColor: viewMode === 'card' ? '#667eea' : '#e5e7eb',
+                      background: viewMode === 'card' ? '#eef2ff' : 'white',
+                      color: viewMode === 'card' ? '#667eea' : '#6b7280',
+                      cursor: 'pointer',
+                      fontWeight: '600',
+                      fontSize: '0.85rem',
+                      transition: 'all 0.2s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="3" width="8" height="8" rx="2" fill="currentColor"/>
+                      <rect x="13" y="3" width="8" height="8" rx="2" fill="currentColor"/>
+                      <rect x="3" y="13" width="8" height="8" rx="2" fill="currentColor"/>
+                      <rect x="13" y="13" width="8" height="8" rx="2" fill="currentColor"/>
+                    </svg>
+                    כרטיסים
+                  </button>
+                  <button
+                    onClick={() => setViewMode('table')}
+                    title="תצוגת טבלה"
+                    style={{
+                      padding: '8px 14px',
+                      borderRadius: '10px',
+                      border: '1.5px solid',
+                      borderColor: viewMode === 'table' ? '#667eea' : '#e5e7eb',
+                      background: viewMode === 'table' ? '#eef2ff' : 'white',
+                      color: viewMode === 'table' ? '#667eea' : '#6b7280',
+                      cursor: 'pointer',
+                      fontWeight: '600',
+                      fontSize: '0.85rem',
+                      transition: 'all 0.2s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="3" width="18" height="4" rx="1" fill="currentColor"/>
+                      <rect x="3" y="10" width="18" height="4" rx="1" fill="currentColor"/>
+                      <rect x="3" y="17" width="18" height="4" rx="1" fill="currentColor"/>
+                    </svg>
+                    טבלה
+                  </button>
+                </div>
+              </div>
 
           {loading ? (
             <div style={{ textAlign: 'center', padding: '40px' }}>
@@ -1202,6 +1260,106 @@ const AdminPage = () => {
                 <div style={{ textAlign: 'center', padding: '40px' }}>
                   <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>אין משתמשים במערכת</p>
               </div>
+              ) : viewMode === 'table' ? (
+                <div style={{ overflowX: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem', direction: 'rtl' }}>
+                    <thead>
+                      <tr style={{ background: 'linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%)', borderBottom: '2px solid #e5e7eb' }}>
+                        {['שם / אימייל', 'טלפון', 'סטטוס', 'בקשות', 'תאריך הרשמה', ''].map((col) => (
+                          <th key={col} style={{ padding: '12px 16px', textAlign: 'right', fontWeight: '700', color: '#2C3E50', whiteSpace: 'nowrap' }}>{col}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map((user, idx) => (
+                        <tr
+                          key={user.id}
+                          style={{ background: idx % 2 === 0 ? 'white' : '#f9fafb', borderBottom: '1px solid #e5e7eb', transition: 'background 0.15s' }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = '#eef2ff' }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = idx % 2 === 0 ? 'white' : '#f9fafb' }}
+                        >
+                          <td style={{ padding: '12px 16px' }}>
+                            <div style={{ fontWeight: '600', color: '#2C3E50' }}>{user.full_name || '-'}</div>
+                            <div style={{ fontSize: '0.85rem', color: '#6b7280' }}>
+                              {user.email ? (
+                                <a href={`mailto:${user.email}`} style={{ color: '#0f4eb3', textDecoration: 'underline' }}>{user.email}</a>
+                              ) : '-'}
+                            </div>
+                          </td>
+                          <td style={{ padding: '12px 16px', color: '#2C3E50' }}>{user.phone || '-'}</td>
+                          <td style={{ padding: '12px 16px' }}>
+                            <select
+                              value={user.application_status || 'בטיפול'}
+                              onClick={(e) => e.stopPropagation()}
+                              onChange={async (e) => {
+                                e.stopPropagation()
+                                const newStatus = e.target.value
+                                const oldStatus = user.application_status
+                                setUsers(users.map(u => u.id === user.id ? { ...u, application_status: newStatus } : u))
+                                try {
+                                  const token = localStorage.getItem('access_token')
+                                  const response = await fetch(buildApiUrl(`/api/admin/users/${user.id}/status`), {
+                                    method: 'PUT',
+                                    headers: { 'Content-Type': 'application/json', 'Authorization': token ? `Bearer ${token}` : '' },
+                                    body: JSON.stringify({ status: newStatus })
+                                  })
+                                  if (!response.ok) {
+                                    setUsers(users.map(u => u.id === user.id ? { ...u, application_status: oldStatus } : u))
+                                    const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }))
+                                    throw new Error(errorData.detail || 'Failed to update status')
+                                  }
+                                  setTimeout(() => fetchUsers(), 500)
+                                } catch (error) {
+                                  console.error('Error updating status:', error)
+                                  alert(`שגיאה בעדכון הסטטוס: ${error.message}`)
+                                }
+                              }}
+                              style={{
+                                padding: '5px 24px 5px 10px',
+                                borderRadius: '10px',
+                                fontSize: '0.85rem',
+                                fontWeight: '600',
+                                border: '1px solid #e5e7eb',
+                                background: 'white',
+                                color: '#2C3E50',
+                                cursor: 'pointer',
+                                appearance: 'none',
+                                WebkitAppearance: 'none',
+                                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'left 8px center',
+                                backgroundSize: '10px'
+                              }}
+                            >
+                              <option value="בטיפול">בטיפול</option>
+                              <option value="בקשה טופלה">בקשה טופלה</option>
+                            </select>
+                          </td>
+                          <td style={{ padding: '12px 16px', color: '#2C3E50', textAlign: 'center' }}>{user.submissions_count || 0}</td>
+                          <td style={{ padding: '12px 16px', color: '#2C3E50', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>{formatDate(user.created_at)}</td>
+                          <td style={{ padding: '12px 16px', textAlign: 'center' }}>
+                            <button
+                              onClick={() => handleUserClick(user)}
+                              style={{
+                                padding: '6px 16px',
+                                background: 'linear-gradient(135deg, rgba(102,126,234,0.95) 0%, rgba(118,75,162,0.95) 100%)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '8px',
+                                cursor: 'pointer',
+                                fontWeight: '600',
+                                fontSize: '0.85rem',
+                                whiteSpace: 'nowrap'
+                              }}
+                            >
+                              צפה בפרטים
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
                   {users.map((user) => (
