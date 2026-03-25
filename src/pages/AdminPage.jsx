@@ -299,6 +299,28 @@ const AdminPage = () => {
             }
           }
 
+  const handleDeleteUser = async (user) => {
+    if (!window.confirm(`האם אתה בטוח שברצונך למחוק את המשתמש ${user.full_name || user.email}?`)) return
+    try {
+      const token = localStorage.getItem('access_token')
+      const response = await fetch(buildApiUrl(`/api/admin/users/${user.id}`), {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : '',
+        },
+      })
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }))
+        throw new Error(errorData.detail || 'Failed to delete user')
+      }
+      setUsers(users.filter(u => u.id !== user.id))
+    } catch (err) {
+      console.error('Error deleting user:', err)
+      alert(`שגיאה במחיקת המשתמש: ${err.message}`)
+    }
+  }
+
   const handleUserClick = (user) => {
     fetchUserDetails(user.id)
   }
@@ -1338,22 +1360,40 @@ const AdminPage = () => {
                           <td style={{ padding: '12px 16px', color: '#2C3E50', textAlign: 'center' }}>{user.submissions_count || 0}</td>
                           <td style={{ padding: '12px 16px', color: '#2C3E50', fontSize: '0.85rem', whiteSpace: 'nowrap' }}>{formatDate(user.created_at)}</td>
                           <td style={{ padding: '12px 16px', textAlign: 'center' }}>
-                            <button
-                              onClick={() => handleUserClick(user)}
-                              style={{
-                                padding: '6px 16px',
-                                background: 'linear-gradient(135deg, rgba(102,126,234,0.95) 0%, rgba(118,75,162,0.95) 100%)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '8px',
-                                cursor: 'pointer',
-                                fontWeight: '600',
-                                fontSize: '0.85rem',
-                                whiteSpace: 'nowrap'
-                              }}
-                            >
-                              צפה בפרטים
-                            </button>
+                            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                              <button
+                                onClick={() => handleUserClick(user)}
+                                style={{
+                                  padding: '6px 16px',
+                                  background: 'linear-gradient(135deg, rgba(102,126,234,0.95) 0%, rgba(118,75,162,0.95) 100%)',
+                                  color: 'white',
+                                  border: 'none',
+                                  borderRadius: '8px',
+                                  cursor: 'pointer',
+                                  fontWeight: '600',
+                                  fontSize: '0.85rem',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                צפה בפרטים
+                              </button>
+                              <button
+                                onClick={(e) => { e.stopPropagation(); handleDeleteUser(user) }}
+                                style={{
+                                  padding: '6px 12px',
+                                  background: '#fee2e2',
+                                  color: '#dc2626',
+                                  border: '1px solid #fecaca',
+                                  borderRadius: '8px',
+                                  cursor: 'pointer',
+                                  fontWeight: '600',
+                                  fontSize: '0.85rem',
+                                  whiteSpace: 'nowrap'
+                                }}
+                              >
+                                מחק
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -1551,12 +1591,28 @@ const AdminPage = () => {
                         marginTop: '16px',
                         paddingTop: '16px',
                         borderTop: '1px solid #e5e7eb',
-                        textAlign: 'center',
-                        color: '#667eea',
-                        fontWeight: '600',
-                        fontSize: '0.9rem'
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
                       }}>
-                        לחץ לצפייה בפרטים המלאים →
+                        <span style={{ color: '#667eea', fontWeight: '600', fontSize: '0.9rem' }}>
+                          לחץ לצפייה בפרטים המלאים →
+                        </span>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleDeleteUser(user) }}
+                          style={{
+                            padding: '6px 14px',
+                            background: '#fee2e2',
+                            color: '#dc2626',
+                            border: '1px solid #fecaca',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            fontWeight: '600',
+                            fontSize: '0.85rem'
+                          }}
+                        >
+                          מחק
+                        </button>
                       </div>
                     </div>
                   ))}
