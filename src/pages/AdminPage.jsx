@@ -255,7 +255,7 @@ const AdminPage = () => {
               
               setSelectedUser(userData)
               // Load admin notes from user metadata
-              const notes = userData.user_metadata?.admin_notes || ''
+              const notes = userData.user_metadata?.notes || ''
               setAdminNotes(notes)
             } catch (err) {
               console.error('Error fetching user details:', err)
@@ -288,7 +288,7 @@ const AdminPage = () => {
                 ...prev,
                 user_metadata: {
                   ...prev.user_metadata,
-                  admin_notes: notes
+                  notes: notes
                 }
               }))
             } catch (err) {
