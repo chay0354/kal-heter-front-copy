@@ -27,7 +27,7 @@ function LandingPage() {
         <img
           className="hero-background-img"
           alt="Hero background"
-          src="/hero-background.png"
+          src="/hero-background.jpg"
         />
         
         <ImageGallerySection />
@@ -78,7 +78,7 @@ function LandingPage() {
             <img
               className="why-choose-image"
               alt="בית מודרני מבטון"
-              src="/why-choose-image.png"
+              src="/why-choose-image.jpg"
             />
             
             <div className="why-choose-text">

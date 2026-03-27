@@ -201,7 +201,7 @@ function AuthPage() {
         <div 
           className="home-content"
           style={{
-            backgroundImage: "url('/eef4e7b9c078d09a23b8f5bf3ffc49e51fb0dee3.png')",
+            backgroundImage: "url('/eef4e7b9c078d09a23b8f5bf3ffc49e51fb0dee3.jpg')",
             backgroundPosition: 'center center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat'
