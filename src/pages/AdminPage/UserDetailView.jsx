@@ -31,16 +31,7 @@ const FileLink = ({ url, label, fileName, onDownload }) => {
           console.log('[FileLink] Downloading file:', fileUrl, 'as:', fileName)
           onDownload(fileUrl, fileName)
         }}
-        style={{
-          padding: '4px 12px',
-          background: '#667eea',
-          color: 'white',
-          border: 'none',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          fontSize: '0.875rem',
-          fontWeight: '500'
-        }}
+        style={{ padding: '4px 12px', background: '#667eea', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.875rem', fontWeight: '500' }}
       >
         הורד
       </button>
