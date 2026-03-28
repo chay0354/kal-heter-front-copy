@@ -72,19 +72,33 @@ const UserDetailView = ({
   const propertyDetails = dataSource?.property_details || {}
   const measurementDetails = dataSource?.measurement_details || {}
   const selectedHouse = dataSource?.selected_house || {}
-  const fileUrls = dataSource?.file_urls || {}
+  const rawFileUrls = dataSource?.file_urls || {}
 
-  console.log('[AdminPage] Data source:', dataSource ? 'Found' : 'Not found')
-  console.log('[AdminPage] File URLs:', fileUrls)
-  console.log('[AdminPage] File URLs type:', typeof fileUrls)
-  console.log('[AdminPage] File URLs keys:', fileUrls ? Object.keys(fileUrls) : 'No fileUrls')
-  if (fileUrls) {
-    console.log('[AdminPage] ID photo URL:', fileUrls.id_photo)
-    console.log('[AdminPage] Property photos:', fileUrls.property_photos)
-    console.log('[AdminPage] Tabu extract:', fileUrls.tabu_extract)
-    console.log('[AdminPage] PDF file:', fileUrls.pdf_file)
-    console.log('[AdminPage] DWF file:', fileUrls.dwf_file)
-    console.log('[AdminPage] DWG file:', fileUrls.dwg_file)
+  // Extract URL from a field that may be a string URL or a pre-uploaded object { url, uploaded }
+  const extractUrl = (field) => {
+    if (!field) return null
+    if (typeof field === 'string' && field.startsWith('http')) return field
+    if (typeof field === 'object' && field.url) return field.url
+    return null
+  }
+
+  // Merge explicit file_urls with URLs embedded in detail objects (from pre-upload flow)
+  const fileUrls = {
+    ...rawFileUrls,
+    id_photo: rawFileUrls.id_photo || extractUrl(personalDetails.idPhoto),
+    tabu_extract: rawFileUrls.tabu_extract || extractUrl(propertyDetails.tabuExtract),
+    plot_photo: rawFileUrls.plot_photo || extractUrl(propertyDetails.plotPhoto),
+    pdf_file: rawFileUrls.pdf_file || extractUrl(measurementDetails.pdfFile),
+    dwf_file: rawFileUrls.dwf_file || extractUrl(measurementDetails.dwfFile),
+    dwg_file: rawFileUrls.dwg_file || extractUrl(measurementDetails.dwgFile),
+    property_photos: rawFileUrls.property_photos ||
+      (Array.isArray(propertyDetails.propertyPhotos)
+        ? propertyDetails.propertyPhotos.map(p => extractUrl(p)).filter(Boolean)
+        : []),
+    additional_rights_holders_photos: rawFileUrls.additional_rights_holders_photos ||
+      (Array.isArray(personalDetails.additionalRightsHolders)
+        ? personalDetails.additionalRightsHolders.map(h => extractUrl(h.idPhoto)).filter(Boolean)
+        : []),
   }
 
   const additionalRightsHolders = personalDetails.additionalRightsHolders || []
