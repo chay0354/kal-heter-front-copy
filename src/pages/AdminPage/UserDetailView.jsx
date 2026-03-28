@@ -68,11 +68,19 @@ const UserDetailView = ({
 
   const dataSource = hasDraft ? user.form_draft : latestSubmission
 
-  const personalDetails = dataSource?.personal_details || {}
-  const propertyDetails = dataSource?.property_details || {}
-  const measurementDetails = dataSource?.measurement_details || {}
-  const selectedHouse = dataSource?.selected_house || {}
-  const rawFileUrls = dataSource?.file_urls || {}
+  const parseJsonField = (field) => {
+    if (!field) return {}
+    if (typeof field === 'string') {
+      try { return JSON.parse(field) } catch { return {} }
+    }
+    return field
+  }
+
+  const personalDetails = parseJsonField(dataSource?.personal_details)
+  const propertyDetails = parseJsonField(dataSource?.property_details)
+  const measurementDetails = parseJsonField(dataSource?.measurement_details)
+  const selectedHouse = parseJsonField(dataSource?.selected_house)
+  const rawFileUrls = parseJsonField(dataSource?.file_urls)
 
   // Extract URL from a field that may be a string URL or a pre-uploaded object { url, uploaded }
   const extractUrl = (field) => {
@@ -108,15 +116,12 @@ const UserDetailView = ({
     <div className="personal-details-page">
       <div className="personal-details-container">
         <div className="personal-details-content">
+        <h1>1</h1>
           {/* Header with Logo */}
           <div className="personal-details-header">
-            <button
-              className="back-link"
-              onClick={handleBackToList}
-              type="button"
-            >
+            <button className="back-link" onClick={handleBackToList} type="button">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               חזרה לרשימת משתמשים
             </button>
@@ -735,10 +740,18 @@ const UserDetailView = ({
                               </span>
                             </div>
                             <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>
-                              <div>פרטים אישיים: {submission.personal_details?.firstName || submission.personal_details?.email || 'כן'}</div>
-                              <div>פרטי נכס: {submission.property_details?.city || submission.property_details?.street || 'כן'}</div>
-                              <div>מפת מדידה: {submission.measurement_details?.surveyorName || 'כן'}</div>
-                              <div>בית חלומות: {submission.selected_house?.title || submission.selected_house?.id ? 'כן' : 'לא'}</div>
+                              {(() => {
+                                const sp = parseJsonField(submission.personal_details)
+                                const spr = parseJsonField(submission.property_details)
+                                const sm = parseJsonField(submission.measurement_details)
+                                const sh = parseJsonField(submission.selected_house)
+                                return <>
+                                  <div>פרטים אישיים: {sp.firstName || sp.email || 'כן'}</div>
+                                  <div>פרטי נכס: {spr.city || spr.street || 'כן'}</div>
+                                  <div>מפת מדידה: {sm.surveyorName || 'כן'}</div>
+                                  <div>בית חלומות: {sh.title || sh.id ? 'כן' : 'לא'}</div>
+                                </>
+                              })()}
                             </div>
                           </div>
                         ))}
