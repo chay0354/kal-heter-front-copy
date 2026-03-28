@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../components/PlanningRequest.css'
-import { getFormData, clearFormData } from '../services/formData'
+import { getFormData } from '../services/formData'
 import { submitForm, checkSubmissionStatus } from '../services/formSubmission'
 import { authenticatedFetch, getAccessToken } from '../services/auth'
 
@@ -34,7 +34,7 @@ const SummaryPage = () => {
   useEffect(() => {
     const savedData = getFormData()
     setFormData(savedData)
-    
+
     // Check if user has already submitted on page load
     const checkIfSubmitted = async () => {
       try {
@@ -42,13 +42,24 @@ const SummaryPage = () => {
         if (status.has_submitted) {
           setHasSubmitted(true)
           setLoadingStatus(true)
+          // If localStorage is empty (e.g. new browser/device), load form data from backend
+          if (!savedData || Object.keys(savedData).length === 0) {
+            if (status.form_data) {
+              setFormData({
+                personalDetails: status.form_data.personal_details || {},
+                propertyDetails: status.form_data.property_details || {},
+                measurementDetails: status.form_data.measurement_details || {},
+                selectedHouse: status.form_data.selected_house || {},
+              })
+            }
+          }
         }
       } catch (error) {
         console.error('Error checking submission status:', error)
         // Don't set hasSubmitted on error - allow user to try
       }
     }
-    
+
     checkIfSubmitted()
   }, [])
 
@@ -179,10 +190,7 @@ const SummaryPage = () => {
 
       // Submit form to backend
       await submitForm(formData)
-      
-      // Clear form data from localStorage after successful submission
-      clearFormData()
-      
+
       setHasSubmitted(true)
       setLoadingStatus(true)
     } catch (error) {
