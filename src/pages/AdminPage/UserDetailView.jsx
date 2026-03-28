@@ -116,7 +116,7 @@ const UserDetailView = ({
     <div className="personal-details-page">
       <div className="personal-details-container">
         <div className="personal-details-content">
-        <h1>1</h1>
+          <h1>2</h1>
           {/* Header with Logo */}
           <div className="personal-details-header">
             <button className="back-link" onClick={handleBackToList} type="button">
@@ -173,12 +173,16 @@ const UserDetailView = ({
                         <span className="summary-value">{user.phone || personalDetails.phone || '-'}</span>
                       </div>
                       <div className="summary-detail-item">
-                        <span className="summary-label">כתובת:</span>
-                        <span className="summary-value">{user.address || '-'}</span>
+
+                        {/* <span className="summary-label">כתובת:</span>
+                        <span className="summary-value">
+                          {user.address || (propertyDetails.street && propertyDetails.city ? `${propertyDetails.street}, ${propertyDetails.city}` : propertyDetails.street || propertyDetails.city) || '-'}
+                        </span> */}
+
                       </div>
                       <div className="summary-detail-item">
                         <span className="summary-label">מספר תעודת זהות:</span>
-                        <span className="summary-value">{user.id_number || personalDetails.idNumber || '-'}</span>
+                        <span className="summary-value">{personalDetails.idNumber || user.id_number || '-'}</span>
                       </div>
                       <div className="summary-detail-item">
                         <span className="summary-label">סטטוס:</span>
