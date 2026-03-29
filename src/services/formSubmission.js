@@ -1,4 +1,5 @@
 import { authenticatedFetch, getAccessToken } from './auth'
+import { getFormData } from './formData'
 
 // Normalize API base URL - remove trailing slashes to prevent double slashes
 const getApiBaseUrl = () => {
@@ -68,11 +69,12 @@ export const uploadFileImmediately = async (file, fileType = 'id_photo') => {
     const formData = new FormData()
     formData.append(fileType, file)
     
-    // Add minimal required fields (empty objects are fine for draft)
-    formData.append('personal_details', JSON.stringify({}))
-    formData.append('property_details', JSON.stringify({}))
-    formData.append('measurement_details', JSON.stringify({}))
-    formData.append('selected_house', JSON.stringify({}))
+    // Include current form data so we don't overwrite existing draft fields
+    const currentFormData = getFormData()
+    formData.append('personal_details', JSON.stringify(currentFormData.personalDetails || {}))
+    formData.append('property_details', JSON.stringify(currentFormData.propertyDetails || {}))
+    formData.append('measurement_details', JSON.stringify(currentFormData.measurementDetails || {}))
+    formData.append('selected_house', JSON.stringify(currentFormData.selectedHouse || {}))
 
     const response = await authenticatedFetch(buildApiUrl('/api/form/save-draft'), {
       method: 'POST',
