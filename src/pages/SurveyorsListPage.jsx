@@ -1,34 +1,10 @@
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { SURVEYORS } from '../constants/surveyors'
 import './SurveyorsListPage.css'
 
 function SurveyorsListPage() {
   const navigate = useNavigate()
-
-  // Sample surveyors data - you can replace this with API data later
-  const surveyors = [
-    {
-      id: 1,
-      name: 'מודדי יונס',
-      phone: '052-6744259',
-      email: 'Eron.engineers@gmail.com',
-      area: 'אזור מרכז'
-    },
-    {
-      id: 2,
-      name: 'שנאור וולדמן',
-      phone: '058-7477099',
-      email: 'shneor@merchav.co.il',
-      area: 'אזור דרום'
-    },
-    {
-      id: 3,
-      name: 'נור מחאמיד',
-      phone: '050-7900360',
-      email: 'mahmidnour@gmail.com',
-      area: 'אזור צפון'
-    },
-  ]
+  const surveyors = SURVEYORS
 
   return (
     <div className="surveyors-list-page">
@@ -84,7 +60,7 @@ function SurveyorsListPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {surveyors.map((surveyor, index) => (
+                  {surveyors.map((surveyor) => (
                     <tr key={surveyor.id}>
                       <td className="td-name">{surveyor.name}</td>
                       <td className="td-phone">{surveyor.phone}</td>
