@@ -60,7 +60,9 @@ function TermsPage() {
               {TERMS_SECTIONS.map((section) => (
                 <div key={section.id}>
                   <h3>{section.title}</h3>
-                  <p>{section.content}</p>
+                  {section.content.map((paragraph, i) => (
+                    <p key={i}>{paragraph}</p>
+                  ))}
                 </div>
               ))}
             </div>
