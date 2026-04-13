@@ -107,7 +107,6 @@ const UserDetailView = ({
     <div className="personal-details-page">
       <div className="personal-details-container">
         <div className="personal-details-content">
-          <h1>2</h1>
           {/* Header with Logo */}
           <div className="personal-details-header">
             <button className="back-link" onClick={handleBackToList} type="button">

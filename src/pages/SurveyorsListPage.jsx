@@ -9,53 +9,25 @@ function SurveyorsListPage() {
   const surveyors = [
     {
       id: 1,
-      name: 'משה לוי',
-      phone: '050-1234567',
-      email: 'moshe@gmail.com',
-      area: 'תל אביב והסביבה'
+      name: 'מודדי יונס',
+      phone: '052-6744259',
+      email: 'Eron.engineers@gmail.com',
+      area: 'אזור מרכז'
     },
     {
       id: 2,
-      name: 'משה לוי',
-      phone: '050-1234567',
-      email: 'moshe@gmail.com',
-      area: 'תל אביב והסביבה'
+      name: 'שנאור וולדמן',
+      phone: '058-7477099',
+      email: 'shneor@merchav.co.il',
+      area: 'אזור דרום'
     },
     {
       id: 3,
-      name: 'משה לוי',
-      phone: '050-1234567',
-      email: 'moshe@gmail.com',
-      area: 'תל אביב והסביבה'
+      name: 'נור מחאמיד',
+      phone: '050-7900360',
+      email: 'mahmidnour@gmail.com',
+      area: 'אזור צפון'
     },
-    {
-      id: 4,
-      name: 'משה לוי',
-      phone: '050-1234567',
-      email: 'moshe@gmail.com',
-      area: 'תל אביב והסביבה'
-    },
-    {
-      id: 5,
-      name: 'משה לוי',
-      phone: '050-1234567',
-      email: 'moshe@gmail.com',
-      area: 'תל אביב והסביבה'
-    },
-    {
-      id: 6,
-      name: 'משה לוי',
-      phone: '050-1234567',
-      email: 'moshe@gmail.com',
-      area: 'תל אביב והסביבה'
-    },
-    {
-      id: 7,
-      name: 'משה לוי',
-      phone: '050-1234567',
-      email: 'moshe@gmail.com',
-      area: 'תל אביב והסביבה'
-    }
   ]
 
   return (
