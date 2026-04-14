@@ -255,7 +255,6 @@ const SummaryPage = () => {
                 {steps.map((step) => (
                   <div key={step.number} className={`${styles['progress-step']} ${styles.completed}`}>
                     <div className={`${styles['progress-circle']} ${styles.completed}`}>
-                      <CheckmarkIcon />
                     </div>
                     <span className={styles['progress-label']}>{step.label}</span>
                   </div>
