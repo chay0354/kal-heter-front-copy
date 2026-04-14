@@ -67,8 +67,8 @@ export const DREAM_CARDS = [
   {
     id: 1,
     tag: 'קל״צ',
-    title: 'האחוזה של חיים',
-    desc: 'Lorem sap.',
+    title: 'בית בטבע',
+    desc: 'וילה דו-מפלסית בעלת תכנון בר-קיימא השומר על טמפרטורת הבית יציבה בכל ימות השנה',
     spec: [
       { icon: '/icons/Ruler Angular.png', text: '250 מ״ר' },
       { icon: '/icons/car.png', text: '2 חניות' },
