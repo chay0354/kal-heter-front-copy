@@ -54,6 +54,7 @@ function ProcessExplanationPage() {
                   checked={isChecked}
                   onChange={(e) => setIsChecked(e.target.checked)}
                 />
+                <span className={styles['checkbox-custom']}></span>
                 <span className={styles['checkbox-text']}>
                   קראתי ואני מאשר/ת את התנאים ואת הנחיות הגשת המסמכים.
                 </span>
