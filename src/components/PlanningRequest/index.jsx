@@ -492,9 +492,28 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                       type="file"
                       multiple
                       accept="image/*"
-                      onChange={(e) => {
+                      onChange={async (e) => {
                         const files = Array.from(e.target.files)
+                        // Update UI immediately with File objects
                         handlePropertyChange('propertyPhotos', files)
+
+                        // Upload each photo immediately and store URLs
+                        try {
+                          const uploadedPhotos = await Promise.all(
+                            files.map(async (file) => {
+                              const fileUrl = await uploadFileImmediately(file, 'property_photos')
+                              if (fileUrl) {
+                                return { url: fileUrl, name: file.name, size: file.size, type: file.type, uploaded: true }
+                              }
+                              return file
+                            })
+                          )
+                          const updatedData = { ...propertyData, propertyPhotos: uploadedPhotos }
+                          setPropertyData(updatedData)
+                          saveFormData({ propertyDetails: updatedData })
+                        } catch (error) {
+                          console.error('[propertyPhotos] Error uploading photos:', error)
+                        }
                       }}
                       className={styles['hidden-input']}
                       id="property-photos-input"

@@ -44,6 +44,9 @@ Thumbs.db
 *.swo
 *~
 
+# Dev samples (local only)
+src/dev/
+
 # Temporary files
 *.tmp
 *.temp

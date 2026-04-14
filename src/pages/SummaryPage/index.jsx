@@ -568,11 +568,13 @@ const SummaryPage = () => {
                         id="details-confirmation"
                         checked={detailsConfirmed}
                         onChange={handleCheckboxChange}
-                        className={`${styles['terms-checkbox-styled']} ${detailsConfirmed ? styles['terms-checkbox-styled-checked'] : styles['terms-checkbox-styled-unchecked']}`}
+                        className={styles['terms-checkbox-hidden']}
                       />
-                      {detailsConfirmed && (
-                        <CheckmarkIcon className={styles['checkmark-svg']} stroke="#ffffff" strokeWidth={3.5} />
-                      )}
+                      <div className={`${styles['terms-checkbox-styled']} ${detailsConfirmed ? styles['terms-checkbox-styled-checked'] : styles['terms-checkbox-styled-unchecked']}`}>
+                        {detailsConfirmed && (
+                          <CheckmarkIcon className={styles['checkmark-svg']} stroke="#ffffff" strokeWidth={3.5} />
+                        )}
+                      </div>
                     </div>
                     <label
                       htmlFor="details-confirmation"
