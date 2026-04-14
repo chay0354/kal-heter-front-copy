@@ -8,8 +8,21 @@ import GridViewIcon from '../../components/icons/GridViewIcon'
 import TableViewIcon from '../../components/icons/TableViewIcon'
 import RefreshIcon from '../../components/icons/RefreshIcon'
 
+const ADMIN_PASSWORD = '4765'
+
 const AdminPage = () => {
   const [viewMode, setViewMode] = useState('card')
+  const [authorized, setAuthorized] = useState(false)
+
+  React.useEffect(() => {
+    const input = window.prompt('הכנס סיסמת מנהל:')
+    if (input === ADMIN_PASSWORD) {
+      setAuthorized(true)
+    } else {
+      window.alert('סיסמה שגויה. אין גישה לדף זה.')
+      window.history.back()
+    }
+  }, [])
 
   const {
     users,
@@ -114,6 +127,8 @@ const AdminPage = () => {
       }
     }
   }
+
+  if (!authorized) return null
 
   if (selectedUser) {
     return (
