@@ -4,43 +4,23 @@ import styles from './styles.module.css'
 import { saveFormData, getFormData, saveFileData, saveFileUrl } from '../../services/formData'
 import { uploadFileImmediately } from '../../services/formSubmission'
 import PlusIcon from '../icons/PlusIcon'
+import {
+  INITIAL_FORM_DATA,
+  INITIAL_PROPERTY_DATA,
+  INITIAL_MEASUREMENT_DATA,
+  FORM_STEPS,
+  STEPS,
+  PROPERTY_FILE_FIELD_MAP,
+  MEASUREMENT_FILE_FIELD_MAP,
+  DREAM_CARDS
+} from './constants'
 
 const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hideSections = false, hideMeasurement = false }) => {
   const navigate = useNavigate()
   const location = useLocation()
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    email: '',
-    idNumber: '',
-    idPhoto: null,
-    additionalRightsHolders: []
-  })
-
-  const [propertyData, setPropertyData] = useState({
-    council: '',
-    city: '',
-    street: '',
-    propertySize: '',
-    lot: '',
-    helka: '',
-    gush: '',
-    photoDate: '',
-    propertyPhotos: [],
-    plotPhoto: null,
-    tabuExtract: null,
-    israelLandAuthorityContract: ''
-  })
-
-  const [measurementData, setMeasurementData] = useState({
-    surveyorName: '',
-    measurementDate: '',
-    israelMappingNumber: '',
-    pdfFile: null,
-    dwfFile: null,
-    dwgFile: null
-  })
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA)
+  const [propertyData, setPropertyData] = useState(INITIAL_PROPERTY_DATA)
+  const [measurementData, setMeasurementData] = useState(INITIAL_MEASUREMENT_DATA)
 
   const [errors, setErrors] = useState({})
 
@@ -225,13 +205,7 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     }
     setPropertyData(updatedData)
 
-    // Map field names to backend field names
-    const fieldMap = {
-      'tabuExtract': 'tabu_extract',
-      'propertyPhotos': 'property_photos',
-      'plotPhoto': 'plot_photo'
-    }
-    const backendField = fieldMap[field] || field
+    const backendField = PROPERTY_FILE_FIELD_MAP[field] || field
 
     // Upload file immediately
     try {
@@ -278,13 +252,7 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     }
     setMeasurementData(updatedData)
 
-    // Map field names to backend field names
-    const fieldMap = {
-      'pdfFile': 'pdf_file',
-      'dwfFile': 'dwf_file',
-      'dwgFile': 'dwg_file'
-    }
-    const backendField = fieldMap[field] || field
+    const backendField = MEASUREMENT_FILE_FIELD_MAP[field] || field
 
     // Upload file immediately
     try {
@@ -347,17 +315,7 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     // Navigate to previous step in form process based on current route
     const currentPath = location.pathname
 
-    // Define the form flow steps
-    const formSteps = {
-      '/dashboard': null, // First step, no back
-      '/property-details-final': '/dashboard',
-      '/property-details': '/property-details-final',
-      '/home-catalog': '/property-details',
-      '/summary': '/home-catalog'
-    }
-
-    // Get the previous step for current path
-    const previousStep = formSteps[currentPath]
+    const previousStep = FORM_STEPS[currentPath]
 
     if (previousStep) {
       navigate(previousStep)
@@ -382,31 +340,11 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
     activeStep = 4  // Dream Home
   }
 
-  const dreamCards = Array.from({ length: 6 }).map((_, idx) => ({
-    id: idx + 1,
-    tag: 'קל״צ',
-    title: idx === 0 ? 'האחוזה של חיים' : 'שם הדגם',
-    desc: 'Lorem ipsum mi diam morbi ut morbi arcu augue sed et cursus elit tristique vestibulum eget sap.',
-    spec: [
-      { icon: '/icons/Ruler Angular.png', text: '250 מ״ר' },
-      { icon: '/icons/car.png', text: '3 חניות' },
-      { icon: '/icons/Bed.png', text: '3 חדרי שינה' },
-      { icon: '/icons/Server.png', text: '2 מפלסים' }
-    ],
-    image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80'
-  }))
-
   const handleHouseSelect = (house) => {
     saveFormData({ selectedHouse: house })
     navigate('/summary')
   }
-  const steps = [
-    { number: 1, label: 'פרטים אישיים' },
-    { number: 2, label: 'מפת מדידה' },
-    { number: 3, label: 'פרטי הנכס' },
-    { number: 4, label: 'בחירת בית חלומות' },
-    { number: 5, label: 'סיכום ושליחה' }
-  ].map(step => ({
+  const steps = STEPS.map(step => ({
     ...step,
     status: activeStep === step.number ? 'active' : activeStep > step.number ? 'completed' : ''
   }))
@@ -739,7 +677,7 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
               </div>
               <div className={styles['dream-cards-scroll']}>
                 <div className={styles['dream-cards-grid']}>
-                  {dreamCards.map(card => (
+                  {DREAM_CARDS.map(card => (
                     <div
                       key={card.id}
                       className={`${styles['dream-card']} ${styles['cursor-pointer']}`}
@@ -757,7 +695,12 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                           href="#!"
                           onClick={(e) => {
                             e.stopPropagation()
-                            // Handle view architectural plans
+                            if (card.drawing) {
+                              const a = document.createElement('a')
+                              a.href = card.drawing
+                              a.download = card.drawing.split('/').pop()
+                              a.click()
+                            }
                           }}
                         >
                           צפייה בתוכניות הארכיטקטוניות
