@@ -1,0 +1,576 @@
+/* ─── Page shell (copied from PlanningRequest.css) ─── */
+
+.personal-details-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+  background-color: white;
+  direction: rtl;
+}
+
+.personal-details-container {
+  max-width: 1400px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.personal-details-content {
+  background-image: url('/eef4e7b9c078d09a23b8f5bf3ffc49e51fb0dee3.jpg');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 40px;
+  padding: 60px 80px;
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.personal-details-header {
+  text-align: right;
+  margin-bottom: 40px;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.nav-logo-link {
+  position: relative;
+  width: 152px;
+  height: 66.71px;
+  aspect-ratio: 2.25;
+  display: inline-block;
+  text-align: right;
+  margin-left: auto;
+}
+
+.nav-logo-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.nav-logo-text {
+  position: absolute;
+  top: 22px;
+  right: 0;
+  left: auto;
+  font-family: 'Tel_Aviv-ModernistRegular', Helvetica, sans-serif;
+  font-weight: 400;
+  color: #002169;
+  font-size: 36.2px;
+  text-align: right;
+  letter-spacing: -0.72px;
+  direction: rtl;
+}
+
+/* Back link */
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  text-decoration: none;
+  font-size: 16px;
+  margin-bottom: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.back-link:hover {
+  color: #333;
+}
+
+.back-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Card */
+.personal-details-card {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  direction: rtl;
+  display: flex;
+  flex-direction: column;
+  min-height: 800px;
+  flex: 1;
+}
+
+.personal-details-card-content {
+  padding: 50px 60px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  box-sizing: border-box;
+  min-height: 950px;
+}
+
+.form-title {
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  font-size: 32px !important;
+  font-weight: 400;
+  font-style: normal;
+  color: #002169;
+  margin: 0 0 50px 0;
+  text-align: right;
+  line-height: 100%;
+  letter-spacing: -0.02em;
+}
+
+/* Summary sections */
+.summary-section {
+  margin-bottom: 40px;
+  padding: 30px;
+  background: #f9f9f9;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+}
+
+.summary-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.summary-section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2C3E50;
+  margin: 0;
+  font-family: 'Tel_Aviv-ModernistBold', sans-serif;
+}
+
+.summary-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.summary-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.summary-value {
+  font-size: 16px;
+  color: #2C3E50;
+  font-weight: 600;
+}
+
+.no-file {
+  color: #999;
+  font-style: italic;
+}
+
+/* House card */
+.summary-house-card {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.summary-house-image {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.summary-house-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.summary-house-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2C3E50;
+  margin: 0;
+  font-family: 'Tel_Aviv-ModernistBold', sans-serif;
+}
+
+.summary-house-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.summary-house-spec-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: #f0f0f0;
+  border-radius: 6px;
+}
+
+.summary-house-spec-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  opacity: 0.8;
+  filter: grayscale(100%) brightness(0.6);
+}
+
+.summary-house-spec {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Loading state */
+.loading-state {
+  text-align: center;
+  padding: 40px;
+}
+
+.loading-text {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+/* Links */
+.email-link {
+  color: #0f4eb3;
+  text-decoration: underline;
+}
+
+/* File section */
+.files-section-has-files {
+  background: #f0f9ff;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.files-section-no-files {
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.files-section-title-has-files {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e40af;
+  margin: 0;
+  font-family: 'Tel_Aviv-ModernistBold', sans-serif;
+}
+
+.files-section-title-no-files {
+  font-size: 24px;
+  font-weight: 700;
+  color: #856404;
+  margin: 0;
+  font-family: 'Tel_Aviv-ModernistBold', sans-serif;
+}
+
+.files-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.file-entry {
+  padding: 10px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.file-entry-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.file-url-item {
+  margin-top: 8px;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.file-url-text {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 4px;
+  word-break: break-all;
+}
+
+.no-files-message {
+  padding: 20px;
+  text-align: center;
+  color: #856404;
+}
+
+.no-files-title {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.no-files-subtitle {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* FileLink component */
+.file-link-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.file-view-link {
+  color: #667eea;
+  text-decoration: underline;
+}
+
+.download-btn {
+  padding: 4px 12px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Rights holders section */
+.rights-holders-header {
+  grid-column: 1 / -1;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.rights-holders-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.rights-holder-name {
+  grid-column: 1 / -1;
+  margin-right: 20px;
+}
+
+.rights-holder-name-label {
+  font-weight: 600;
+}
+
+/* Property photos */
+.property-photos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.property-photos-count {
+  margin-bottom: 4px;
+}
+
+.photo-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.photo-link {
+  color: #667eea;
+  font-size: 0.9rem;
+}
+
+/* Selected plan / application data */
+.full-width-item {
+  grid-column: 1 / -1;
+}
+
+/* Pre element for JSON display */
+.json-pre {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  overflow: auto;
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+}
+
+/* House tag badge */
+.house-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #667eea;
+  color: white;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  margin-bottom: 10px;
+}
+
+/* House ID */
+.house-id {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+/* House desc */
+.house-desc {
+  margin: 10px 0;
+  color: #6b7280;
+}
+
+/* Admin notes section */
+.admin-notes-section {
+  background: #f8f9fa;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 40px;
+}
+
+.admin-notes-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #2C3E50;
+  margin: 0 0 16px 0;
+  font-family: 'Tel_Aviv-ModernistBold', sans-serif;
+}
+
+.admin-notes-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  font-family: 'Tel_Aviv-ModernistRegular', 'Tel Aviv', Helvetica, sans-serif;
+  resize: vertical;
+  direction: rtl;
+  text-align: right;
+  box-sizing: border-box;
+}
+
+.admin-notes-saving {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #6b7280;
+  text-align: right;
+}
+
+.admin-notes-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #6b7280;
+  text-align: right;
+}
+
+/* Submissions history */
+.submissions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.submission-item {
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.submission-item-latest {
+  background: #f8f9fa;
+}
+
+.submission-item-older {
+  background: white;
+}
+
+.submission-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.submission-item-title {
+  font-size: 1rem;
+}
+
+.submission-item-date {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.submission-item-body {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+@media (max-width: 768px) {
+  .summary-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .personal-details-content {
+    padding: 30px 20px;
+  }
+
+  .personal-details-card-content {
+    padding: 30px 20px;
+  }
+}
