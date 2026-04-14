@@ -695,7 +695,12 @@ const PlanningRequest = ({ selectedPlan, onBack, showFields = true, nextPath, hi
                           href="#!"
                           onClick={(e) => {
                             e.stopPropagation()
-                            // Handle view architectural plans
+                            if (card.drawing) {
+                              const a = document.createElement('a')
+                              a.href = card.drawing
+                              a.download = card.drawing.split('/').pop()
+                              a.click()
+                            }
                           }}
                         >
                           צפייה בתוכניות הארכיטקטוניות

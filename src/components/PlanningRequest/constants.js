@@ -60,16 +60,22 @@ export const MEASUREMENT_FILE_FIELD_MAP = {
   dwgFile: 'dwg_file'
 }
 
-export const DREAM_CARDS = Array.from({ length: 6 }).map((_, idx) => ({
-  id: idx + 1,
-  tag: 'קל״צ',
-  title: idx === 0 ? 'האחוזה של חיים' : 'שם הדגם',
-  desc: 'Lorem ipsum mi diam morbi ut morbi arcu augue sed et cursus elit tristique vestibulum eget sap.',
-  spec: [
-    { icon: '/icons/Ruler Angular.png', text: '250 מ״ר' },
-    { icon: '/icons/car.png', text: '2 חניות' },
-    { icon: '/icons/Bed.png', text: '3 חדרי שינה' },
-    { icon: '/icons/Server.png', text: '2 מפלסים' }
-  ],
-  image: 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=900&q=80'
-}))
+// To add a new card: copy the object below, increment the id, fill in the data.
+// Place card images in: public/images/dream-cards/
+// They will be accessible at: /images/dream-cards/<filename>
+export const DREAM_CARDS = [
+  {
+    id: 1,
+    tag: 'קל״צ',
+    title: 'האחוזה של חיים',
+    desc: 'Lorem sap.',
+    spec: [
+      { icon: '/icons/Ruler Angular.png', text: '250 מ״ר' },
+      { icon: '/icons/car.png', text: '2 חניות' },
+      { icon: '/icons/Bed.png', text: '3 חדרי שינה' },
+      { icon: '/icons/Server.png', text: '2 מפלסים' },
+    ],
+    image: '/images/dream-cards/card-1.jpg',
+    drawing: '/images/drawings/01.pdf'
+  },
+]
