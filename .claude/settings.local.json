@@ -4,7 +4,11 @@
       "Bash(find /Users/david/sc/kal2/kal-heter-front-copy/src -type f \\\\\\( -name \"*.jsx\" -o -name \"*.js\" \\\\\\) -exec wc -l {} +)",
       "Bash(grep -l \"style={{\" /Users/david/sc/kal2/kal-heter-front-copy/src/**/*.jsx)",
       "Bash(grep -rn \"<svg\" /Users/david/sc/kal2/kal-heter-front-copy/src/components/landing/*.jsx)",
-      "Bash(grep -r \"CheckCircle\\\\|CloudUpload\\\\|ConfettiMinimalistic\\\\|DocumentAdd\\\\|Heart\\\\|Like\\\\|NotificationUnreadLines\" /Users/david/sc/kal2/kal-heter-front-copy/src/components/landing/*.jsx)"
+      "Bash(grep -r \"CheckCircle\\\\|CloudUpload\\\\|ConfettiMinimalistic\\\\|DocumentAdd\\\\|Heart\\\\|Like\\\\|NotificationUnreadLines\" /Users/david/sc/kal2/kal-heter-front-copy/src/components/landing/*.jsx)",
+      "Bash(find /Users/david/sc/kal2/kal-heter-front-copy/src -type f \\\\\\( -name \"*.js\" -o -name \"*.jsx\" \\\\\\) -exec grep -l \"service\" {} \\\\;)",
+      "Bash(wc -l /Users/david/sc/kal2/kal-heter-admin/routers/*.py)",
+      "Bash(grep -n \"email\\\\|send\\\\|mail\" /Users/david/sc/kal2/kal-heter-admin/routers/*.py)",
+      "Bash(ls -la /Users/david/sc/kal2/kal-heter-admin/*.py)"
     ]
   }
 }

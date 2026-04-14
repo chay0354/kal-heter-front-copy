@@ -12,7 +12,6 @@
   background: white;
   color: #2C3E50;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
@@ -33,7 +32,6 @@
 
 .chevron {
   margin-right: 8px;
-  transition: transform 0.2s ease;
   color: #6b7280;
   flex-shrink: 0;
 }
@@ -64,7 +62,6 @@
   background: white;
   cursor: pointer;
   text-align: center;
-  transition: background 0.2s ease;
   border-bottom: 1px solid #f3f4f6;
 }
 

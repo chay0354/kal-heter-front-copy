@@ -33,21 +33,9 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
   position: relative;
   overflow: hidden;
-  animation: fadeInUp 0.8s ease-out;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Header */
@@ -156,7 +144,6 @@
   cursor: pointer;
   font-weight: 600;
   font-size: 0.85rem;
-  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -253,7 +240,6 @@
 
 .users-table tbody tr {
   border-bottom: 1px solid #e5e7eb;
-  transition: background 0.15s;
 }
 
 .users-table tbody tr:hover {
@@ -337,12 +323,10 @@
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   border: 2px solid transparent;
 }
 
 .card:hover {
-  transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
   border-color: #667eea;
 }
